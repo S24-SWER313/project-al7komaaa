@@ -1,8 +1,8 @@
-package com.project1.project;
+package com.project1.project.User;
 
 import java.util.Date;
 
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.Id;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +15,7 @@ import lombok.Data;
 public class Friendship {
 private @Id @GeneratedValue
      Long friendshipID;
-     @OneToMany
+     @ManyToOne  //T8AYARAT
     private Long userID1;
     @ManyToOne
     private Long userID2;

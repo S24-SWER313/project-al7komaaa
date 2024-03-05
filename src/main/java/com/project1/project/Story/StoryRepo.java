@@ -1,4 +1,4 @@
-package com.project1.project;
+package com.project1.project.Story;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

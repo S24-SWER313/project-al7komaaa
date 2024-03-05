@@ -1,9 +1,11 @@
-package com.project1.project;
+package com.project1.project.User;
 
 import java.sql.Date;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.Id;
+
+import com.project1.project.Post.Post;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
