@@ -1,31 +1,31 @@
-package com.project1.project.Like;
+package com.project1.project.like;
 
-import java.util.Date;
+import com.project1.project.comment.Comment;
+import com.project1.project.post.Post;
+import com.project1.project.user.User;
 
-import jakarta.persistence.Id;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
+
 @Entity
 @Data
+@Table(name = "likes")
 public class Like {
-    private @Id @GeneratedValue
-     Long likeID;
-     @ManyToOne
-    private Long postID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long likeId;
+
+    // Other like properties
+  @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+
     @ManyToOne
-    private Long userID;
-    private Date likeDate;
-    public Like() {
-    }
-    public Like(Long likeID, Long postID, Long userID, Date likeDate) {
-        this.likeID = likeID;
-        this.postID = postID;
-        this.userID = userID;
-        this.likeDate = likeDate;
-    }
-   
-    
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }

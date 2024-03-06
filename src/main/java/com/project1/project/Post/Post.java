@@ -1,37 +1,36 @@
-package com.project1.project.Post;
+package com.project1.project.post;
 
-import java.util.Date;
+import java.util.List;
 
-import jakarta.persistence.Id;
+import com.project1.project.comment.Comment;
+import com.project1.project.like.Like;
+import com.project1.project.share.Share;
+import com.project1.project.user.User;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
+
 @Entity
 @Data
+@Table(name = "posts")
 public class Post {
-    private @Id @GeneratedValue
-    Long postID;
-     @ManyToOne
-    private Long userID;
-    private String content; // بلزم نعمل الها كلاس اينوم سؤال
-    private Date postDate;
-    private Long likesCount;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long postId;
 
-    private Long commentsCount;
-    private Long sharesCount;
-    public Post(Long postID, Long userID, String content, Date postDate, Long likesCount, Long commentsCount,
-    Long sharesCount) {
-        this.postID = postID;
-        this.userID = userID;
-        this.content = content;
-        this.postDate = postDate;
-        this.likesCount = likesCount;
-        this.commentsCount = commentsCount;
-        this.sharesCount = sharesCount;
-    }
-    public Post() {
-    }   
-     
+    // Other post properties
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "post") //t8ayarat
+    private List<Like> like;
+
+    @OneToMany(mappedBy = "post")
+    private List<Share> shares;
 }
+
