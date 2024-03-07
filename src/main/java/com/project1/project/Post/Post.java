@@ -9,10 +9,10 @@ import com.project1.project.Share.Share;
 import com.project1.project.User.User;
 
 import jakarta.persistence.*;
-import lombok.Data;
+
 
 @Entity
-@Data
+
 @Table(name = "posts")
 public class Post {
     @Id
@@ -34,22 +34,22 @@ private Type type;
     @OneToMany(mappedBy = "post")
     private List<Share> shares;
 
-    public Post(Long postId, Type type, User user, List<Comment> comments, List<Like> like, List<Share> shares) {
+    public Post(Long postId, Type type, User user) {
         this.postId = postId;
         this.type = type;
         this.user = user;
-        this.comments = comments;
-        this.like = like;
-        this.shares = shares;
+        // this.comments = comments;
+        // this.like = like;
+        // this.shares = shares;
     }
 
     public Post() {
     }
 
-    public Post(Long postId, Type type, User user) {
+    public Post(Long postId, Type type) {
         this.postId = postId;
         this.type = type;
-        this.user = user;
+        // this.user = user;
     }
 
     @Override
@@ -57,7 +57,40 @@ private Type type;
         return "Post [postId=" + postId + ", type=" + type + "]";
     }
 
+    public Long getPostId() {
+        return postId;
+    }
 
+    public void setPostId(Long postId) {
+        this.postId = postId;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
+
+
+
+
+
+
+
+
+    
 
 }
 

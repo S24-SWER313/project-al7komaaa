@@ -2,6 +2,7 @@ package com.project1.project;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.hateoas.CollectionModel;
@@ -66,6 +67,54 @@ public class Controller {
 public List<User> getAllUsers() {
     return userRepo.findAll();
 }
+@GetMapping("/user/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userRepo.findById(id)
+                         .orElseThrow(() -> new Exception(userRepo.findById(id).getClass()));
+    }
+    
+    @GetMapping("/userByFirstName/{name}") //netzakar eno ne3malha non-CaseSensitive
+    public List<User> getUserByFirstName(@PathVariable String name) {
+
+        return userRepo.findByFirstName(name);}
+    //                      .orElseThrow(() -> new Exception(userRepo.findByFirstName(id).getClass()));
+    // }
+
+    @GetMapping("/userByLastName/{name}") //netzakar eno ne3malha non-CaseSensitive
+    public List<User> getUserByLastName(@PathVariable String name) {
+
+        return userRepo.findByLastName(name);}
+
+
+        @GetMapping("/username/{name}") //netzakar eno ne3malha non-CaseSensitive
+        public List<User> getUserName(@PathVariable String name) {
+    
+            // return userRepo.findByName(name).orElse(userRepo.findByFirstName(name));}
+       
+          
+                Optional<User> userOptional = userRepo.findByName(name);
+                
+                if (userOptional.isPresent()) {
+                    return userOptional.get();
+                } else {
+                    List<User> users = userRepo.findByFirstName(name);
+                    if (!users.isEmpty()) {
+                        // Assuming you want to return the first user in the list
+                        return users.get(0);
+                    } else {
+                        // Handle the case when no user is found
+                        return null; // or throw an exception, return a default user, etc.
+                    }
+                }
+            }
+            
+       
+       
+       
+       
+        }
+    
+
 
 
     @PostMapping("/users")
@@ -73,11 +122,7 @@ public List<User> getAllUsers() {
         return userRepo.save(user);
     }
 
-    @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userRepo.findById(id)
-                         .orElseThrow(() -> new Exception(userRepo.findById(id).getClass()));
-    }
+    
 
 
     @GetMapping("/posts")
@@ -150,4 +195,12 @@ public List<User> getAllUsers() {
                               .map(share -> ResponseEntity.ok().body(share))
                               .orElse(ResponseEntity.notFound().build());
     }
+
+
+
+
+
+
+
+
 }

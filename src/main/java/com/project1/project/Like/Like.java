@@ -6,10 +6,10 @@ import com.project1.project.Post.Post;
 import com.project1.project.User.User;
 
 import jakarta.persistence.*;
-import lombok.Data;
+
 
 @Entity
-@Data
+
 @Table(name = "likes")
 public class Like {
     @Id
@@ -52,6 +52,59 @@ public class Like {
     public String toString() {
       return "Like [likeId=" + likeId + ", type=" + type + "]";
     }
-        
+
+    public Long getLikeId() {
+      return likeId;
+    }
+
+    public void setLikeId(Long likeId) {
+      this.likeId = likeId;
+    }
+
+    public likeType getType() {
+      return type;
+    }
+
+    public void setType(likeType type) {
+      this.type = type;
+    }
+
+    public Post getPost() {
+      return post;
+    }
+
+    public void setPost(Post post) {
+      this.post = post;
+    }
+
+    public Comment getComment() {
+      return comment;
+    }
+
+    public void setComment(Comment comment) {
+      this.comment = comment;
+    }
+
+    public User getUser() {
+      return user;
+    }
+
+    public void setUser(User user) {
+      this.user = user;
+    }
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+    
     
 }

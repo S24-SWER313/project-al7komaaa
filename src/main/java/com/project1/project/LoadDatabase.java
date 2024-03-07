@@ -32,16 +32,20 @@ public class LoadDatabase {
                                     ShareRepo shareRepository) {
         return args -> {
             // Create and persist users
-
+            // User mary = new User();
             User mary = new User((long) 1,"mary", "hamad", "123456789", "john@example.com", 30, Gender.MALE, "Bio 1", "Location 1");
             userRepository.save(mary);
-
+            // User jad = new User();
             User jad = new User((long) 2,"Jad", "Smith", "987654321", "jane@example.com", 25, Gender.FEMAL, "Bio 2", "Location 2");
             userRepository.save(jad);
 
             // Create and persist posts
             Post postMary = new Post((long) 1, Type.TEXT, mary);
+                        // Post postMary = new Post((long) 1, Type.TEXT);
+
+
             postRepository.save(postMary);
+            // Post postJad = new Post((long) 2, Type.IMAGE);
 
             Post postJad = new Post((long) 2, Type.IMAGE, jad);
             postRepository.save(postJad);

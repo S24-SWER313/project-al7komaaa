@@ -6,7 +6,7 @@ import com.project1.project.Post.Type;
 import com.project1.project.User.User;
 
 import jakarta.persistence.*;
-import lombok.Data;
+
 
 @Entity
 @Table(name = "comments")
@@ -38,6 +38,42 @@ public class Comment {
     public String toString() {
         return "Comment [commentId=" + commentId + ", type=" + type + "]";
     }
+
+    public Long getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(Long commentId) {
+        this.commentId = commentId;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+   
+    
+
 
     
 
