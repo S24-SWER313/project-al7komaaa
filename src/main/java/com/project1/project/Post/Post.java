@@ -1,11 +1,12 @@
-package com.project1.project.post;
+package com.project1.project.Post;
 
 import java.util.List;
 
-import com.project1.project.comment.Comment;
-import com.project1.project.like.Like;
-import com.project1.project.share.Share;
-import com.project1.project.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project1.project.Comment.Comment;
+import com.project1.project.Like.Like;
+import com.project1.project.Share.Share;
+import com.project1.project.User.User;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -18,8 +19,8 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    // Other post properties
-
+private Type type;
+  @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -32,5 +33,31 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     private List<Share> shares;
+
+    public Post(Long postId, Type type, User user, List<Comment> comments, List<Like> like, List<Share> shares) {
+        this.postId = postId;
+        this.type = type;
+        this.user = user;
+        this.comments = comments;
+        this.like = like;
+        this.shares = shares;
+    }
+
+    public Post() {
+    }
+
+    public Post(Long postId, Type type, User user) {
+        this.postId = postId;
+        this.type = type;
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Post [postId=" + postId + ", type=" + type + "]";
+    }
+
+
+
 }
 

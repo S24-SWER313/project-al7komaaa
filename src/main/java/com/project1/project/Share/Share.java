@@ -1,7 +1,8 @@
-package com.project1.project.share;
+package com.project1.project.Share;
 
-import com.project1.project.post.Post;
-import com.project1.project.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project1.project.Post.Post;
+import com.project1.project.User.User;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -13,15 +14,31 @@ public class Share {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long shareId;
-
-    // Other share properties
-
+private String content;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
+  @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
+
+    public Share() {
+    }
+
+    public Share(Long shareId, String content, User user, Post post) {
+        this.shareId = shareId;
+        this.content = content;
+        this.user = user;
+        this.post = post;
+    }
+
+    @Override
+    public String toString() {
+        return "Share [shareId=" + shareId + ", content=" + content + "]";
+    }
+    
+
     
 }
