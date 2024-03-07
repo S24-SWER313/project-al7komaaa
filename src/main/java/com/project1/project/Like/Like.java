@@ -1,8 +1,9 @@
-package com.project1.project.like;
+package com.project1.project.Like;
 
-import com.project1.project.comment.Comment;
-import com.project1.project.post.Post;
-import com.project1.project.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project1.project.Comment.Comment;
+import com.project1.project.Post.Post;
+import com.project1.project.User.User;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -15,11 +16,11 @@ public class Like {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeId;
 
-    // Other like properties
-  @ManyToOne
+    private likeType type ;
+    @JsonIgnore  @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
-
+  @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "comment_id")
     private Comment comment;
@@ -28,4 +29,29 @@ public class Like {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Like(Long likeId, likeType type, Post post, User user) {
+      this.likeId = likeId;
+      this.type = type;
+      this.post = post;
+   
+      this.user = user;
+    }
+
+    public Like() {
+    }
+
+    public Like(Long likeId, likeType type, Post post, Comment comment, User user) {
+      this.likeId = likeId;
+      this.type = type;
+      this.post = post;
+      this.comment = comment;
+      this.user = user;
+    }
+
+    @Override
+    public String toString() {
+      return "Like [likeId=" + likeId + ", type=" + type + "]";
+    }
+        
+    
 }
