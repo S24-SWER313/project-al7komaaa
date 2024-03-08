@@ -5,7 +5,7 @@ import com.project1.project.Post.Post;
 import com.project1.project.User.User;
 
 import jakarta.persistence.*;
-import lombok.Data;
+
 
 @Entity
 
@@ -14,12 +14,12 @@ public class Share {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long shareId;
-private String content;
+    private String content;
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
+    private Long count=(long) 1;
 
 
 
@@ -31,8 +31,9 @@ private String content;
     public Share() {
     }
 
-    public Share(Long shareId, String content, User user, Post post) {
-        this.shareId = shareId;
+    public Share( String content, User user, Post post) {
+        this.shareId =count++;
+
         this.content = content;
         this.user = user;
         this.post = post;

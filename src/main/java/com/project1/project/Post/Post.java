@@ -19,7 +19,11 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-private Type type;
+// private Type type;
+private String image;
+private String video;
+private String content;
+private Long count =(long) 1;
   @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -34,28 +38,28 @@ private Type type;
     @OneToMany(mappedBy = "post")
     private List<Share> shares;
 
-    public Post(Long postId, Type type, User user) {
-        this.postId = postId;
-        this.type = type;
-        this.user = user;
-        // this.comments = comments;
-        // this.like = like;
-        // this.shares = shares;
-    }
 
     public Post() {
     }
 
-    public Post(Long postId, Type type) {
-        this.postId = postId;
-        this.type = type;
-        // this.user = user;
+    
+    public Post( String image, String video, String content, User user) {
+        this.postId =count++;
+        this.image = image;
+        this.video = video;
+        this.content = content;
+        this.user = user;
+      
     }
 
-    @Override
-    public String toString() {
-        return "Post [postId=" + postId + ", type=" + type + "]";
+
+    public Post( String content, User user) {
+        this.postId =count++;
+        this.content = content;
+        this.user = user;
+    
     }
+
 
     public Long getPostId() {
         return postId;
@@ -64,21 +68,42 @@ private Type type;
     public void setPostId(Long postId) {
         this.postId = postId;
     }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    public User getUser() {
+  public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+
+    public String getImage() {
+        return image;
+    }
+
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+
+    public String getVideo() {
+        return video;
+    }
+
+
+    public void setVideo(String video) {
+        this.video = video;
+    }
+
+
+    public String getContent() {
+        return content;
+    }
+
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
 
