@@ -32,8 +32,8 @@ private Long count =(long) 1;
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "post") //t8ayarat
-    private List<Like> like;
+    @OneToMany(mappedBy = "post" ) //t8ayarat
+    public  List<Like> like;
 
     @OneToMany(mappedBy = "post")
     private List<Share> shares;
@@ -44,7 +44,7 @@ private Long count =(long) 1;
 
     
     public Post( String image, String video, String content, User user) {
-        this.postId =count++;
+        this.postId =++count;
         this.image = image;
         this.video = video;
         this.content = content;
@@ -54,12 +54,18 @@ private Long count =(long) 1;
 
 
     public Post( String content, User user) {
-        this.postId =count++;
+        this.postId =++count;
         this.content = content;
         this.user = user;
     
     }
-
+    // public void addLike(Like likeee) {
+    //     if(likeee==null)
+    //     new Like();
+    //     else{
+    //     like.add(likeee);
+    //     likeee.setPost(this);}
+    // }
 
     public Long getPostId() {
         return postId;
@@ -72,7 +78,7 @@ private Long count =(long) 1;
         return user;
     }
 
-    public void setUser(User user) {
+    public  void setUser(User user) {
         this.user = user;
     }
 

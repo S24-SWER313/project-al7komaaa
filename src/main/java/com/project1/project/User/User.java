@@ -2,10 +2,8 @@
 package com.project1.project.User;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.util.List;
-
 import com.project1.project.Comment.Comment;
 import com.project1.project.Like.Like;
 import com.project1.project.Post.Post;
@@ -59,7 +57,7 @@ private Long count=(long) 1;
             LocalDate dateOfBirth) {
               
 
-        this.id =count++;
+        this.id =++count;
         this.firstName = firstName;
         this.lastName = lastName;
         this.mobile = mobile;
