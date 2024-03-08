@@ -34,7 +34,7 @@ public class LoadDatabase {
         return args -> {
             // Create and persist users
             // User mary = new User();
-            User mary = new User("mary", "hamad", "123456789", "john@example.com", Gender.MALE,LocalDate.of(2003, 4, 2));
+            User mary = new User("mary", "hamad", "123456789", "mary@example.com", Gender.MALE,LocalDate.of(2003, 4, 2));
             userRepository.save(mary);
             // User jad = new User();
             User jad = new User("Jad", "Smith", "987654321", "jane@example.com", Gender.FEMAL, LocalDate.of(2003, 5,31));

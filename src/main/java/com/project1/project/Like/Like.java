@@ -30,7 +30,7 @@ private Long count=(long) 1;
     private User user;
 
     public Like( likeType type, Post post, User user) {
-      this.likeId =count++;
+      this.likeId =++count;
 
       this.type = type;
       this.post = post;
@@ -42,9 +42,10 @@ private Long count=(long) 1;
     }
 
     public Like( likeType type, Post post, Comment comment, User user) {
-      this.likeId =count++;
+      this.likeId =++count;
       this.type = type;
       this.post = post;
+     
       this.comment = comment;
       this.user = user;
     }

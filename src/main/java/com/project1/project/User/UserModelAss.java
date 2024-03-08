@@ -11,10 +11,11 @@ public class UserModelAss implements RepresentationModelAssembler<User, EntityMo
 
     @Override
     public EntityModel<User> toModel(User user) {
-      return null;
-              // return EntityModel.of(user,
-              //   linkTo(methodOn(Controller.class).getUserById(user.getId())).withSelfRel(),
-              //   linkTo(methodOn(Controller.class).addFriend(new Long(1),user.getId())).withRel("Add Friend"));
+    
+              return EntityModel.of(user,
+                linkTo(methodOn(Controller.class).getUserById(user.getId())).withSelfRel());
+               // linkTo(methodOn(Controller.class).addFriend(new Long(1),user.getId())).withRel("Add Friend"));
+
     }
     
 }

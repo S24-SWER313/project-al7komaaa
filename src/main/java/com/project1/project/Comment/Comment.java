@@ -32,7 +32,7 @@ private Long count=(long) 1;
     }
 
     public Comment( String content, String image, String video, User user, Post post) {
-        this.commentId =count++;
+        this.commentId =++count;
         this.content = content;
         this.image = image;
         this.video = video;
