@@ -8,7 +8,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import com.project1.project.Controller;
+import com.project1.project.User.Controller;
 public class CommentModelAss implements RepresentationModelAssembler<Comment, EntityModel<Comment>> {
 
     @Override
