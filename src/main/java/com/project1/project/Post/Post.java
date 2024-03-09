@@ -45,6 +45,7 @@ private Long count =(long) 1;
     
     public Post( String image, String video, String content, User user) {
         this.postId =++count;
+        this.count=count++;
         this.image = image;
         this.video = video;
         this.content = content;
@@ -55,6 +56,7 @@ private Long count =(long) 1;
 
     public Post( String content, User user) {
         this.postId =++count;
+        this.count=count++;
         this.content = content;
         this.user = user;
     

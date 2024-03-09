@@ -18,6 +18,7 @@ public class Comment {
     private String image;
     private String video;
 private Long count=(long) 1;
+      
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -29,10 +30,12 @@ private Long count=(long) 1;
 
 
     public Comment() {
+        
     }
-
+  
     public Comment( String content, String image, String video, User user, Post post) {
         this.commentId =++count;
+        this.count=count;
         this.content = content;
         this.image = image;
         this.video = video;

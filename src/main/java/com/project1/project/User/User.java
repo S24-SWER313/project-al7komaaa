@@ -58,6 +58,7 @@ private Long count=(long) 1;
               
 
         this.id =++count;
+        this.count=count++;
         this.firstName = firstName;
         this.lastName = lastName;
         this.mobile = mobile;

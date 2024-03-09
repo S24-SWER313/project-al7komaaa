@@ -33,7 +33,7 @@ public class Share {
 
     public Share( String content, User user, Post post) {
         this.shareId =++count;
-
+        this.count=count++;
         this.content = content;
         this.user = user;
         this.post = post;
