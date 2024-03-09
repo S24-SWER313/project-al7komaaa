@@ -1,14 +1,9 @@
 package com.project1.project.Share;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project1.project.Post.Post;
 import com.project1.project.User.User;
-
 import jakarta.persistence.*;
-
-
 @Entity
-
 @Table(name = "shares")
 public class Share {
     @Id
@@ -19,15 +14,11 @@ public class Share {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    private Long count=(long) 1;
-
-
-
-  @JsonIgnore
+    private static Long count = 0L; // متغير ثابت لزيادة العداد
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
-
     public Share() {
     }
 
@@ -38,47 +29,35 @@ public class Share {
         this.user = user;
         this.post = post;
     }
-
     @Override
     public String toString() {
         return "Share [shareId=" + shareId + ", content=" + content + "]";
     }
-
     public Long getShareId() {
         return shareId;
     }
-
     public void setShareId(Long shareId) {
         this.shareId = shareId;
     }
-
     public String getContent() {
         return content;
     }
-
     public void setContent(String content) {
         this.content = content;
     }
-
     public User getUser() {
         return user;
     }
-
     public void setUser(User user) {
         this.user = user;
     }
-
     public Post getPost() {
         return post;
     }
-
     public void setPost(Post post) {
         this.post = post;
     }
     
-
-
-
     
     
 }
