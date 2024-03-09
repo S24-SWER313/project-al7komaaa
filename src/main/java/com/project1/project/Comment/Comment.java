@@ -24,10 +24,12 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
     public Comment() {
+        
     }
-
+  
     public Comment( String content, String image, String video, User user, Post post) {
         this.commentId =++count;
+        this.count=count;
         this.content = content;
         this.image = image;
         this.video = video;

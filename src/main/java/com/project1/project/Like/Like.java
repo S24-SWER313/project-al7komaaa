@@ -25,7 +25,7 @@ public class Like {
 
     public Like( likeType type, Post post, User user) {
       this.likeId =++count;
-
+      this.count=count++;
       this.type = type;
       this.post = post;
    
@@ -36,6 +36,7 @@ public class Like {
 
     public Like( likeType type, Post post, Comment comment, User user) {
       this.likeId =++count;
+      this.count=count++;
       this.type = type;
       this.post = post;
       this.comment = comment;

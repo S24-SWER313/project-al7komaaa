@@ -61,37 +61,46 @@ private UserModelAss userModelAss;
     }
 
     @GetMapping("/user/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userRepo.findById(id)
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        User user = userRepo.findById(id)
                 .orElseThrow(() -> new NFException(User.class));
+        return ResponseEntity.ok(user);
     }
+// اغير الريسبونس انتتي
 
-    @GetMapping("/userByFirstName/{name}") // netzakar eno ne3malha non-CaseSensitive
-    public List<User> getUserByFirstName(@PathVariable String name) {
-
-        List<User> nameList = userRepo.findByFirstName(name);
-        if (nameList.size() == 0)
-            new NFException(userRepo.findByFirstName(name).getClass());
-        return nameList;
-    }
-
-    @GetMapping("/userByLastName/{name}") // netzakar eno ne3malha non-CaseSensitive
-    public List<User> getUserByLastName(@PathVariable String name) {
-        return userRepo.findByLastName(name);
-    }
-    @GetMapping("/userName/{name}")
-    public List<User> getUserName(@PathVariable String name) {
-        List<User> userName = userRepo.findByFullName(name);
-        if (userName.isEmpty()) {
-            List<User> usersByFirstName = userRepo.findByFirstName(name);
-            if (usersByFirstName.isEmpty()) {
-                return userRepo.findByLastName(name);
-            } else {
-                return usersByFirstName;
-            }
-        } else {
-            return userName;
+  
+    @GetMapping("/userByFirstName/{name}")
+    public ResponseEntity<List<User>> getUserByFirstName(@PathVariable String name) {
+        List<User> userList = userRepo.findByFirstName(name);
+        if (userList.isEmpty()) {
+            throw new NFException(User.class);
         }
+        return ResponseEntity.ok(userList);
     }
+
+    @GetMapping("/userByLastName/{name}")// netzakar eno ne3malha non-CaseSensitive
+    public ResponseEntity<List<User>> getUserByLastName(@PathVariable String name) {
+        List<User> userList = userRepo.findByLastName(name);
+        if (userList.isEmpty()) {
+            throw new NFException(User.class);
+        }
+        return ResponseEntity.ok(userList);
+    }
+
+        @GetMapping("/userName/{name}")
+        public ResponseEntity<List<User>> getUserName(@PathVariable String name) {
+            List<User> userList = userRepo.findByFullName(name);
+            if (userList.isEmpty()) {
+                userList = userRepo.findByFirstName(name);
+                if (userList.isEmpty()) {
+                    userList = userRepo.findByLastName(name);
+                }
+            }
+            if (userList.isEmpty()) {
+                throw new NFException(User.class);
+            }
+            return ResponseEntity.ok(userList);
+        }
+    
 
 }

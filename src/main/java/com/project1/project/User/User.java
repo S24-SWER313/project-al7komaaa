@@ -49,6 +49,7 @@ public class User {
 
 
         this.id =++count;
+        this.count=count++;
         this.firstName = firstName;
         this.lastName = lastName;
         this.mobile = mobile;

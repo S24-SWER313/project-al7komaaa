@@ -1,19 +1,10 @@
 package com.project1.project;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-// public class NFException extends RuntimeException {
-
-//     NFException(Class clazz) {
-        
-//         super("Could not find  " + clazz.getName() );
-      
-      
-
-      public class NFException extends RuntimeException {
-      
-          public NFException(Class<?> clazz) {
-              super("Could not find " + clazz.getSimpleName());
-          }
-      }
-      
-
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class NFException extends RuntimeException {
+    public NFException(Class<?> clazz) {
+        super("Resource of type " + clazz.getSimpleName() + " not found");
+    }
+}
