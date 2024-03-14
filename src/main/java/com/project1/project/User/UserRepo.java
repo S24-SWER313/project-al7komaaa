@@ -8,17 +8,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> { 
 
-    List<User> findByFirstName(String firstName);
 
-    List< User> findByLastName(String lastName);
+
+    List<User> findByFirstname(String firstname);
+    List< User> findByLastname(String lastname);
     // List <User> findByGetName(String name);
- @Query("SELECT u FROM User u WHERE CONCAT(u.firstName, ' ', u.lastName) = ?1")
-    List<User> findByFullName(String fullName);
+    @Query("SELECT u FROM User u WHERE CONCAT(u.firstname, ' ', u.lastname) = ?1")
+    List<User> findByFullname(String fullname);
 
 
     Optional<User> findByUsername(String username);
 
-    Optional<User> findByUserName(String userName);
+    // Optional<User> findByUserName(String userName);
 
     Boolean existsByEmail(String email);
   
