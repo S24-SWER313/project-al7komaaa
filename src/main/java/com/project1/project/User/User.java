@@ -15,19 +15,23 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String firstname;
+    private String lastname;
     private String mobile;
     private String email;
     private int age;
+    private String username;
     private Gender gender;
     private String bio;
     private String location;
-    private String fullName;
+    private String fullname;
+    
     private String image;
-    private LocalDate dateOfBirth;
-    private String backgroudImage;
-    private boolean isFriend;
+    private LocalDate dateofbirth;
+    private String backgroudimage;
+    private boolean isfriend;
+private String password ;
+
     private static Long count = 0L; // متغير ثابت لزيادة العداد
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
@@ -50,12 +54,12 @@ public class User {
 
         this.id =++count;
         this.count=count++;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstname = firstName;
+        this.lastname = lastName;
         this.mobile = mobile;
         this.email = email;
         this.gender = gender;
-        this.dateOfBirth = dateOfBirth;
+        this.dateofbirth = dateOfBirth;
     }
     public void addFriend(User friend) {
         Long count = friends.stream().filter(e -> e.getId().equals(friend.getId())).count();
@@ -71,18 +75,18 @@ public class User {
     }
     public String getFirstName() {
         
-        return firstName;
+        return firstname;
     }
     public void setFirstName(String firstName) {
-        this.fullName= this.firstName = this.firstName + " " + this.lastName;
-        this.firstName = firstName;
+        this.fullname= this.firstname = this.firstname + " " + this.lastname;
+        this.firstname = firstName;
     }
     public String getLastName() {
-        return lastName;
+        return lastname;
     }
     public void setLastName(String lastName) {
-        this.fullName= this.firstName = this.firstName + " " + this.lastName;
-        this.lastName = lastName;
+        this.fullname= this.firstname = this.firstname + " " + this.lastname;
+        this.lastname = lastName;
     }
     public String getMobile() {
         return mobile;
@@ -97,7 +101,7 @@ public class User {
         this.email = email;
     }
     public int getAge() {
-      this.age=(int)(LocalDate.now().getYear()-dateOfBirth.getYear());
+      this.age=(int)(LocalDate.now().getYear()-dateofbirth.getYear());
                return age;
     }
     public Gender getGender() {
@@ -119,8 +123,8 @@ public class User {
         this.location = location;
     }
     public String getFullName() {
-        this.fullName= this.firstName = this.firstName + " " + this.lastName;
-        return fullName;
+        this.fullname= this.firstname = this.firstname + " " + this.lastname;
+        return fullname;
     }
     public String getImage() {
         return image;
@@ -129,21 +133,39 @@ public class User {
         this.image = image;
     }
     public LocalDate getDateOfBirth() {
-        return dateOfBirth;
+        return dateofbirth;
     }
     public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+        this.dateofbirth = dateOfBirth;
     }
     public String getBackgroudImage() {
-        return backgroudImage;
+        return backgroudimage;
     }
     public void setBackgroudImage(String backgroudImage) {
-        this.backgroudImage = backgroudImage;
+        this.backgroudimage = backgroudImage;
     }
     public boolean isFriend() {
-        return isFriend;
+        return isfriend;
     }
     public void setFriend(boolean isFriend) {
-        this.isFriend = isFriend;
+        this.isfriend = isFriend;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getUserName() {
+        return username;
+    }
+
+    public void setUserName(String userName) {
+        username = userName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
 }
+  
