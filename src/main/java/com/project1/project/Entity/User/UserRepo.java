@@ -1,4 +1,4 @@
-package com.project1.project.User;
+package com.project1.project.Entity.User;
 import java.util.List;
 import java.util.Optional;
 

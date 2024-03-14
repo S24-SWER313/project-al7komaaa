@@ -1,4 +1,4 @@
-package com.project1.project.Comment;
+package com.project1.project.Entity.Comment;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

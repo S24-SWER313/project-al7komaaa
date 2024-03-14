@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.project1.project.Security.Jwt.AuthEntryPointJwt;
 import com.project1.project.Security.Jwt.AuthTokenFilter;
 import com.project1.project.Security.Services.UserDetailsServiceImpl;
-
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 // import com.bezkoder.springjwt.security.jwt.AuthEntryPointJwt;
 // import com.bezkoder.springjwt.security.jwt.AuthTokenFilter;
 // import com.bezkoder.springjwt.security.services.UserDetailsServiceImpl;
@@ -84,22 +84,44 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 //    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 //  }
   
+  // @Bean
+  // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  //   http.csrf(csrf -> csrf.disable())
+  //       .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+  //       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+  //       .authorizeHttpRequests(auth -> 
+  //         auth.requestMatchers("/api/auth/**").permitAll()
+  //             .requestMatchers("/api/test/**").permitAll()
+  //             .anyRequest().authenticated()
+
+  //       );
+    
+  //   http.authenticationProvider(authenticationProvider());
+
+  //   http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    
+  //   return http.build();
+  // }
+
+
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> 
-          auth.requestMatchers("/api/auth/**").permitAll()
-              .requestMatchers("/api/test/**").permitAll().requestMatchers("/api/auth/signup").permitAll()//hon
-              .anyRequest().authenticated()
+          auth.requestMatchers("/api/auth/**").permitAll() // يجب أن تشمل جميع المسارات المتعلقة بالتسجيل والمصادقة
+              .requestMatchers("/api/test/**").permitAll()
+              .anyRequest().permitAll()); // إذا كانت هذه المسارات غير محمية
+        //       .anyRequest().authenticated()
 
-        );
+        // );
     
     http.authenticationProvider(authenticationProvider());
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     
     return http.build();
-  }
+}
+
 }

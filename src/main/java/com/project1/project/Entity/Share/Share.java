@@ -1,7 +1,7 @@
-package com.project1.project.Share;
+package com.project1.project.Entity.Share;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project1.project.Post.Post;
-import com.project1.project.User.User;
+import com.project1.project.Entity.Post.Post;
+import com.project1.project.Entity.User.User;
 import jakarta.persistence.*;
 @Entity
 @Table(name = "shares")

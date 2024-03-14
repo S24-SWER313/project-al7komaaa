@@ -1,14 +1,14 @@
-package com.project1.project.User;
+package com.project1.project.Entity.User;
 
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import com.project1.project.Comment.Comment;
-import com.project1.project.Like.Like;
-import com.project1.project.Post.Post;
-import com.project1.project.Share.Share;
+import com.project1.project.Entity.Comment.Comment;
+import com.project1.project.Entity.Like.Like;
+import com.project1.project.Entity.Post.Post;
+import com.project1.project.Entity.Share.Share;
 @Entity
 @Table(name = "users")
 public class User {
@@ -101,9 +101,13 @@ private String password ;
         this.email = email;
     }
     public int getAge() {
-      this.age=(int)(LocalDate.now().getYear()-dateofbirth.getYear());
+        if(dateofbirth==null){
+            return 0;
+        }else{ 
+      this.age=(int)(LocalDate.now().getYear()-getDateofbirth().getYear());
                return age;
-    }
+    }}
+    
     public Gender getGender() {
         return gender;
     }

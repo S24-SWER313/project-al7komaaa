@@ -1,4 +1,4 @@
-package com.project1.project.User;
+package com.project1.project.Entity.User;
 
 import java.net.URI;
 import java.util.List;
@@ -18,14 +18,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.project1.project.NFException;
-import com.project1.project.Comment.Comment;
-import com.project1.project.Comment.CommentRepo;
-import com.project1.project.Like.Like;
-import com.project1.project.Like.LikeRepo;
-import com.project1.project.Post.Post;
-import com.project1.project.Post.PostRepo;
-import com.project1.project.Share.Share;
-import com.project1.project.Share.ShareRepo;
+import com.project1.project.Entity.Comment.Comment;
+import com.project1.project.Entity.Comment.CommentRepo;
+import com.project1.project.Entity.Like.Like;
+import com.project1.project.Entity.Like.LikeRepo;
+import com.project1.project.Entity.Post.Post;
+import com.project1.project.Entity.Post.PostRepo;
+import com.project1.project.Entity.Share.Share;
+import com.project1.project.Entity.Share.ShareRepo;
 
 import jakarta.transaction.Transactional;
 
