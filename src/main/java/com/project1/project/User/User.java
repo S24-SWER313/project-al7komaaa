@@ -20,6 +20,7 @@ public class User {
     private String mobile;
     private String email;
     private int age;
+    private String UserName;
     private Gender gender;
     private String bio;
     private String location;
@@ -28,6 +29,8 @@ public class User {
     private LocalDate dateOfBirth;
     private String backgroudImage;
     private boolean isFriend;
+private String password ;
+
     private static Long count = 0L; // متغير ثابت لزيادة العداد
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
@@ -146,4 +149,22 @@ public class User {
     public void setFriend(boolean isFriend) {
         this.isFriend = isFriend;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getUserName() {
+        return UserName;
+    }
+
+    public void setUserName(String userName) {
+        UserName = userName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
 }
+  
