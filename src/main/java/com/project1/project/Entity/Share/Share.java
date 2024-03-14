@@ -3,18 +3,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project1.project.Entity.Post.Post;
 import com.project1.project.Entity.User.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "shares")
 public class Share {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long shareId;
+    @Size(max = 10000, message = "Content is too long")
     private String content;
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    private static Long count = 0L; // متغير ثابت لزيادة العداد
+   
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
@@ -23,8 +25,7 @@ public class Share {
     }
 
     public Share( String content, User user, Post post) {
-        this.shareId =++count;
-        this.count=count++;
+       
         this.content = content;
         this.user = user;
         this.post = post;

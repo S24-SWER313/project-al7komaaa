@@ -33,6 +33,7 @@ import com.project1.project.Security.Services.UserDetailsImpl;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+  
   @Autowired
   AuthenticationManager authenticationManager;
 
