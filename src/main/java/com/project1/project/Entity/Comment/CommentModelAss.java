@@ -1,4 +1,4 @@
-package com.project1.project.Comment;
+package com.project1.project.Entity.Comment;
 
 
 import java.lang.reflect.Method;
@@ -8,7 +8,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import com.project1.project.User.Controller;
+import com.project1.project.Entity.User.Controller;
 public class CommentModelAss implements RepresentationModelAssembler<Comment, EntityModel<Comment>> {
 
     @Override

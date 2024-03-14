@@ -1,4 +1,4 @@
-package com.project1.project.Post;
+package com.project1.project.Entity.Post;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project1.project.Comment.Comment;
-import com.project1.project.Like.Like;
-import com.project1.project.Like.likeType;
-import com.project1.project.User.User;
+import com.project1.project.Entity.Comment.Comment;
+import com.project1.project.Entity.Like.Like;
+import com.project1.project.Entity.Like.likeType;
+import com.project1.project.Entity.User.User;
 
 @RestController
 @RequestMapping("/post") 

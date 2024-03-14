@@ -1,4 +1,4 @@
-package com.project1.project.Post;
+package com.project1.project.Entity.Post;
 
 public enum Type {
 

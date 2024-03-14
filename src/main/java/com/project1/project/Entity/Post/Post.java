@@ -1,10 +1,10 @@
-package com.project1.project.Post;
+package com.project1.project.Entity.Post;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project1.project.Comment.Comment;
-import com.project1.project.Like.Like;
-import com.project1.project.Share.Share;
-import com.project1.project.User.User;
+import com.project1.project.Entity.Comment.Comment;
+import com.project1.project.Entity.Like.Like;
+import com.project1.project.Entity.Share.Share;
+import com.project1.project.Entity.User.User;
 import jakarta.persistence.*;
 @Entity
 @Table(name = "posts")

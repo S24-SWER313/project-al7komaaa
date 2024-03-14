@@ -1,4 +1,4 @@
-package com.project1.project.User;
+package com.project1.project.Entity.User;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
