@@ -4,6 +4,7 @@ import com.project1.project.Entity.Post.Post;
 import com.project1.project.Entity.User.User;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -11,10 +12,12 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
     // private Type type;
+
+    @Size(max = 10000, message = "Content is too long")
     private String content;
     private String image;
     private String video;
-    private static Long count = 0L; // متغير ثابت لزيادة العداد
+   
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -28,8 +31,7 @@ public class Comment {
     }
   
     public Comment( String content, String image, String video, User user, Post post) {
-        this.commentId =++count;
-        this.count=count;
+        
         this.content = content;
         this.image = image;
         this.video = video;
@@ -37,7 +39,7 @@ public class Comment {
         this.post = post;
     }
     public Comment(String content, User user, Post post) {
-        this.commentId =++count;
+     
         this.content = content;
         this.user = user;
         this.post = post;

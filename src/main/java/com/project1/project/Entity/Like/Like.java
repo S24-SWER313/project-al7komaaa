@@ -11,7 +11,7 @@ public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeId;
-    private static Long count = 0L; // متغير ثابت لزيادة العداد
+
     private likeType type ;
     @JsonIgnore  @ManyToOne
     @JoinColumn(name = "post_id")
@@ -25,8 +25,7 @@ public class Like {
     private User user;
 
     public Like( likeType type, Post post, User user) {
-      this.likeId =++count;
-      this.count=count++;
+      
       this.type = type;
       this.post = post;
    
@@ -36,8 +35,7 @@ public class Like {
     }
 
     public Like( likeType type, Post post, Comment comment, User user) {
-      this.likeId =++count;
-      this.count=count++;
+     
       this.type = type;
       this.post = post;
       this.comment = comment;
