@@ -48,18 +48,18 @@ private String password ;
     public User() {
     }
    
-    public User( String firstName, String lastName, String mobile, String email,  Gender gender,
-            LocalDate dateOfBirth) {
+    public User( String firstname, String lastname, String mobile, String email,  Gender gender,
+            LocalDate dateofbirth) {
 
 
         this.id =++count;
         this.count=count++;
-        this.firstname = firstName;
-        this.lastname = lastName;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.mobile = mobile;
         this.email = email;
         this.gender = gender;
-        this.dateofbirth = dateOfBirth;
+        this.dateofbirth = dateofbirth;
     }
     public void addFriend(User friend) {
         Long count = friends.stream().filter(e -> e.getId().equals(friend.getId())).count();
@@ -73,18 +73,18 @@ private String password ;
     public void setId(Long id) {
         this.id = id;
     }
-    public String getFirstName() {
+    public String getFirstname() {
         
         return firstname;
     }
-    public void setFirstName(String firstName) {
+    public void setFirstname(String firstName) {
         this.fullname= this.firstname = this.firstname + " " + this.lastname;
         this.firstname = firstName;
     }
-    public String getLastName() {
+    public String getLastname() {
         return lastname;
     }
-    public void setLastName(String lastName) {
+    public void setLastname(String lastName) {
         this.fullname= this.firstname = this.firstname + " " + this.lastname;
         this.lastname = lastName;
     }
@@ -122,7 +122,7 @@ private String password ;
     public void setLocation(String location) {
         this.location = location;
     }
-    public String getFullName() {
+    public String getFullname() {
         this.fullname= this.firstname = this.firstname + " " + this.lastname;
         return fullname;
     }
@@ -132,16 +132,16 @@ private String password ;
     public void setImage(String image) {
         this.image = image;
     }
-    public LocalDate getDateOfBirth() {
+    public LocalDate getDateofbirth() {
         return dateofbirth;
     }
-    public void setDateOfBirth(LocalDate dateOfBirth) {
+    public void setDateofbirth(LocalDate dateOfBirth) {
         this.dateofbirth = dateOfBirth;
     }
-    public String getBackgroudImage() {
+    public String getBackgroudimage() {
         return backgroudimage;
     }
-    public void setBackgroudImage(String backgroudImage) {
+    public void setBackgroudimage(String backgroudImage) {
         this.backgroudimage = backgroudImage;
     }
     public boolean isFriend() {
@@ -155,15 +155,21 @@ private String password ;
         return password;
     }
 
-    public String getUserName() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUserName(String userName) {
+    public void setUsername(String userName) {
         username = userName;
     }
 
     public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public User(String email, String username, String password) {
+        this.email = email;
+        this.username = username;
         this.password = password;
     }
     
