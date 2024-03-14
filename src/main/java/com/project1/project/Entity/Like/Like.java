@@ -1,8 +1,9 @@
-package com.project1.project.Like;
+package com.project1.project.Entity.Like;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project1.project.Comment.Comment;
-import com.project1.project.Post.Post;
-import com.project1.project.User.User;
+import com.project1.project.Entity.Comment.Comment;
+import com.project1.project.Entity.Post.Post;
+import com.project1.project.Entity.User.User;
+
 import jakarta.persistence.*;
 @Entity
 @Table(name = "likes")
@@ -10,7 +11,7 @@ public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeId;
-    private static Long count = 0L; // متغير ثابت لزيادة العداد
+
     private likeType type ;
     @JsonIgnore  @ManyToOne
     @JoinColumn(name = "post_id")
@@ -24,8 +25,7 @@ public class Like {
     private User user;
 
     public Like( likeType type, Post post, User user) {
-      this.likeId =++count;
-      this.count=count++;
+      
       this.type = type;
       this.post = post;
    
@@ -35,8 +35,7 @@ public class Like {
     }
 
     public Like( likeType type, Post post, Comment comment, User user) {
-      this.likeId =++count;
-      this.count=count++;
+     
       this.type = type;
       this.post = post;
       this.comment = comment;

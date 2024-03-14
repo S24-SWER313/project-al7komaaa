@@ -1,6 +1,8 @@
 package com.project1.project.Security.Services;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -10,7 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project1.project.User.User;
+import com.project1.project.Entity.User.User;
 
 public class UserDetailsImpl implements UserDetails {
   private static final long serialVersionUID = 1L;
@@ -24,15 +26,15 @@ public class UserDetailsImpl implements UserDetails {
   @JsonIgnore
   private String password;
 
-  private  Collection<? extends GrantedAuthority> authorities;
+   private Collection<? extends GrantedAuthority> authorities;
 
-  public UserDetailsImpl(Long id, String username, String email, String password,
-      Collection<? extends GrantedAuthority> authorities) {
+  public UserDetailsImpl(Long id, String username, String email, String password , Collection<? extends GrantedAuthority> authorities) {
     this.id = id;
     this.username = username;
     this.email = email;
     this.password = password;
-    this.authorities = authorities;
+    this.authorities=authorities;
+   
   }
 
   public static UserDetailsImpl build(User user) {
@@ -44,15 +46,15 @@ public class UserDetailsImpl implements UserDetails {
         user.getId(), 
         user.getUsername(), 
         user.getEmail(),
-        user.getPassword(), 
-        null);
-}
+        user.getPassword(),
+        null) ;
+       
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return null;
-  }
-
+}
   public Long getId() {
     return id;
   }

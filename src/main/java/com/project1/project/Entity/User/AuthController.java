@@ -1,4 +1,4 @@
-package com.project1.project.User;
+package com.project1.project.Entity.User;
 
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +33,7 @@ import com.project1.project.Security.Services.UserDetailsImpl;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+  
   @Autowired
   AuthenticationManager authenticationManager;
 

@@ -1,11 +1,12 @@
-package com.project1.project.Post;
+package com.project1.project.Entity.Post;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project1.project.Comment.Comment;
-import com.project1.project.Like.Like;
-import com.project1.project.Share.Share;
-import com.project1.project.User.User;
+import com.project1.project.Entity.Comment.Comment;
+import com.project1.project.Entity.Like.Like;
+import com.project1.project.Entity.Share.Share;
+import com.project1.project.Entity.User.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "posts")
 public class Post {
@@ -15,9 +16,10 @@ public class Post {
 // private Type type;
 private String image;
 private String video;
+@Size(max = 1000000, message = "Content is too long")
 private String content;
 // private Long count =(long) 1;
-private static Long count = 0L; // متغير ثابت لزيادة العداد
+
 
   @JsonIgnore
     @ManyToOne
@@ -37,8 +39,7 @@ private static Long count = 0L; // متغير ثابت لزيادة العداد
  
     public Post( String image, String video, String content, User user) {
 
-        this.postId =++count;
-        this.count=count++;
+      
         this.image = image;
         this.video = video;
         this.content = content;
@@ -48,8 +49,7 @@ private static Long count = 0L; // متغير ثابت لزيادة العداد
 
 
     public Post( String content, User user) {
-        this.postId =++count;
-        this.count=count++;
+      
         this.content = content;
         this.user = user;
 

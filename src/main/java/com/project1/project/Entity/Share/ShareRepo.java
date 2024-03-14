@@ -1,4 +1,4 @@
-package com.project1.project.Share;
+package com.project1.project.Entity.Share;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
