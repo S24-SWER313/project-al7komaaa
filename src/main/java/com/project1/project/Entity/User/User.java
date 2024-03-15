@@ -1,14 +1,14 @@
 package com.project1.project.Entity.User;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+// import jakarta.validation.constraints.Email;
+// import jakarta.validation.constraints.Max;
+// import jakarta.validation.constraints.Min;
+// import jakarta.validation.constraints.NotBlank;
+// import jakarta.validation.constraints.NotNull;
+// import jakarta.validation.constraints.Past;
+// import jakarta.validation.constraints.Pattern;
+// import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,41 +27,37 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-   @NotNull(message = "First name is required")
-   @Pattern(regexp = "^[a-zA-Z]*$", message = "First name must contain only letters")
-    @Size(min = 2, max = 30, message = "First name must be between 2 and 30 characters")
-    private String firstname;
+    // @NotNull(message = "First name is required")
+    // @Pattern(regexp = "^[a-zA-Z]*$", message = "First name must contain only letters")
+    // @Size(min = 2, max = 30, message = "First name must be between 2 and 30 characters")
+    private String firstname="unKnow";
 
-      
-   @NotNull(message = "Last name is required")
-   @Pattern(regexp = "^[a-zA-Z]*$", message = "Last name must contain only letters")
-    @Size(min = 2, max = 30, message = "First name must be between 2 and 30 characters")
-    private String lastname;
+    // @NotNull(message = "Last name is required")
+    // @Pattern(regexp = "^[a-zA-Z]*$", message = "Last name must contain only letters")
+    // @Size(min = 2, max = 30, message = "Last name must be between 2 and 30 characters")
+    private String lastname=" user";
 
-    @NotBlank(message = "Mobile number is required")
-    @Pattern(regexp="\\d+", message="Mobile number must contain only digits")
+    // @NotBlank(message = "Mobile number is required")
+    // @Pattern(regexp="\\d+", message="Mobile number must contain only digits")
     private String mobile;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
+    // @NotBlank(message = "Email is required")
+    // @Email(message = "Invalid email format")
     private String email;
 
-    //  @Min(value = 18, message = "Age must be at least 18")
+    // @Min(value = 18, message = "Age must be at least 18")
     // @Max(value = 120, message = "Age must be less than or equal to 120")
     private int age;
 
-    
     private String username;
     private Gender gender;
     private String bio;
     private String location;
 
-    
+    @Transient 
     private String fullname;
     private String image;
     
-    @Past(message = "Date of birth must be in the past")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateofbirth;
 
     private String backgroudimage;
@@ -83,15 +79,11 @@ public class User {
     public User() {
     }
 
-    public User(String firstname, String lastname, String mobile, String email, Gender gender,
-            LocalDate dateofbirth) {
-
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.mobile = mobile;
+  
+    public User( String username,String email, String password) {
         this.email = email;
-        this.gender = gender;
-        this.dateofbirth = dateofbirth;
+        this.username = username;
+        this.password = password;
     }
 
     public void addFriend(User friend) {
@@ -114,8 +106,9 @@ public class User {
     }
 
     public void setFirstname(String firstName) {
-        this.fullname = this.firstname = this.firstname + " " + this.lastname;
-        this.firstname = firstName;
+        if (firstName != null) { 
+            this.fullname = this.firstname = this.firstname + " " + this.lastname;
+            this.firstname = firstName;}
     }
 
     public String getLastname() {
@@ -123,8 +116,9 @@ public class User {
     }
 
     public void setLastname(String lastName) {
+if(lastName!=null){
         this.fullname = this.firstname = this.firstname + " " + this.lastname;
-        this.lastname = lastName;
+        this.lastname = lastName;}
     }
 
     public String getMobile() {
@@ -230,10 +224,5 @@ public class User {
         this.password = password;
     }
 
-    public User(String email, String username, String password) {
-        this.email = email;
-        this.username = username;
-        this.password = password;
-    }
-
+   
 }
