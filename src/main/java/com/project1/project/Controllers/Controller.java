@@ -1,4 +1,4 @@
-package com.project1.project.Entity.User;
+package com.project1.project.Controllers;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -28,6 +28,9 @@ import com.project1.project.Entity.Post.Post;
 import com.project1.project.Entity.Post.PostRepo;
 import com.project1.project.Entity.Share.Share;
 import com.project1.project.Entity.Share.ShareRepo;
+import com.project1.project.Entity.User.User;
+import com.project1.project.Entity.User.UserModelAss;
+import com.project1.project.Entity.User.UserRepo;
 
 import jakarta.transaction.Transactional;
 
