@@ -6,10 +6,14 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,13 +27,17 @@ import com.project1.project.Entity.Share.Share;
 import com.project1.project.Entity.Share.ShareRepo;
 import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserRepo;
+import com.project1.project.Payload.Response.MessageResponse;
+import com.project1.project.Security.Jwt.JwtUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/post")
 public class PostController {
-
+  @Autowired
+  private JwtUtils jwtUtils;
+ 
     @Autowired
     private PostRepo postRepo;
     @Autowired
@@ -41,24 +49,24 @@ public class PostController {
     @Autowired
     private  CommentRepo commentRepo;
 
-    @PostMapping("/create")
-    public Post createPost(HttpServletRequest request,Post post){
-    // post.setUser(user);
-    // return postRepo.save(post);
-    Long userId = (Long) request.getAttribute("userId"); 
-    if (userId == null) {
-        return null;
-    }
-     User user = userRepo.findById(userId).orElse(null);
-    post.setUser(user);
    
-    return postRepo.save(post);
+    
+    @PostMapping("/create")
+    public ResponseEntity<?> createPost(@RequestHeader("Authorization") String jwt, @RequestBody Post post) {
+      
+        String username = jwtUtils.extractUsername(jwt);
+        
+        User user = userRepo.findByUsername(username)
+                            .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        post.setUser(user);
+        
+        postRepo.save(post);
+        
+        return ResponseEntity.ok(new MessageResponse("Post Created successfully!"));
+    }
+    
 
-    // if (user == null) {
-    //     return Collections.emptyList();
-    // }
-    // return user.posts; 
-}
 
 
     @GetMapping("/posts")
@@ -67,20 +75,21 @@ public class PostController {
         return postRepo.findAll();
     }
 
-    @PostMapping("/share")
-    public Share sharePost(Long postId, HttpServletRequest request , String content) {
-        Long userId = (Long) request.getAttribute("userId"); 
-        if (userId == null) {
-            return null;
-        }
-        User user = userRepo.findById(userId).orElse(null);
-        Post post = postRepo.findById(postId).orElse(null);
-       Share share = new Share(content,user,post);
-
-
-        return shareRepo.save(share);
+    @PostMapping("/share/{postId}")
+    public ResponseEntity<?> sharePost(@PathVariable Long postId, @RequestHeader("Authorization") String jwt, @RequestBody String content) {
+      
+            String username = jwtUtils.extractUsername(jwt);
+            User user = userRepo.findByUsername(username)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
+            Post post = postRepo.findById(postId).orElse(null);
+            if (post == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
+            }
+            Share share = new Share(content, user, post);
+            shareRepo.save(share);
+            return ResponseEntity.ok(new MessageResponse("Share created successfully!"));
     }
-
+    
 
     @GetMapping("/posts/{postId}")
     public Post findById(@PathVariable Long postId) {
@@ -90,9 +99,11 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    public void deleteById(Long postId, Long userId) throws Exception {
-      
-        if (userHasPermissionToDeletePost(postId, userId)) {
+    public void deleteById(@PathVariable Long postId, @RequestHeader("Authorization") String jwt) throws Exception {
+        String username = jwtUtils.extractUsername(jwt);
+        User user = userRepo.findByUsername(username)
+                            .orElseThrow(() -> new RuntimeException("User not found"));
+        if (userHasPermissionToDeletePost(postId, user.getId())) {
     
             postRepo.deleteById(postId);
         } else {
@@ -100,46 +111,49 @@ public class PostController {
         }
     }
     
-    // تحقق مما إذا كان المستخدم مخولًا بحذف المنشور
     private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
-        // قم بفحص قاعدة البيانات أو أي نظام مصادقة آخر للتحقق مما إذا كان المستخدم هو صاحب المنشور
-        // على سبيل المثال، يمكنك التحقق من أن المستخدم مملوك للمنشور في قاعدة البيانات
+     
         Post post = postRepo.findById(postId).orElse(null);
 
         return post != null && post.user.getId().equals(userId);
     }
     
     /////////////////////////////////////////////////////////////////////
-    @PostMapping("/comment")
-    public Comment createComment(Comment coment, HttpServletRequest request, String content , Long postId) {
+    @PostMapping("/comment/{postId}/post")
+    public ResponseEntity<MessageResponse> createComment( @RequestHeader("Authorization") String jwt, @RequestBody Comment comment, @PathVariable Long postId) {
 
-        Long userId = (Long) request.getAttribute("userId"); 
-        if (userId == null) {
-            return null;
-        }
-        User user = userRepo.findById(userId).orElse(null);
+        String username = jwtUtils.extractUsername(jwt);
+        User user = userRepo.findByUsername(username)
+                            .orElseThrow(() -> new RuntimeException("User not found"));
         Post post = postRepo.findById(postId).orElse(null);
-        Comment comment =new Comment(content,user,post);
-        
-        return commentRepo.save(comment);
-    }
-
-   @DeleteMapping("/{PostId}/Comment{commentId}")
-    public List<Comment> deleteComment(Long commentId, Long postId, HttpServletRequest request) throws Exception {
-        Long userId = (Long) request.getAttribute("userId"); 
-        if (userId == null) {
-            return null;
+        if (post == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Post not found"));
         }
-      List<Comment>postComments=postRepo.postComments(postId);
-      Comment comment=postComments.stream().filter(e->e.getCommentId().equals(commentId)).collect(Collectors.toList()).getFirst();
+        post.postComments.add(comment);
+        comment.setUser(user);
+        comment.setPost(post);
+        // user.comments.add(comment);
+        commentRepo.save(comment);
+        return ResponseEntity.ok(new MessageResponse("Share created successfully!"));
+       
+        
+    }
+ 
+   @DeleteMapping("/comment/{commentId}")
+    public ResponseEntity deleteComment(@PathVariable Long commentId, @RequestHeader("Authorization") String jwt)  {
+        String username = jwtUtils.extractUsername(jwt);
+        User user = userRepo.findByUsername(username)
+                            .orElseThrow(() -> new RuntimeException("User not found"));
+    //   List<Comment>postComments=postRepo.postComments(postId);
+      Comment comment=commentRepo.findById(commentId).get();
       User userComment=comment.getUser();
 
-      if (userHasPermissionToDeleteComment(commentId, userId)) {
+      if (userHasPermissionToDeleteComment(commentId, user.getId())) {
         commentRepo.deleteById(commentId);
     } else {
-        throw new Exception("User is not authorized to delete this comment");
+        return ResponseEntity.ok(new MessageResponse("you are not authorized!"));
     }
-        return postRepo.postComments(postId);
+        return ResponseEntity.ok(new MessageResponse("Delete successfully!"));
 
     }
     private boolean userHasPermissionToDeleteComment(Long commentId, Long userId) {

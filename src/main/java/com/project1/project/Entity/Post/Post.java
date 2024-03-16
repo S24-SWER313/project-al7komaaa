@@ -25,32 +25,32 @@ private String content;
     @ManyToOne
     @JoinColumn(name = "user_id")
     public User user;
-    @OneToMany(mappedBy = "post")
-    private List<Comment> postComments;
-    @OneToMany(mappedBy = "post") //t8ayarat
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    public List<Comment> postComments;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL) //t8ayarat
     private List<Like> like;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Share> shares;
     public Post() {
     }
 
  
-    public Post( String image, String video, String content, User user) {
+    public Post( String image, String video, String content) {
 
       
         this.image = image;
         this.video = video;
         this.content = content;
-        this.user = user;
+        // this.user.setId(userId);
       
     }
 
 
-    public Post( String content, User user) {
+    public Post( String content) {
       
         this.content = content;
-        this.user = user;
+     
 
     }
 
