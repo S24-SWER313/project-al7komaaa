@@ -1,5 +1,8 @@
 package com.project1.project.Entity.Comment;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project1.project.Entity.Like.Like;
 import com.project1.project.Entity.Post.Post;
 import com.project1.project.Entity.User.User;
 
@@ -26,6 +29,8 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
+    
+    
     public Comment() {
         
     }

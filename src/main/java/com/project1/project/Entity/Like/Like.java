@@ -15,21 +15,19 @@ public class Like {
     private likeType type ;
     @JsonIgnore  @ManyToOne
     @JoinColumn(name = "post_id")
-    private Post post;
+    public Post post;
   @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "comment_id")
-    private Comment comment;
+    public Comment comment;
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Like( likeType type, Post post, User user) {
+    public Like( likeType type) {
       
       this.type = type;
-      this.post = post;
    
-      this.user = user;
     }
     public Like() {
     }
@@ -57,8 +55,8 @@ public class Like {
     public void setType(likeType type) {
       this.type = type;
     }
-    public Post getPost() {
-      return post;
+    public String getPost() {
+      return post.getContent();
     }
     public void setPost(Post post) {
       this.post = post;
@@ -69,8 +67,8 @@ public class Like {
     public void setComment(Comment comment) {
       this.comment = comment;
     }
-    public User getUser() {
-      return user;
+    public String getUser() {
+      return user.getUsername();
     }
     public void setUser(User user) {
       this.user = user;

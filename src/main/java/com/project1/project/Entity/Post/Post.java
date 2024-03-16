@@ -28,7 +28,7 @@ private String content;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     public List<Comment> postComments;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL) //t8ayarat
-    private List<Like> like;
+    public List<Like> like;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Share> shares;
