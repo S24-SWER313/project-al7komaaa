@@ -64,7 +64,7 @@ public class User {
     private String backgroudimage;
     private boolean isfriend;
     private String password;
-    private ArrayList<Role> role;
+    public ArrayList<Role> role;
     // role=new ArrayList<>;
     
 
@@ -229,12 +229,13 @@ if(lastName!=null){
     }
 
 
-    public ArrayList<Role> getRole() {
+    public Role getRole() {
         if (role == null) {
             role = new ArrayList<>();
         }
         role.add(Role.USER); 
-        return role;
+        return role.getLast();
+        
     }
     
 
