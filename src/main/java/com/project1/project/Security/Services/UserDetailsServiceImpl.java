@@ -11,8 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserRepo;
 
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+
   @Autowired
   private UserRepo userRepository;
 

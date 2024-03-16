@@ -110,11 +110,9 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> 
-          auth.requestMatchers("/api/auth/**").permitAll() // يجب أن تشمل جميع المسارات المتعلقة بالتسجيل والمصادقة
+          auth.requestMatchers("/api/auth/signup").permitAll() // يجب أن تشمل جميع المسارات المتعلقة بالتسجيل والمصادقة
               .requestMatchers("/api/test/**").permitAll()
-              // .requestMatchers("/api/auth/signup").permitAll()
-              // .requestMatchers("/api/auth/signin").permitAll()
-              // .anyRequest().permitAll()); // إذا كانت هذه المسارات غير محمية
+             // .anyRequest().permitAll()); // إذا كانت هذه المسارات غير محمية
               .anyRequest().authenticated()
 
         );
