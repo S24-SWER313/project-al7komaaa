@@ -3,6 +3,7 @@ package com.project1.project.Security.Jwt;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,4 +64,19 @@ public class JwtUtils {
 
     return false;
   }
+  
+  public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    final Claims claims = extractAllClaims(token);
+    return claimsResolver.apply(claims);
+}
+
+private Claims extractAllClaims(String token) {
+    return Jwts.parser().setSigningKey(key()).parseClaimsJws(token).getBody();
+}
+
+public String extractUsername(String token) {
+  return extractClaim(token, Claims::getSubject);
+}
+
+
 }

@@ -15,7 +15,7 @@ public interface UserRepo extends JpaRepository<User, Long> {
     // List <User> findByGetName(String name);
     @Query("SELECT u FROM User u WHERE CONCAT(u.firstname, ' ', u.lastname) = ?1")
     List<User> findByFullname(String fullname);
-
+// User findUserByJwtUser(String jwt);
 
     Optional<User> findByUsername(String username);
 

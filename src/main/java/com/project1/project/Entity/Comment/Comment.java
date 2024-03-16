@@ -38,11 +38,10 @@ public class Comment {
         this.user = user;
         this.post = post;
     }
-    public Comment(String content, User user, Post post) {
+    public Comment(String content) {
      
         this.content = content;
-        this.user = user;
-        this.post = post;
+     
     }
     public Long getCommentId() {
         return commentId;
