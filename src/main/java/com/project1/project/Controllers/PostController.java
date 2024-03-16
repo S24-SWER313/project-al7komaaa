@@ -1,4 +1,4 @@
-package com.project1.project.Entity.Post;
+package com.project1.project.Controllers;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project1.project.Entity.Comment.Comment;
 import com.project1.project.Entity.Like.Like;
 import com.project1.project.Entity.Like.likeType;
+import com.project1.project.Entity.Post.Post;
+import com.project1.project.Entity.Post.PostRepo;
 import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserRepo;
 
