@@ -1,5 +1,6 @@
 package com.project1.project.Entity.Post;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ import com.project1.project.Entity.Comment.Comment;
 import com.project1.project.Entity.Like.Like;
 import com.project1.project.Entity.Like.likeType;
 import com.project1.project.Entity.User.User;
+import com.project1.project.Entity.User.UserRepo;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/post")
@@ -19,6 +23,8 @@ public class PostController {
 
     @Autowired
     private PostRepo postRepo;
+    @Autowired
+    private  UserRepo userRepo;
 
     // @PostMapping("/create")
     // public Post createPost(Post post,User user){
@@ -109,4 +115,18 @@ public class PostController {
 
     public void deleteShearById(Long shearId, Long userId) {
     }
-}
+
+
+
+    @GetMapping("/userPosts")
+public List<Post> findUserPosts(HttpServletRequest request) {
+    Long userId = (Long) request.getAttribute("userId"); 
+    if (userId == null) {
+        return Collections.emptyList();
+    }
+    User user = userRepo.findById(userId).orElse(null);
+    if (user == null) {
+        return Collections.emptyList();
+    }
+    return user.posts; 
+}}

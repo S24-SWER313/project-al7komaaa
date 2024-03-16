@@ -1,7 +1,9 @@
 package com.project1.project.Entity.User;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,27 +82,35 @@ private UserModelAss userModelAss;
 
     @GetMapping("/userByLastName/{name}")// netzakar eno ne3malha non-CaseSensitive
     public ResponseEntity<List<User>> getUserByLastName(@PathVariable String name) {
-        List<User> userList = userRepo.findByFirstname(name);
+        List<User> userList = userRepo.findByLastname(name);
         if (userList.isEmpty()) {
             throw new NFException(User.class);
         }
         return ResponseEntity.ok(userList);
     }
 
-        @GetMapping("/userName/{name}")
-        public ResponseEntity<List<User>> getUserName(@PathVariable String name) {
-            List<User> userList = userRepo.findByFirstname(name);
-            if (userList.isEmpty()) {
-                userList = userRepo.findByFirstname(name);
-                if (userList.isEmpty()) {
-                    userList = userRepo.findByFirstname(name);
-                }
-            }
-            if (userList.isEmpty()) {
-                throw new NFException(User.class);
-            }
-            return ResponseEntity.ok(userList);
-        }
+  @GetMapping("/fullName/{name}")
+public ResponseEntity<List<User>> getFullName(@PathVariable String name) {
+    List<User> userList = new ArrayList<>();
+    userList.addAll(userRepo.findByFirstname(name));
+    userList.addAll(userRepo.findByLastname(name));
+    userList.addAll(userRepo.findByFullname(name));
+userList.stream().distinct();
+    if (userList.isEmpty()) {
+        throw new NFException(User.class);
+    }
+    return ResponseEntity.ok(userList);
+}
+
     
+       
+@GetMapping("/UserName/{name}")
+public ResponseEntity<Optional<User>> getUserName(@PathVariable String name) {
+    Optional<User> user = userRepo.findByUsername(name);
+    if (!user.isPresent()) {
+        throw new NFException(User.class);
+    }
+    return ResponseEntity.ok(user);
+}
 
 }

@@ -14,7 +14,7 @@ public class UserModelAss implements RepresentationModelAssembler<User, EntityMo
     
               return EntityModel.of(user,
                 linkTo(methodOn(Controller.class).getUserById(user.getId())).withSelfRel());
-               // linkTo(methodOn(Controller.class).addFriend(new Long(1),user.getId())).withRel("Add Friend"));
+              //  linkTo(methodOn(Controller.class).addFriend(new Long(1),user.getId())).withRel("Add Friend"));
 
     }
     
