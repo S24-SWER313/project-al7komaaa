@@ -1,4 +1,4 @@
-package com.project1.project.Entity.User;
+package com.project1.project.Controllers;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project1.project.Entity.User.User;
+import com.project1.project.Entity.User.UserRepo;
 import com.project1.project.Payload.Request.LoginRequest;
 import com.project1.project.Payload.Request.SignupRequest;
 import com.project1.project.Payload.Response.JwtResponse;

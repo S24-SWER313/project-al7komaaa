@@ -24,10 +24,9 @@ private String content;
   @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    public User user;
     @OneToMany(mappedBy = "post")
-    private List<Comment> comments;
-
+    private List<Comment> postComments;
     @OneToMany(mappedBy = "post") //t8ayarat
     private List<Like> like;
 

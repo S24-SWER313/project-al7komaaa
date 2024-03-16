@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 // import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,12 +31,12 @@ public class User {
     // @NotNull(message = "First name is required")
     // @Pattern(regexp = "^[a-zA-Z]*$", message = "First name must contain only letters")
     // @Size(min = 2, max = 30, message = "First name must be between 2 and 30 characters")
-    private String firstname="unKnow";
+    private String firstname="unKnown";
 
     // @NotNull(message = "Last name is required")
     // @Pattern(regexp = "^[a-zA-Z]*$", message = "Last name must contain only letters")
     // @Size(min = 2, max = 30, message = "Last name must be between 2 and 30 characters")
-    private String lastname=" user";
+    private String lastname="user";
 
     // @NotBlank(message = "Mobile number is required")
     // @Pattern(regexp="\\d+", message="Mobile number must contain only digits")
@@ -63,9 +64,12 @@ public class User {
     private String backgroudimage;
     private boolean isfriend;
     private String password;
+    public ArrayList<Role> role;
+    // role=new ArrayList<>;
+    
 
     @OneToMany(mappedBy = "user")
-    private List<Post> posts;
+    public List<Post> posts;
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
     @OneToMany(mappedBy = "user")
@@ -222,6 +226,21 @@ if(lastName!=null){
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+
+    public Role getRole() {
+        if (role == null) {
+            role = new ArrayList<>();
+        }
+        role.add(Role.USER); 
+        return role.getLast();
+        
+    }
+    
+
+    public void setRole(ArrayList<Role> role) {
+        this.role = role;
     }
 
    
