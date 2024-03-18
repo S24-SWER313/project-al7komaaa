@@ -88,6 +88,7 @@ public class User {
         this.email = email;
         this.username = username;
         this.password = password;
+       
     }
 
     public void addFriend(User friend) {
@@ -229,12 +230,12 @@ if(lastName!=null){
     }
 
 
-    public Role getRole() {
+    public ArrayList<Role> getRole() {
         if (role == null) {
             role = new ArrayList<>();
         }
         role.add(Role.USER); 
-        return role.getLast();
+        return role;
         
     }
     
