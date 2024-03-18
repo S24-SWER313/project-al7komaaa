@@ -32,6 +32,7 @@ import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserModelAss;
 import com.project1.project.Entity.User.UserRepo;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @RestController
@@ -108,12 +109,14 @@ userList.stream().distinct();
     
        
 @GetMapping("/UserName/{name}")
-public ResponseEntity<Optional<User>> getUserName(@PathVariable String name) {
+public ResponseEntity<User> getUserName(@PathVariable String name) {
     Optional<User> user = userRepo.findByUsername(name);
-    if (!user.isPresent()) {
-        throw new NFException(User.class);
+    if (user.isPresent()) {
+        return ResponseEntity.ok(user.get());
+    } else {
+        throw new EntityNotFoundException("User not found with username: " + name);
     }
-    return ResponseEntity.ok(user);
 }
+
 
 }
