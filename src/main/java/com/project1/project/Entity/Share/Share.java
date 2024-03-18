@@ -15,7 +15,7 @@ public class Share {
     @JsonIgnore
     @ManyToOne 
     @JoinColumn(name = "user_id")
-    private User user;
+    public User user;
    
     @JsonIgnore
     @ManyToOne
