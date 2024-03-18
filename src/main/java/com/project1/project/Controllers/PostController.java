@@ -2,6 +2,7 @@ package com.project1.project.Controllers;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -201,10 +202,21 @@ public class PostController {
 
     }
     @GetMapping("/{postId}/likes")
-    public List<Like> getAllPostLike(@PathVariable Long postId) {
-      
-        return postRepo.findLikes(postId);
-}
+    public ResponseEntity<List<Like>> getAllPostLikes(@PathVariable Long postId) {
+        // التحقق من وجود المنشور
+        Optional<Post> postOptional = postRepo.findById(postId);
+        if (!postOptional.isPresent()) {
+            // إرجاع رمز الحالة "Not Found" إذا لم يتم العثور على المنشور
+            return ResponseEntity.notFound().build();
+        }
+        
+        // العثور على قائمة الإعجابات للمنشور المعطى
+        List<Like> likes = postRepo.findLikes(postId);
+        
+        // إرجاع قائمة الإعجابات مع رمز الحالة "OK"
+        return ResponseEntity.ok(likes);
+    }
+    
 
     
 @DeleteMapping("/{likeId}/like")
@@ -240,19 +252,21 @@ public ResponseEntity<MessageResponse> UnCreatelikePost(@PathVariable Long likeI
 
     // }
 @DeleteMapping(("/share/{shareId}"))
-    public void deleteShearById(@PathVariable Long shareId,  HttpServletRequest request) throws Exception {
+    public String deleteShearById(@PathVariable Long shareId,  HttpServletRequest request) throws Exception {
         
         String jwt = parseJwt(request);
         if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
           String username = jwtUtils.getUserNameFromJwtToken(jwt);
         User user = userRepo.findByUsername(username)
                             .orElseThrow(() -> new RuntimeException("User not found"));
-
-                            if (userHasPermissionToDeletePost(shareId, user.getId())) {
+Share share=shareRepo.findById(shareId).get();
+                            if (userHasPermissionToDeletePost(share.user.getId(), user.getId())) {
                           shareRepo.deleteById(shareId);
+                          return "done";
                             } else {
-                                throw new Exception("User is not authorized to delete this post");
+                                return("User is not authorized to delete this post");
                             }}
+        return null;
                         
 
 
@@ -262,13 +276,13 @@ public ResponseEntity<MessageResponse> UnCreatelikePost(@PathVariable Long likeI
 
     @GetMapping("/userPosts")
     public List<Post> findUserPosts(HttpServletRequest request) {
-        Long userId = (Long) request.getAttribute("userId"); 
-        if (userId == null) {
-            return Collections.emptyList();
-        }
-        // Use the corrected method to fetch user's posts
-        return userRepo.findPostsByUserId(userId);
+      String jwt = parseJwt(request);
+      if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        User user=userRepo.findByUsername(username).get() ;
+        return userRepo.findPostsByUserId(user.getId());
     }
+  return null;}
     
 private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
      
