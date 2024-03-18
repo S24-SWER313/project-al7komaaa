@@ -232,9 +232,10 @@ if(lastName!=null){
 
     public ArrayList<Role> getRole() {
         if (role == null) {
-            role = new ArrayList<>();
+            role = new ArrayList<>(); 
+            role.add(Role.USER); 
         }
-        role.add(Role.USER); 
+       
         return role;
         
     }
