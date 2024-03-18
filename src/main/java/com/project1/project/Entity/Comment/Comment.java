@@ -22,11 +22,11 @@ public class Comment {
     private String video;
    
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne 
     @JoinColumn(name = "user_id")
     private User user;
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne 
     @JoinColumn(name = "post_id")
     private Post post;
     

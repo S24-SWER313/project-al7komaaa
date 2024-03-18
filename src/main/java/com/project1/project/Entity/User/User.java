@@ -76,7 +76,7 @@ public class User {
     public List<Like> likes;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Share> shares;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_friends", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
     private List<User> friends;
 
