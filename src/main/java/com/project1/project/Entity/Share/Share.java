@@ -13,7 +13,7 @@ public class Share {
     @Size(max = 10000, message = "Content is too long")
     private String content;
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne 
     @JoinColumn(name = "user_id")
     private User user;
    

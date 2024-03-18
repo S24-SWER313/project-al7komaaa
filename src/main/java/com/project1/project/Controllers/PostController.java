@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,9 +55,13 @@ public class PostController {
     private  LikeRepo likeRepo;
     
     @PostMapping("/create")
-    public ResponseEntity<?> createPost(@RequestHeader("Authorization") String jwt, @RequestBody Post post) {
-      
-        String username = jwtUtils.extractUsername(jwt);
+    public ResponseEntity<?> createPost(HttpServletRequest request, @RequestBody Post post) {
+        // @RequestHeader("Authorization") String jwt,
+        // String username = jwtUtils.extractUsername(jwt);
+        String jwt = parseJwt(request);
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+          String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        
         
         User user = userRepo.findByUsername(username)
                             .orElseThrow(() -> new RuntimeException("User not found"));
@@ -64,7 +69,7 @@ public class PostController {
         post.setUser(user);
         
         postRepo.save(post);
-        
+        }
         return ResponseEntity.ok(new MessageResponse("Post Created successfully!"));
     }
     
@@ -78,9 +83,11 @@ public class PostController {
     }
 
     @PostMapping("/share/{postId}")
-    public ResponseEntity<?> sharePost(@PathVariable Long postId, @RequestHeader("Authorization") String jwt, @RequestBody String content) {
+    public ResponseEntity<?> sharePost(@PathVariable Long postId, HttpServletRequest request, @RequestBody String content) {
       
-            String username = jwtUtils.extractUsername(jwt);
+        String jwt = parseJwt(request);
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+          String username = jwtUtils.getUserNameFromJwtToken(jwt);
             User user = userRepo.findByUsername(username)
                                 .orElseThrow(() -> new RuntimeException("User not found"));
             Post post = postRepo.findById(postId).orElse(null);
@@ -88,7 +95,7 @@ public class PostController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
             }
             Share share = new Share(content, user, post);
-            shareRepo.save(share);
+            shareRepo.save(share);}
             return ResponseEntity.ok(new MessageResponse("Share created successfully!"));
     }
     
@@ -101,8 +108,10 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    public void deleteById(@PathVariable Long postId, @RequestHeader("Authorization") String jwt) throws Exception {
-        String username = jwtUtils.extractUsername(jwt);
+    public void deleteById(@PathVariable Long postId, HttpServletRequest request) throws Exception {
+        String jwt = parseJwt(request);
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+          String username = jwtUtils.getUserNameFromJwtToken(jwt);
         User user = userRepo.findByUsername(username)
                             .orElseThrow(() -> new RuntimeException("User not found"));
         if (userHasPermissionToDeletePost(postId, user.getId())) {
@@ -110,16 +119,18 @@ public class PostController {
             postRepo.deleteById(postId);
         } else {
             throw new Exception("User is not authorized to delete this post");
-        }
+        }}
     }
     
    
     
     /////////////////////////////////////////////////////////////////////
     @PostMapping("/comment/{postId}/post")
-    public ResponseEntity<MessageResponse> createComment( @RequestHeader("Authorization") String jwt, @RequestBody Comment comment, @PathVariable Long postId) {
+    public ResponseEntity<MessageResponse> createComment( HttpServletRequest request, @RequestBody Comment comment, @PathVariable Long postId) {
 
-        String username = jwtUtils.extractUsername(jwt);
+        String jwt = parseJwt(request);
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+          String username = jwtUtils.getUserNameFromJwtToken(jwt);
         User user = userRepo.findByUsername(username)
                             .orElseThrow(() -> new RuntimeException("User not found"));
         Post post = postRepo.findById(postId).orElse(null);
@@ -130,28 +141,30 @@ public class PostController {
         comment.setUser(user);
         comment.setPost(post);
         // user.comments.add(comment);
-        commentRepo.save(comment);
+        commentRepo.save(comment);}
         return ResponseEntity.ok(new MessageResponse("Share created successfully!"));
        
         
     }
  
    @DeleteMapping("/comment/{commentId}")
-    public ResponseEntity deleteComment(@PathVariable Long commentId, @RequestHeader("Authorization") String jwt)  {
-        String username = jwtUtils.extractUsername(jwt);
+    public ResponseEntity deleteComment(@PathVariable Long commentId, HttpServletRequest request)  {
+        String jwt = parseJwt(request);
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+          String username = jwtUtils.getUserNameFromJwtToken(jwt);
         User user = userRepo.findByUsername(username)
                             .orElseThrow(() -> new RuntimeException("User not found"));
     //   List<Comment>postComments=postRepo.postComments(postId);
       Comment comment=commentRepo.findById(commentId).get();
       User userComment=comment.getUser();
-
+        
       if (userHasPermissionToDeleteComment(commentId, user.getId())) {
         commentRepo.deleteById(commentId);
     } else {
         return ResponseEntity.ok(new MessageResponse("you are not authorized!"));
     }
         return ResponseEntity.ok(new MessageResponse("Delete successfully!"));
-
+        }return null;
     }
     private boolean userHasPermissionToDeleteComment(Long commentId, Long userId) {
         
@@ -162,23 +175,29 @@ public class PostController {
 
     ////////////////////////////////////////////////////////////////////
     @GetMapping("/user/like")
-    public List<Post> findByLikesContainsUser( @RequestHeader("Authorization") String jwt) {// البوستات الي اليوزر حاط لايك عليهم
-        String username = jwtUtils.extractUsername(jwt);
+    public List<Post> findByLikesContainsUser( HttpServletRequest request) {// البوستات الي اليوزر حاط لايك عليهم
+        String jwt = parseJwt(request);
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+          String username = jwtUtils.getUserNameFromJwtToken(jwt);
         User user = userRepo.findByUsername(username)
                             .orElseThrow(() -> new RuntimeException("User not found"));
                           List<Like>likeList=likeRepo.findByUser(user);
                     List<Post> likePost=likeList.stream().map(e->e.post).collect(Collectors.toList());
-                    return likePost;
+                    return likePost;}
+                    return null;
     }
     @PostMapping("/{postId}/like")
-    public Like CreatelikePost(@RequestBody Like like,@PathVariable Long postId,@RequestHeader("Authorization") String jwt) {// يوزر يوزر مش حاسها زابطة
-        String username = jwtUtils.extractUsername(jwt);
+    public Like CreatelikePost(@RequestBody Like like,@PathVariable Long postId,HttpServletRequest request) {// يوزر يوزر مش حاسها زابطة
+        String jwt = parseJwt(request);
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+          String username = jwtUtils.getUserNameFromJwtToken(jwt);
         User user = userRepo.findByUsername(username)
                             .orElseThrow(() -> new RuntimeException("User not found"));
                             like.setUser(user);
                         Post post=    postRepo.findById(postId).get();
                             like.setPost(post);
-                        return likeRepo.save(like);
+                        return likeRepo.save(like);}
+        return null;
 
     }
     @GetMapping("/{postId}/likes")
@@ -220,18 +239,20 @@ public ResponseEntity<MessageResponse> UnCreatelikePost(@PathVariable Long likeI
     //     return null;
 
     // }
-@DeleteMapping(("/share/{shearId}"))
-    public void deleteShearById(@PathVariable Long shearId,  @RequestHeader("Authorization") String jwt) throws Exception {
+@DeleteMapping(("/share/{shareId}"))
+    public void deleteShearById(@PathVariable Long shareId,  HttpServletRequest request) throws Exception {
         
-        String username = jwtUtils.extractUsername(jwt);
+        String jwt = parseJwt(request);
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+          String username = jwtUtils.getUserNameFromJwtToken(jwt);
         User user = userRepo.findByUsername(username)
                             .orElseThrow(() -> new RuntimeException("User not found"));
 
-                            if (userHasPermissionToDeletePost(shearId, user.getId())) {
-                          shareRepo.deleteById(shearId);
+                            if (userHasPermissionToDeletePost(shareId, user.getId())) {
+                          shareRepo.deleteById(shareId);
                             } else {
                                 throw new Exception("User is not authorized to delete this post");
-                            }
+                            }}
                         
 
 
@@ -240,20 +261,32 @@ public ResponseEntity<MessageResponse> UnCreatelikePost(@PathVariable Long likeI
 
 
     @GetMapping("/userPosts")
-public List<Post> findUserPosts(HttpServletRequest request) {
-    Long userId = (Long) request.getAttribute("userId"); 
-    if (userId == null) {
-        return Collections.emptyList();
+    public List<Post> findUserPosts(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId"); 
+        if (userId == null) {
+            return Collections.emptyList();
+        }
+        // Use the corrected method to fetch user's posts
+        return userRepo.findPostsByUserId(userId);
     }
-    User user = userRepo.findById(userId).orElse(null);
-    if (user == null) {
-        return Collections.emptyList();
-    }
-    return user.posts; 
-}
+    
 private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
      
         Post post = postRepo.findById(postId).orElse(null);
 
         return post != null && post.user.getId().equals(userId);
-    }}
+    }
+
+
+
+ private String parseJwt(HttpServletRequest request) {
+    String headerAuth = request.getHeader("Authorization");
+
+    if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+      return headerAuth.substring(7);
+    }
+
+    return null;
+  }
+
+}

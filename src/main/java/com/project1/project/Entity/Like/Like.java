@@ -13,14 +13,14 @@ public class Like {
     private Long likeId;
 
     private likeType type ;
-    @JsonIgnore  @ManyToOne
+    @JsonIgnore   @ManyToOne 
     @JoinColumn(name = "post_id")
     public Post post;
   @JsonIgnore
-    @ManyToOne
+  @ManyToOne 
     @JoinColumn(name = "comment_id")
     public Comment comment;
-    @OneToOne
+    @OneToOne 
     @JoinColumn(name = "user_id")
     private User user;
 

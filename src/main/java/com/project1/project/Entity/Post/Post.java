@@ -22,7 +22,7 @@ private String content;
 
 
   @JsonIgnore
-    @ManyToOne
+  @ManyToOne 
     @JoinColumn(name = "user_id")
     public User user;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
