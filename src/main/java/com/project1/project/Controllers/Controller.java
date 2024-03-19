@@ -9,7 +9,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,8 +34,10 @@ import com.project1.project.Entity.Share.ShareRepo;
 import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserModelAss;
 import com.project1.project.Entity.User.UserRepo;
+import com.project1.project.Security.Jwt.JwtUtils;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 
 @RestController
@@ -42,6 +47,8 @@ public class Controller {
     private final PostRepo postRepo;
     private final ShareRepo shareRepo;
     private final UserRepo userRepo;
+      @Autowired
+  private JwtUtils jwtUtils;
     @Autowired
 private UserModelAss userModelAss;
 
@@ -117,6 +124,99 @@ public ResponseEntity<User> getUserName(@PathVariable String name) {
         throw new EntityNotFoundException("User not found with username: " + name);
     }
 }
+
+
+
+@GetMapping("/UserFriend/{userid}")
+public List<User> getUserFriend(@PathVariable Long userid){
+
+    User user = userRepo.findById(userid).get();
+return user.friends;
+
+}
+
+
+
+
+@PostMapping("/AddUserFriend/{userfriendid}")
+public ResponseEntity<String> addFriend(HttpServletRequest request, @PathVariable Long userfriendid) {
+
+    String jwt = parseJwt(request);
+    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        User user = userRepo.findByUsername(username)
+                            .orElseThrow(() -> new RuntimeException("User not found"));
+        User friend = userRepo.findById(userfriendid)
+                              .orElseThrow(() -> new RuntimeException("Friend not found"));
+
+        // Check if the friend already exists in the user's friends list
+        boolean alreadyExists = user.friends.contains(friend);
+        boolean alreadyExistss = friend.friends.contains(user);
+        // If the friend doesn't already exist, add them to the user's friends list
+        if (!alreadyExists && !alreadyExistss) {
+            user.friends.add(friend);
+            friend.friends.add(user);
+            userRepo.save(friend);
+            userRepo.save(user);
+            return ResponseEntity.ok("Friend added successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Friend already exists");
+        }
+    }
+
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("failed process");
+}
+
+
+
+@DeleteMapping("/deleteUserFriend/{userid}")
+public ResponseEntity<String> deleteUserFriend(@PathVariable Long userid, HttpServletRequest request) {
+
+    String jwt = parseJwt(request);
+    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        User user = userRepo.findByUsername(username)
+                            .orElseThrow(() -> new RuntimeException("User not found"));
+        User friend = userRepo.findById(userid)
+                              .orElseThrow(() -> new RuntimeException("Friend not found"));
+
+        boolean alreadyExists = user.friends.contains(friend);
+        boolean alreadyExistss = friend.friends.contains(user);
+
+        if (alreadyExists && alreadyExistss) {
+            user.friends.remove(friend);
+            friend.friends.remove(user);
+            userRepo.save(friend);
+            userRepo.save(user);
+            return ResponseEntity.ok("Friend removed successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Friend not found in user's friend list");
+        }
+    }
+
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+}
+
+//     User user = userRepo.findById(userid).get();
+// return user.friends;
+
+
+
+
+
+
+
+
+
+ private String parseJwt(HttpServletRequest request) {
+    String headerAuth = request.getHeader("Authorization");
+
+    if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+      return headerAuth.substring(7);
+    }
+
+    return null;
+  }
 
 
 }

@@ -28,5 +28,7 @@ List<Post> findPostsByUserId(Long userId);
 
     Boolean existsByEmail(String email);
     Boolean existsByUsername(String username);
+    @Query("SELECT u.friends FROM User u WHERE u.id = :id")
+    List<User> getFriends(Long id);
   
 }
