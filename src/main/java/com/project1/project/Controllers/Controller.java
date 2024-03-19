@@ -74,11 +74,13 @@ private UserModelAss userModelAss;
     
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userRepo.findById(id)
-                .orElseThrow(() -> new NFException(User.class));
-        return ResponseEntity.ok(user);
-    }
+public ResponseEntity<EntityModel<User>> getUserById(@PathVariable Long id, HttpServletRequest request) {
+    User user = userRepo.findById(id)
+            .orElseThrow(() -> new NFException(User.class));
+    EntityModel<User> entityModel = userModelAss.toModeluserprofile(user, request);
+    return ResponseEntity.ok(entityModel);
+}
+
 // اغير الريسبونس انتتي
 
   
