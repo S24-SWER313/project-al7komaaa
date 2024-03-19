@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,12 +129,13 @@ public ResponseEntity<User> getUserName(@PathVariable String name) {
 
 
 @GetMapping("/UserFriend/{userid}")
-public List<User> getUserFriend(@PathVariable Long userid){
+public Set<User> getUserFriend(@PathVariable Long userid){
 
     User user = userRepo.findById(userid).get();
-return user.friends;
+return userRepo.getFriends(userid);
 
 }
+
 
 
 
@@ -153,7 +155,9 @@ public ResponseEntity<String> addFriend(HttpServletRequest request, @PathVariabl
         boolean alreadyExists = user.friends.contains(friend);
         boolean alreadyExistss = friend.friends.contains(user);
         // If the friend doesn't already exist, add them to the user's friends list
-        if (!alreadyExists && !alreadyExistss) {
+        if (!alreadyExists && !alreadyExistss ) {
+            friend.setFriend(true);
+            user.setFriend(true);
             user.friends.add(friend);
             friend.friends.add(user);
             userRepo.save(friend);
@@ -184,6 +188,8 @@ public ResponseEntity<String> deleteUserFriend(@PathVariable Long userid, HttpSe
         boolean alreadyExistss = friend.friends.contains(user);
 
         if (alreadyExists && alreadyExistss) {
+            friend.setFriend(false);
+            user.setFriend(false);
             user.friends.remove(friend);
             friend.friends.remove(user);
             userRepo.save(friend);
@@ -197,8 +203,6 @@ public ResponseEntity<String> deleteUserFriend(@PathVariable Long userid, HttpSe
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 }
 
-//     User user = userRepo.findById(userid).get();
-// return user.friends;
 
 
 

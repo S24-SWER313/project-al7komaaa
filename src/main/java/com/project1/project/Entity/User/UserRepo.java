@@ -1,6 +1,7 @@
 package com.project1.project.Entity.User;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,6 +30,6 @@ List<Post> findPostsByUserId(Long userId);
     Boolean existsByEmail(String email);
     Boolean existsByUsername(String username);
     @Query("SELECT u.friends FROM User u WHERE u.id = :id")
-    List<User> getFriends(Long id);
+    Set<User> getFriends(Long id);
   
 }
