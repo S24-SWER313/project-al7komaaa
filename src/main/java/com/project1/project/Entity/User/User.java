@@ -13,9 +13,11 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project1.project.Entity.Comment.Comment;
 import com.project1.project.Entity.Like.Like;
 import com.project1.project.Entity.Post.Post;
@@ -76,9 +78,9 @@ public class User {
     public List<Like> likes;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Share> shares;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL) @JsonIgnore
     @JoinTable(name = "user_friends", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
-    public List<User> friends;
+    public Set<User> friends;
 
     public User() {
     }

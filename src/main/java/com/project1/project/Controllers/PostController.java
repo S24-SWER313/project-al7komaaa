@@ -303,4 +303,44 @@ private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
     return null;
   }
 
+
+//   @GetMapping("/FriendPosts/{friendId}")
+//   public List<Post> findfriendPosts(HttpServletRequest request , @PathVariable Long friendId) {
+//     String jwt = parseJwt(request);
+//     if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+//       String username = jwtUtils.getUserNameFromJwtToken(jwt);
+//       User user=userRepo.findByUsername(username).get() ;
+//       User friend =userRepo.findById(friendId) .get();
+//       boolean isFriend =user.friends.contains(friend);
+//      if(isFriend){
+//   return userRepo.findPostsByUserId(friend.getId());
+
+// }
+//       return null;
+//   }
+// return null;}
+
+
+@GetMapping("/friendPosts/{friendId}")
+public ResponseEntity<List<Post>> findfriendPosts(HttpServletRequest request, @PathVariable Long friendId) {
+    String jwt = parseJwt(request);
+    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        User user = userRepo.findByUsername(username).orElse(null);
+        User friend = userRepo.findById(friendId).orElse(null);
+        
+        if (user != null && friend != null && user.friends != null && user.friends.contains(friend)) {
+            List<Post> friendPosts = userRepo.findPostsByUserId(friendId);
+            return ResponseEntity.ok(friendPosts);
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.emptyList()); // Or any other suitable status code
+        }
+    }
+
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.emptyList());
+}
+
+
+
+
 }
