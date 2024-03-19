@@ -64,15 +64,14 @@ private UserModelAss userModelAss;
     }
     @Transactional
     @GetMapping("/users")
-    public CollectionModel<EntityModel<User>> getAllUsers() {
-        
-  List<EntityModel<User>> employees = userRepo.findAll().stream() 
-      .map(userModelAss::toModel) //
-      .collect(Collectors.toList());
-
-  return CollectionModel.of(employees, linkTo(methodOn(Controller.class).getAllUsers()).withSelfRel());
-       
+    public CollectionModel<EntityModel<User>> getAllUsers(HttpServletRequest request) {
+        List<EntityModel<User>> users = userRepo.findAll().stream()
+                .map(user -> userModelAss.toModelfriendself(user, request))
+                .collect(Collectors.toList());
+    
+        return CollectionModel.of(users, linkTo(methodOn(Controller.class).getAllUsers(request)).withSelfRel());
     }
+    
 
     @GetMapping("/user/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
