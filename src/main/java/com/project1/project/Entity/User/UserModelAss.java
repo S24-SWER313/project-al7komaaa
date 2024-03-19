@@ -28,8 +28,13 @@ return null;
 public EntityModel<User> toModelfriendself(User user, HttpServletRequest request) {
     Link selfLink = linkTo(methodOn(Controller.class).getUserById(user.getId(), request)).withSelfRel();
     Link addFriendLink = linkTo(methodOn(Controller.class).addFriend(request, user.getId())).withRel("Add Friend");
+    Link deleteFriendLink = linkTo(methodOn(Controller.class).deleteUserFriend( user.getId(), request)).withRel("Remove friend");
 
+    if(user.isFriend())
+    return EntityModel.of(user, selfLink, deleteFriendLink);
     return EntityModel.of(user, selfLink, addFriendLink);
+  
+    
 }
 
 public EntityModel<User> toModeluserprofile(User user, HttpServletRequest request) {

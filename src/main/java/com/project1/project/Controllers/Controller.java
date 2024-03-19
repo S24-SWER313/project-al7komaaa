@@ -64,12 +64,12 @@ private UserModelAss userModelAss;
     }
     @Transactional
     @GetMapping("/users")
-    public CollectionModel<EntityModel<User>> getAllUsers(HttpServletRequest request) {
+    public ResponseEntity<CollectionModel<EntityModel<User>>> getAllUsers(HttpServletRequest request) {
         List<EntityModel<User>> users = userRepo.findAll().stream()
                 .map(user -> userModelAss.toModelfriendself(user, request))
                 .collect(Collectors.toList());
     
-        return CollectionModel.of(users, linkTo(methodOn(Controller.class).getAllUsers(request)).withSelfRel());
+                return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(Controller.class).getAllUsers(request)).withSelfRel()));
     }
     
 
@@ -85,12 +85,17 @@ public ResponseEntity<EntityModel<User>> getUserById(@PathVariable Long id, Http
 
   
     @GetMapping("/userByFirstName/{name}")
-    public ResponseEntity<List<User>> getUserByFirstName(@PathVariable String name) {
+    public ResponseEntity<CollectionModel<EntityModel<User>>> getUserByFirstName(@PathVariable String name, HttpServletRequest request) {
         List<User> userList = userRepo.findByFirstname(name);
+      //  EntityModel<User> entityModel = userModelAss.toModeluserprofile(name, request);
+      List<EntityModel<User>> users = userRepo.findAll().stream()
+      .map(user -> userModelAss.toModelfriendself(user, request))
+      .collect(Collectors.toList());
         if (userList.isEmpty()) {
             throw new NFException(User.class);
         }
-        return ResponseEntity.ok(userList);
+        return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
+      
     }
 
     @GetMapping("/userByLastName/{name}")// netzakar eno ne3malha non-CaseSensitive
