@@ -26,7 +26,7 @@ return null;
     
 
 public EntityModel<User> toModelfriendself(User user, HttpServletRequest request) {
-    Link selfLink = linkTo(methodOn(Controller.class).getUserById(user.getId(), request)).withSelfRel();
+    Link selfLink = linkTo(methodOn(Controller.class).getUserById(user.getId(), request)).withRel("view Profile");
     Link addFriendLink = linkTo(methodOn(Controller.class).addFriend(request, user.getId())).withRel("Add Friend");
     Link deleteFriendLink = linkTo(methodOn(Controller.class).deleteUserFriend( user.getId(), request)).withRel("Remove friend");
 
