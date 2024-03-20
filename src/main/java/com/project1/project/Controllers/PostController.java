@@ -255,19 +255,20 @@ public class PostController {
 
     }
     @GetMapping("/{postId}/likes")
-    public ResponseEntity<List<Like>> getAllPostLikes(@PathVariable Long postId) {
-        // التحقق من وجود المنشور
+    public ResponseEntity<List<EntityModel<Like>>> getAllPostLikes(@PathVariable Long postId) {
         Optional<Post> postOptional = postRepo.findById(postId);
+        
         if (!postOptional.isPresent()) {
-            // إرجاع رمز الحالة "Not Found" إذا لم يتم العثور على المنشور
-            return ResponseEntity.notFound().build();
-        }
-        
-        // العثور على قائمة الإعجابات للمنشور المعطى
-        List<Like> likes = postRepo.findLikes(postId);
-        
-        // إرجاع قائمة الإعجابات مع رمز الحالة "OK"
-        return ResponseEntity.ok(likes);
+          return ResponseEntity.notFound().build();
+      }
+      List<Like> likes = postRepo.findLikes(postId);
+
+        List<EntityModel<Like>> entityModels =likes.stream()
+    .map(us -> postmodelAss.toModelPostLike(us))
+    .collect(Collectors.toList());
+
+    
+        return ResponseEntity.ok(entityModels);
     }
     
 
