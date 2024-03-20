@@ -158,7 +158,7 @@ public class PostController {
      return   ResponseEntity.ok(postmodelAss.toModelpostId(post)) ;
     
     }
- 
+ //
     @DeleteMapping("/{postId}")
     public ResponseEntity<String> deleteById(@PathVariable Long postId, HttpServletRequest request) {
         String jwt = parseJwt(request);
