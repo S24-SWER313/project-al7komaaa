@@ -22,7 +22,7 @@ public class Like {
     public Comment comment;
     @OneToOne 
     @JoinColumn(name = "user_id")
-    private User user;
+    public User user;
 
     public Like( likeType type) {
       
