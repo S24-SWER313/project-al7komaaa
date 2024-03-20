@@ -120,35 +120,17 @@ public class PostController {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @GetMapping("/posts")
-    public List<Post> findAllPost() {
-
-        return postRepo.findAll();
+    public ResponseEntity<CollectionModel<EntityModel<Post>>> findAllPost() {
+      List<EntityModel<Post>> users = postRepo.findAll().stream()
+      .map(postmodelAss::toModel)
+      .collect(Collectors.toList());
+  
+        if (users.isEmpty()) {
+            throw new NFException(User.class);
+        }
+        return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
+     
     }
 
     @PostMapping("/share/{postId}")

@@ -27,7 +27,7 @@ public class CommentModelAss implements RepresentationModelAssembler<Comment, En
 public EntityModel<Comment> commentDelEdit(Comment comment, HttpServletRequest request) {
        
         return EntityModel.of(comment,
-               linkTo(methodOn(PostController.class).deleteComment(comment.getCommentId(), request)).withRel("the post's like"));
+               linkTo(methodOn(PostController.class).deleteComment(comment.getCommentId(), request)).withRel("delete comment"));
               //  linkTo(methodOn(PostController.class).getAllPostComments(comment.getCommentId())).withRel("the post's comment")); ne3mal edit elha
  
  
