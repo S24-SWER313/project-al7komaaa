@@ -1,5 +1,8 @@
 package com.project1.project.Controllers;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +11,8 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -20,12 +25,15 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project1.project.NFException;
 import com.project1.project.Entity.Comment.Comment;
+import com.project1.project.Entity.Comment.CommentModelAss;
 import com.project1.project.Entity.Comment.CommentRepo;
 import com.project1.project.Entity.Like.Like;
 import com.project1.project.Entity.Like.LikeRepo;
 import com.project1.project.Entity.Like.likeType;
 import com.project1.project.Entity.Post.Post;
+import com.project1.project.Entity.Post.PostModelAss;
 import com.project1.project.Entity.Post.PostRepo;
 import com.project1.project.Entity.Share.Share;
 import com.project1.project.Entity.Share.ShareRepo;
@@ -54,6 +62,14 @@ public class PostController {
     private  CommentRepo commentRepo;
 
     @Autowired
+    private  PostModelAss postmodelAss;
+
+
+    @Autowired
+    private  CommentModelAss commentmodelAss;
+
+
+    @Autowired
     private  LikeRepo likeRepo;
     
     @PostMapping("/create")
@@ -75,6 +91,57 @@ public class PostController {
         return ResponseEntity.ok(new MessageResponse("Post Created successfully!"));
     }
     
+
+
+    @GetMapping("/{postId}/comment")
+    public ResponseEntity<CollectionModel<EntityModel<Comment>>> getAllPostComments(@PathVariable Long postId, HttpServletRequest request) {
+        // التحقق من وجود المنشور
+        Optional<Post> postOptional = postRepo.findById(postId);
+        if (!postOptional.isPresent()) {
+            // إرجاع رمز الحالة "Not Found" إذا لم يتم العثور على المنشور
+            return ResponseEntity.notFound().build();
+        }
+        
+        // العثور على قائمة الإعجابات للمنشور المعطى
+        List<Comment> comments = postOptional.get().postComments;
+        
+        // إرجاع قائمة الإعجابات مع رمز الحالة "OK"
+       
+        List<EntityModel<Comment>> commentModels = comments.stream()
+        .map(com -> commentmodelAss.commentDelEdit(com, request))
+        .collect(Collectors.toList());
+        if (commentModels.isEmpty()) {
+            throw new NFException(User.class);
+        }
+        return ResponseEntity.ok(CollectionModel.of(commentModels, linkTo(methodOn(PostController.class).findById(postId)).withRel("Go to Post")));
+      
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -323,6 +390,13 @@ return null;
 }// مش مسجل الدخول
 
 
+@GetMapping("/postUser/{postid}")
+public User postUser(@PathVariable Long postid){
+ Post post = postRepo.findById(postid).get();
+ 
+  return post.user;
+
+}
 
 
 }
