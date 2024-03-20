@@ -152,14 +152,15 @@ public class PostController {
     
 
     @GetMapping("/posts/{postId}")
-    public Post findById(@PathVariable Long postId) {
-        return postRepo.findById(postId).get();
-        // .orElseThrow(new NFException(Post.class));
-
+    public ResponseEntity<EntityModel<Post>> findById(@PathVariable Long postId) {
+       Post post=  postRepo.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+        // 
+     return   ResponseEntity.ok(postmodelAss.toModelpostId(post)) ;
+    
     }
-
+ 
     @DeleteMapping("/{postId}")
-    public void deleteById(@PathVariable Long postId, HttpServletRequest request) throws Exception {
+    public ResponseEntity<String> deleteById(@PathVariable Long postId, HttpServletRequest request) {
         String jwt = parseJwt(request);
         if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
           String username = jwtUtils.getUserNameFromJwtToken(jwt);
@@ -169,8 +170,10 @@ public class PostController {
     
             postRepo.deleteById(postId);
         } else {
-            throw new Exception("User is not authorized to delete this post");
+           return  ResponseEntity.badRequest().body("you are not owned the post");
         }}
+        return  ResponseEntity.badRequest().body("you are not auth");
+        
     }
     
    
