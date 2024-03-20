@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 import com.project1.project.Controllers.Controller;
 import com.project1.project.Controllers.PostController;
 
+
 import jakarta.servlet.http.HttpServletRequest;
+@Component
 public class CommentModelAss implements RepresentationModelAssembler<Comment, EntityModel<Comment>> {
 
     @Override

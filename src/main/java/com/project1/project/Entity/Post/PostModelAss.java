@@ -5,12 +5,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.stereotype.Component;
 
 import com.project1.project.Controllers.PostController;
 import com.project1.project.Entity.Comment.Comment;
 
 import jakarta.servlet.http.HttpServletRequest;
-
+@Component
 public class PostModelAss implements RepresentationModelAssembler<Post, EntityModel<Post>> {
     HttpServletRequest request;
     @Override
