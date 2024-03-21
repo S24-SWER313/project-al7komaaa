@@ -68,7 +68,7 @@ private UserModelAss userModelAss;
     @GetMapping("/users")
     public ResponseEntity<CollectionModel<EntityModel<User>>> getAllUsers(HttpServletRequest request) {
         List<EntityModel<User>> users = userRepo.findAll().stream()
-                .map(user -> userModelAss.toModelfriendself(user, request))
+                .map(user -> userModelAss.toModelfriendself(user))
                 .collect(Collectors.toList());
     
                 return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(Controller.class).getAllUsers(request)).withSelfRel()));
@@ -76,10 +76,10 @@ private UserModelAss userModelAss;
     
 
     @GetMapping("/user/{id}")
-public ResponseEntity<EntityModel<User>> getUserById(@PathVariable Long id, HttpServletRequest request) {
+public ResponseEntity<EntityModel<User>> getUserById(@PathVariable Long id) {
     User user = userRepo.findById(id)
             .orElseThrow(() -> new NFException(User.class));
-    EntityModel<User> entityModel = userModelAss.toModeluserprofile(user, request);
+    EntityModel<User> entityModel = userModelAss.toModeluserprofile(user);
     return ResponseEntity.ok(entityModel);
 }
 
@@ -87,11 +87,11 @@ public ResponseEntity<EntityModel<User>> getUserById(@PathVariable Long id, Http
 
   
     @GetMapping("/userByFirstName/{name}")
-    public ResponseEntity<CollectionModel<EntityModel<User>>> getUserByFirstName(@PathVariable String name, HttpServletRequest request) {
+    public ResponseEntity<CollectionModel<EntityModel<User>>> getUserByFirstName(@PathVariable String name) {
         List<User> userList = userRepo.findByFirstname(name);
       //  EntityModel<User> entityModel = userModelAss.toModeluserprofile(name, request);
       List<EntityModel<User>> users = userRepo.findAll().stream()
-      .map(user -> userModelAss.toModelfriendself(user, request))
+      .map(user -> userModelAss.toModelfriendself(user))
       .collect(Collectors.toList());
         if (userList.isEmpty()) {
             throw new NFException(User.class);
@@ -101,10 +101,10 @@ public ResponseEntity<EntityModel<User>> getUserById(@PathVariable Long id, Http
     }
 
     @GetMapping("/userByLastName/{name}")// netzakar eno ne3malha non-CaseSensitive
-    public ResponseEntity<CollectionModel<EntityModel<User>>> getUserByLastName(@PathVariable String name, HttpServletRequest request) {
+    public ResponseEntity<CollectionModel<EntityModel<User>>> getUserByLastName(@PathVariable String name) {
         List<User> userList = userRepo.findByLastname(name);
         List<EntityModel<User>> users = userRepo.findAll().stream()
-      .map(user -> userModelAss.toModelfriendself(user, request))
+      .map(user -> userModelAss.toModelfriendself(user))
       .collect(Collectors.toList());
         if (userList.isEmpty()) {
             throw new NFException(User.class);
@@ -114,13 +114,13 @@ public ResponseEntity<EntityModel<User>> getUserById(@PathVariable Long id, Http
     }
 
   @GetMapping("/fullName/{name}")
-public ResponseEntity<CollectionModel<EntityModel<User>>>getFullName(@PathVariable String name, HttpServletRequest request) {
+public ResponseEntity<CollectionModel<EntityModel<User>>>getFullName(@PathVariable String name) {
     List<User> userList = new ArrayList<>();
     userList.addAll(userRepo.findByFirstname(name));
     userList.addAll(userRepo.findByLastname(name));
     userList.addAll(userRepo.findByFullname(name));
     List<EntityModel<User>> users = userRepo.findAll().stream()
-    .map(user -> userModelAss.toModelfriendself(user, request))
+    .map(user -> userModelAss.toModelfriendself(user))
     .collect(Collectors.toList());
       if (userList.isEmpty()) {
           throw new NFException(User.class);
@@ -130,10 +130,10 @@ public ResponseEntity<CollectionModel<EntityModel<User>>>getFullName(@PathVariab
 }
        
 @GetMapping("/UserName/{name}")
-public ResponseEntity<EntityModel<User>> getUserName(@PathVariable String name , HttpServletRequest request) {
+public ResponseEntity<EntityModel<User>> getUserName(@PathVariable String name ) {
     Optional<User> user = userRepo.findByUsername(name);
     if (user.isPresent()) {
-        EntityModel<User> entityModel = userModelAss.toModeluserprofile(user.get(), request);
+        EntityModel<User> entityModel = userModelAss.toModeluserprofile(user.get());
     return ResponseEntity.ok(entityModel);
     
     } else {
@@ -144,14 +144,14 @@ public ResponseEntity<EntityModel<User>> getUserName(@PathVariable String name ,
 
 
 @GetMapping("/UserFriend/{userid}")
-public ResponseEntity<CollectionModel<EntityModel<User>>> getUserFriend(@PathVariable Long userid ,  HttpServletRequest request){
+public ResponseEntity<CollectionModel<EntityModel<User>>> getUserFriend(@PathVariable Long userid ){
 
     User user = userRepo.findById(userid).get();
     List<EntityModel<User>> users =userRepo.getFriends(userid).stream()
-    .map(us -> userModelAss.toModelfriendself(us, request))
+    .map(us -> userModelAss.toModelfriendself(us))
     .collect(Collectors.toList());
 // return userRepo.getFriends(userid);
-return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(Controller.class).getUserById(userid,request)).withRel("Go to all Posts")));
+return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(Controller.class).getUserById(userid)).withRel("Go to all Posts")));
 
 }
 
