@@ -40,6 +40,8 @@ import com.project1.project.Security.Jwt.JwtUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 public class Controller {
@@ -219,8 +221,6 @@ public ResponseEntity<String> deleteUserFriend(@PathVariable Long userid, HttpSe
 
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 }
-
-
 
 
 
