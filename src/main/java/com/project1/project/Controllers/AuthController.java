@@ -2,10 +2,13 @@ package com.project1.project.Controllers;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.util.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +16,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,6 +47,8 @@ public class AuthController {
 
   @Autowired
   UserRepo userRepository;
+  @Autowired
+  private  UserRepo userRepo;
 
  
 
@@ -128,4 +136,47 @@ public class AuthController {
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 }
+
+
+
+@PutMapping("/ChangePassword")
+public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwords, HttpServletRequest request) {
+    String oldPassword = passwords.get("oldPassword");
+    String newPassword = passwords.get("newPassword");
+    
+    String jwt = parseJwt(request);
+    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        
+        User user = userRepo.findByUsername(username)
+                            .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        if (!encoder.matches(oldPassword, user.getPassword())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Incorrect old password"));
+        }
+        user.setPassword(encoder.encode(newPassword)); 
+        
+        userRepository.save(user); 
+        
+        return ResponseEntity.ok(new MessageResponse("Password changed successfully for user: " + username));
+    } else {
+        return ResponseEntity
+                .badRequest()
+                .body(new MessageResponse("Error: User not found with username "));
+    } 
 }
+
+    private String parseJwt(HttpServletRequest request) {
+      String headerAuth = request.getHeader("Authorization");
+  
+      if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+        return headerAuth.substring(7);
+      }
+  
+      return null;
+    }
+  
+  
+  }
