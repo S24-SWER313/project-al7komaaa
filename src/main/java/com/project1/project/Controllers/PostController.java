@@ -38,6 +38,7 @@ import com.project1.project.Entity.Post.PostRepo;
 import com.project1.project.Entity.Share.Share;
 import com.project1.project.Entity.Share.ShareRepo;
 import com.project1.project.Entity.User.User;
+import com.project1.project.Entity.User.UserModelAss;
 import com.project1.project.Entity.User.UserRepo;
 import com.project1.project.Payload.Response.MessageResponse;
 import com.project1.project.Security.Jwt.JwtUtils;
@@ -64,6 +65,8 @@ public class PostController {
     @Autowired
     private  PostModelAss postmodelAss;
 
+    @Autowired
+    private  UserModelAss usermodelAss;
 
     @Autowired
     private  CommentModelAss commentmodelAss;
@@ -244,26 +247,70 @@ public class PostController {
         if (users.isEmpty()) {
             throw new NFException(User.class);
         }
-        return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(Controller.class).getUserById(user.getId(),request)).withRel("User Profile")));
+        return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(Controller.class).getUserById(user.getId())).withRel("User Profile")));
      
     }
                
-    return ResponseEntity.ok(CollectionModel.of(l,linkTo(methodOn(Controller.class).getUserById(user.getId(),request)).withRel("User Profile")));}
+    return ResponseEntity.ok(CollectionModel.of(l,linkTo(methodOn(Controller.class).getUserById(user.getId())).withRel("User Profile")));}
   
-    @PostMapping("/{postId}/like")
-    public Like CreatelikePost(@RequestBody Like like,@PathVariable Long postId,HttpServletRequest request) {// يوزر يوزر مش حاسها زابطة
-        String jwt = parseJwt(request);
-        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-          String username = jwtUtils.getUserNameFromJwtToken(jwt);
-        User user = userRepo.findByUsername(username)
-                            .orElseThrow(() -> new RuntimeException("User not found"));
-                            like.setUser(user);
-                        Post post=    postRepo.findById(postId).get();
-                            like.setPost(post);
-                        return likeRepo.save(like);}
-        return null;
+    // @PostMapping("/{postId}/like")
+    // public Like CreatelikePost(@RequestBody Like like,@PathVariable Long postId,HttpServletRequest request) {// يوزر يوزر مش حاسها زابطة
+    //     String jwt = parseJwt(request);
+    //     if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+    //       String username = jwtUtils.getUserNameFromJwtToken(jwt);
+    //     User user = userRepo.findByUsername(username)
+    //                         .orElseThrow(() -> new RuntimeException("User not found"));
+    //                         like.setUser(user);
+    //                     Post post= postRepo.findById(postId).get();
+    //                         like.setPost(post);
+    //                         post.like.add(like);
+    //                         postRepo.save(post);
+    //                         userRepo.save(user);
+    //                     return likeRepo.save(like);}
 
+    //     return new Like();
+
+    // }
+
+
+    @PostMapping("/{postId}/like")
+public Like CreatelikePost(@RequestBody Like like, @PathVariable Long postId, HttpServletRequest request) {
+  
+    String jwt = parseJwt(request);
+    
+    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+    
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        
+  
+        User user = userRepo.findByUsername(username).get();
+                         //   .orElseThrow(() -> new RuntimeException("User not found"));
+        
+       
+        like.setUser(user);
+   
+        Post post = postRepo.findById(postId)
+                            .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        like.setPost(post);
+        
+     
+        if (!post.like.contains(like)) {
+        
+            post.like.add(like);
+        }
+        
+        
+        postRepo.save(post);
+       
+        userRepo.save(user);
+       
+        return likeRepo.save(like);
     }
+
+    return new Like();
+}
+
     @GetMapping("/{postId}/likes")
     public ResponseEntity<List<EntityModel<Like>>> getAllPostLikes(@PathVariable Long postId) {
         Optional<Post> postOptional = postRepo.findById(postId);
@@ -355,7 +402,7 @@ Share share=shareRepo.findById(shareId).get();
           return ResponseEntity.ok(CollectionModel.of(users,linkTo(methodOn(PostController.class).findById(user.getId())).withRel("Go to Post")));
      }
    
-     return ResponseEntity.ok(CollectionModel.of(l,linkTo(methodOn(Controller.class).getUserById(user.getId(),request)).withRel("User Profile")));}
+     return ResponseEntity.ok(CollectionModel.of(l,linkTo(methodOn(Controller.class).getUserById(user.getId())).withRel("User Profile")));}
     
 private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
      
@@ -397,10 +444,11 @@ return null;
 
 
 @GetMapping("/postUser/{postid}")
-public User postUser(@PathVariable Long postid){
+public ResponseEntity<EntityModel<User>> postUser(@PathVariable Long postid){
  Post post = postRepo.findById(postid).get();
- 
-  return post.user;
+
+      
+  return ResponseEntity.ok(usermodelAss.toModeluserprofile(post.user));
 
 }
 
