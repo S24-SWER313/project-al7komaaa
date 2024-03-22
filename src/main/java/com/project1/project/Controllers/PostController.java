@@ -253,34 +253,70 @@ public class PostController {
                
     return ResponseEntity.ok(CollectionModel.of(l,linkTo(methodOn(Controller.class).getUserById(user.getId())).withRel("User Profile")));}
   
+    // @PostMapping("/{postId}/like")
+    // public Like CreatelikePost(@RequestBody Like like,@PathVariable Long postId,HttpServletRequest request) {// يوزر يوزر مش حاسها زابطة
+    //     String jwt = parseJwt(request);
+    //     if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+    //       String username = jwtUtils.getUserNameFromJwtToken(jwt);
+    //     User user = userRepo.findByUsername(username)
+    //                         .orElseThrow(() -> new RuntimeException("User not found"));
+    //                         like.setUser(user);
+    //                     Post post= postRepo.findById(postId).get();
+    //                         like.setPost(post);
+    //                         post.like.add(like);
+    //                         postRepo.save(post);
+    //                         userRepo.save(user);
+    //                     return likeRepo.save(like);}
+
+    //     return new Like();
+
+    // }
+
+
     @PostMapping("/{postId}/like")
-  public ResponseEntity<?> createLikePost(@RequestBody Like like, @PathVariable Long postId, HttpServletRequest request) {
-    String jwt = parseJwt(request);
-    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-        String username = jwtUtils.getUserNameFromJwtToken(jwt);
-        User user = userRepo.findByUsername(username).orElse(null);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+    public ResponseEntity<?> createLikePost(@RequestBody Like like, @PathVariable Long postId, HttpServletRequest request) {
+        String jwt = parseJwt(request);
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+            String username = jwtUtils.getUserNameFromJwtToken(jwt);
+            
+            // التحقق من وجود المستخدم
+            User user = userRepo.findByUsername(username).orElse(null);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
+            
+            // التحقق من وجود المنشور
+            Post post = postRepo.findById(postId).orElse(null);
+            if (post == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
+            }
+            
+            // تعيين العلاقات بين المستخدم والإعجاب والمنشور
+            like.setUser(user);
+            like.setPost(post);
+            
+            // التحقق من عدم تكرار الإعجاب
+            if (post.like.stream().anyMatch(l -> l.user.getId().equals(user.getId()))) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User has already liked the post");
+            }
+            
+            // حفظ الإعجاب في قاعدة البيانات
+            Like savedLike = likeRepo.save(like);
+            
+            // إضافة الإعجاب إلى قائمة الإعجابات للمستخدم والمنشور
+            // user.likes.add(savedLike);
+            // post.like.add(savedLike);
+            
+            // حفظ التغييرات في قاعدة البيانات
+            // userRepo.save(user);
+            // postRepo.save(post);
+            
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedLike);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token");
         }
-        like.setUser(user);
-        Post post = postRepo.findById(postId).orElse(null);
-        if (post == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
-        }
-        like.setPost(post);
-        user.likes.add(like);
-        post.like.add(like);
-        userRepo.save(user);
-        postRepo.save(post);
-        if (post.like.stream().anyMatch(l -> l.user.getId().equals(user.getId()))) {
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User has already liked the post");
-      }
-        Like savedLike = likeRepo.save(like);
-        return ResponseEntity.status(HttpStatus.CREATED).body(like);
-    } else {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token");
     }
-}
+    
 
     @GetMapping("/{postId}/likes")
     public ResponseEntity<List<EntityModel<Like>>> getAllPostLikes(@PathVariable Long postId) {
@@ -395,8 +431,30 @@ private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
   }
 
 
-
-
+  @GetMapping("/FriendPosts/{friendId}")
+  public ResponseEntity<?> findFriendPosts(HttpServletRequest request , @PathVariable Long friendId) {
+      String jwt = parseJwt(request);
+      if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+          String username = jwtUtils.getUserNameFromJwtToken(jwt);
+          Optional<User> optionalUser = userRepo.findByUsername(username);
+          Optional<User> optionalFriend = userRepo.findById(friendId);
+          if (optionalUser.isPresent() && optionalFriend.isPresent()) {
+              User user = optionalUser.get();
+              User friend = optionalFriend.get();
+              boolean isFriend = user.friends.contains(friend);
+              if (isFriend) {
+                  List<Post> friendPosts = userRepo.findPostsByUserId(friendId);
+                  return ResponseEntity.ok(friendPosts);
+              } else {
+                  return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("This acount is private to see posts added friend.");
+              }
+          } else {
+              return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or friend not found.");
+          }
+      } else {
+          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access. sign in");
+      }
+  }
 @GetMapping("/postUser/{postid}")
 public ResponseEntity<EntityModel<User>> postUser(@PathVariable Long postid){
  Post post = postRepo.findById(postid).get();
