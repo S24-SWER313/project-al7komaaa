@@ -34,7 +34,7 @@ private String content;
     private List<Share> shares;
     public Post() {
     }
-
+//
  
     public Post( String image, String video, String content) {
 
