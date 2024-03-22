@@ -21,9 +21,10 @@ public class Like {
   @ManyToOne 
     @JoinColumn(name = "comment_id")
     public Comment comment;
-    @ManyToOne
+    @OneToOne //many to one
     @JoinColumn(name = "user_id")
     public User user;
+   
 
     public Like( likeType type) {
       
