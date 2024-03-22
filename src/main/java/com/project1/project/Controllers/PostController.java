@@ -395,30 +395,6 @@ private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
   }
 
 
-@GetMapping("/FriendPosts/{friendId}")
-public ResponseEntity<?> findFriendPosts(HttpServletRequest request , @PathVariable Long friendId) {
-    String jwt = parseJwt(request);
-    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-        String username = jwtUtils.getUserNameFromJwtToken(jwt);
-        Optional<User> optionalUser = userRepo.findByUsername(username);
-        Optional<User> optionalFriend = userRepo.findById(friendId);
-        if (optionalUser.isPresent() && optionalFriend.isPresent()) {
-            User user = optionalUser.get();
-            User friend = optionalFriend.get();
-            boolean isFriend = user.friends.contains(friend);
-            if (isFriend) {
-                List<Post> friendPosts = userRepo.findPostsByUserId(friendId);
-                return ResponseEntity.ok(friendPosts);
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("This acount is private to see posts added friend.");
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or friend not found.");
-        }
-    } else {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access. sign in");
-    }
-}
 
 
 @GetMapping("/postUser/{postid}")
