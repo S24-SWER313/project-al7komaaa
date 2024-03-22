@@ -1,0 +1,634 @@
+version 2
+JvmtiExport can_access_local_variables 0
+JvmtiExport can_hotswap_or_post_breakpoint 0
+JvmtiExport can_post_on_exceptions 0
+# 845 ciObject found
+instanceKlass org/springframework/aop/aspectj/AspectJExpressionPointcut
+ciInstanceKlass java/lang/Cloneable 1 0 7 100 1 100 1 1 1
+instanceKlass org/springframework/security/authentication/ProviderManager$NullEventPublisher
+instanceKlass org/springframework/security/core/userdetails/UserDetailsPasswordService
+instanceKlass org/springframework/security/core/authority/mapping/NullAuthoritiesMapper
+instanceKlass org/springframework/security/authentication/dao/AbstractUserDetailsAuthenticationProvider$DefaultPostAuthenticationChecks
+instanceKlass org/springframework/security/authentication/dao/AbstractUserDetailsAuthenticationProvider$DefaultPreAuthenticationChecks
+instanceKlass org/springframework/security/core/userdetails/cache/NullUserCache
+instanceKlass org/springframework/context/support/MessageSourceAccessor
+instanceKlass org/springframework/security/crypto/password/DelegatingPasswordEncoder$UnmappedIdPasswordEncoder
+instanceKlass org/springframework/security/crypto/password/DelegatingPasswordEncoder
+instanceKlass org/springframework/security/crypto/argon2/Argon2PasswordEncoder
+instanceKlass org/springframework/security/crypto/password/StandardPasswordEncoder
+instanceKlass org/springframework/security/crypto/scrypt/SCryptPasswordEncoder
+instanceKlass javax/crypto/SecretKeyFactorySpi
+instanceKlass  @bci javax/crypto/ProviderVerifier isTrustedModule ()Z 61 <appendix> argL0 ; # javax/crypto/ProviderVerifier$$Lambda+0x000002b5d346b430
+instanceKlass javax/crypto/ProviderVerifier$1
+instanceKlass javax/crypto/ProviderVerifier
+instanceKlass javax/crypto/JceSecurity$3
+instanceKlass javax/crypto/JceSecurity$2
+instanceKlass java/net/spi/URLStreamHandlerProvider
+instanceKlass java/net/URL$1
+instanceKlass java/net/URL$2
+instanceKlass jdk/internal/misc/ThreadTracker
+instanceKlass java/net/URL$ThreadTrackHolder
+instanceKlass javax/crypto/CryptoPolicyParser$CryptoPermissionEntry
+instanceKlass javax/crypto/CryptoPolicyParser$GrantEntry
+instanceKlass javax/crypto/CryptoPolicyParser
+instanceKlass sun/nio/fs/WindowsFileSystemProvider$1
+instanceKlass javax/crypto/JceSecurity$1
+instanceKlass javax/crypto/JceSecurity
+instanceKlass javax/crypto/SecretKeyFactory
+instanceKlass org/springframework/security/crypto/codec/Utf8
+instanceKlass org/springframework/security/crypto/password/Pbkdf2PasswordEncoder
+instanceKlass org/springframework/security/crypto/password/NoOpPasswordEncoder
+instanceKlass org/springframework/security/crypto/password/Digester
+instanceKlass org/springframework/security/crypto/password/MessageDigestPasswordEncoder
+instanceKlass java/util/Base64$Encoder
+instanceKlass java/util/Base64
+instanceKlass org/springframework/security/crypto/keygen/Base64StringKeyGenerator
+instanceKlass org/springframework/security/crypto/password/Md4PasswordEncoder
+instanceKlass org/springframework/security/crypto/keygen/SecureRandomBytesKeyGenerator
+instanceKlass org/springframework/security/crypto/keygen/StringKeyGenerator
+instanceKlass org/springframework/security/crypto/keygen/BytesKeyGenerator
+instanceKlass org/springframework/security/crypto/keygen/KeyGenerators
+instanceKlass org/springframework/security/crypto/password/LdapShaPasswordEncoder
+instanceKlass org/springframework/security/crypto/bcrypt/BCryptPasswordEncoder
+instanceKlass org/springframework/security/crypto/factory/PasswordEncoderFactories
+instanceKlass org/springframework/security/core/authority/mapping/GrantedAuthoritiesMapper
+instanceKlass org/springframework/security/core/userdetails/UserDetailsChecker
+instanceKlass org/springframework/security/core/userdetails/UserCache
+instanceKlass org/springframework/security/config/Customizer
+instanceKlass org/springframework/security/authentication/ProviderManager
+instanceKlass org/springframework/security/config/annotation/authentication/configuration/AuthenticationConfiguration$LazyPasswordEncoder
+instanceKlass org/apache/catalina/core/ContainerBase$ContainerBackgroundProcessor
+instanceKlass org/springframework/security/config/annotation/configuration/AutowireBeanFactoryObjectPostProcessor
+instanceKlass  @bci org/apache/catalina/core/StandardServer startPeriodicLifecycleEvent ()V 76 <appendix> member <vmtarget> ; # org/apache/catalina/core/StandardServer$$Lambda+0x000002b5d3a52ad8
+instanceKlass com/project1/project/Payload/Request/SignupRequest
+instanceKlass com/project1/project/Payload/Request/LoginRequest
+instanceKlass org/springframework/http/HttpEntity
+instanceKlass org/springframework/security/core/GrantedAuthority
+instanceKlass org/springframework/beans/factory/SmartFactoryBean
+instanceKlass org/springframework/boot/web/servlet/context/WebServerStartStopLifecycle
+instanceKlass org/springframework/boot/web/context/WebServerGracefulShutdownLifecycle
+instanceKlass org/apache/naming/ContextAccessController
+instanceKlass org/apache/naming/StringManager
+instanceKlass org/apache/naming/ContextBindings
+instanceKlass  @bci org/apache/catalina/core/StandardServer startInternal ()V 130 <appendix> member <vmtarget> ; # org/apache/catalina/core/StandardServer$$Lambda+0x000002b5d3a50e80
+instanceKlass org/apache/catalina/mapper/WrapperMappingInfo
+instanceKlass org/apache/catalina/mapper/Mapper$ContextList
+instanceKlass org/apache/tomcat/util/threads/Constants
+instanceKlass org/apache/tomcat/util/threads/TaskThread$WrappingRunnable
+instanceKlass org/apache/catalina/core/ContainerBase$ContainerBackgroundProcessorMonitor
+instanceKlass  @bci org/springframework/boot/web/embedded/tomcat/TomcatWebServer removeServiceConnectors ()V 2 <appendix> member <vmtarget> ; # org/springframework/boot/web/embedded/tomcat/TomcatWebServer$$Lambda+0x000002b5d3a4f9a0
+instanceKlass io/micrometer/observation/transport/ResponseContext
+instanceKlass  @bci org/apache/catalina/core/ApplicationFilterConfig registerJMX ()V 142 <appendix> form vmentry <vmtarget> ; # java/lang/invoke/LambdaForm$MH+0x000002b5d3a4dc00
+# instanceKlass java/lang/invoke/LambdaForm$MH+0x000002b5d3a4d800
+# instanceKlass java/lang/invoke/LambdaForm$MH+0x000002b5d3a4d400
+# instanceKlass java/lang/invoke/LambdaForm$MH+0x000002b5d3a4d000
+# instanceKlass java/lang/invoke/LambdaForm$MH+0x000002b5d3a4cc00
+# instanceKlass java/lang/invoke/LambdaForm$MH+0x000002b5d3a4c800
+# instanceKlass java/lang/invoke/LambdaForm$MH+0x000002b5d3a4c400
+instanceKlass org/apache/catalina/util/Introspection
+instanceKlass org/apache/catalina/core/ApplicationFilterConfig
+instanceKlass jakarta/servlet/HttpConstraintElement
+instanceKlass org/apache/catalina/core/StandardContext$NoPluggabilityServletContext
+instanceKlass org/apache/tomcat/websocket/server/WsContextListener
+instanceKlass org/apache/tomcat/websocket/server/WsSessionListener
+instanceKlass jakarta/servlet/GenericFilter
+instanceKlass  @bci java/util/Comparator comparingLong (Ljava/util/function/ToLongFunction;)Ljava/util/Comparator; 6 <appendix> member <vmtarget> ; # java/util/Comparator$$Lambda+0x000002b5d3467348
+instanceKlass  @bci org/apache/tomcat/websocket/server/WsWriteTimeout <init> ()V 9 <appendix> argL0 ; # org/apache/tomcat/websocket/server/WsWriteTimeout$$Lambda+0x000002b5d3a4a7b8
+instanceKlass  @cpi org/apache/tomcat/websocket/server/WsWriteTimeout 136 form vmentry <vmtarget> ; # java/lang/invoke/LambdaForm$DMH+0x000002b5d3a4c000
+instanceKlass java/nio/channels/CompletionHandler
+instanceKlass jakarta/websocket/SendHandler
+instanceKlass org/apache/tomcat/websocket/server/WsWriteTimeout
+instanceKlass org/apache/tomcat/websocket/WsExtension
+instanceKlass jakarta/websocket/Extension
+instanceKlass org/apache/tomcat/websocket/Constants
+instanceKlass jakarta/websocket/CloseReason
+instanceKlass jakarta/websocket/Session
+instanceKlass jakarta/websocket/EndpointConfig
+instanceKlass org/apache/tomcat/websocket/WsRemoteEndpointImplBase
+instanceKlass jakarta/websocket/RemoteEndpoint
+instanceKlass org/apache/tomcat/websocket/AsyncChannelWrapper
+instanceKlass org/apache/tomcat/websocket/ClientEndpointHolder
+instanceKlass jakarta/websocket/HandshakeResponse
+instanceKlass jakarta/websocket/CloseReason$CloseCode
+instanceKlass org/apache/tomcat/websocket/WsWebSocketContainer
+instanceKlass org/apache/tomcat/websocket/BackgroundProcess
+instanceKlass  @bci org/springframework/boot/actuate/endpoint/web/ServletEndpointRegistrar onStartup (Ljakarta/servlet/ServletContext;)V 6 <appendix> member <vmtarget> ; # org/springframework/boot/actuate/endpoint/web/ServletEndpointRegistrar$$Lambda+0x000002b5d3a47ac8
+instanceKlass org/apache/catalina/core/ApplicationServletRegistration
+instanceKlass org/apache/tomcat/util/modeler/Util
+instanceKlass org/apache/catalina/core/StandardWrapperFacade
+instanceKlass org/apache/catalina/core/ApplicationFilterRegistration
+instanceKlass org/apache/tomcat/util/descriptor/web/Constants
+instanceKlass  @bci org/springframework/boot/web/servlet/ServletContextInitializerBeans <init> (Lorg/springframework/beans/factory/ListableBeanFactory;[Ljava/lang/Class;)V 72 <appendix> argL0 ; # org/springframework/boot/web/servlet/ServletContextInitializerBeans$$Lambda+0x000002b5d3a46608
+instanceKlass org/springframework/boot/web/servlet/ServletContextInitializerBeans$ServletListenerRegistrationBeanAdapter
+instanceKlass jakarta/servlet/ServletContextListener
+instanceKlass jakarta/servlet/http/HttpSessionListener
+instanceKlass jakarta/servlet/http/HttpSessionIdListener
+instanceKlass jakarta/servlet/http/HttpSessionAttributeListener
+instanceKlass jakarta/servlet/ServletRequestAttributeListener
+instanceKlass jakarta/servlet/ServletContextAttributeListener
+instanceKlass org/springframework/http/HttpInputMessage
+instanceKlass  @bci jdk/internal/reflect/MethodHandleIntegerFieldAccessorImpl setInt (Ljava/lang/Object;I)V 41 <adapter> ; # java/lang/invoke/LambdaForm$MH+0x000002b5d3a44400
+instanceKlass org/springframework/core/convert/support/StringToNumberConverterFactory$StringToNumber
+instanceKlass jakarta/servlet/FilterConfig
+instanceKlass jakarta/servlet/FilterChain
+instanceKlass sun/reflect/ReflectionFactory$1
+instanceKlass sun/reflect/ReflectionFactory
+instanceKlass org/springframework/objenesis/instantiator/sun/SunReflectionFactoryHelper
+instanceKlass org/springframework/objenesis/instantiator/sun/SunReflectionFactoryInstantiator
+instanceKlass org/springframework/objenesis/strategy/PlatformDescription
+instanceKlass org/springframework/cglib/proxy/Enhancer$2
+instanceKlass org/springframework/cglib/proxy/Enhancer$1
+instanceKlass org/springframework/cglib/proxy/Enhancer$3
+instanceKlass org/springframework/aop/ThrowsAdvice
+instanceKlass  @bci org/springframework/aop/framework/AdvisedSupport getInterceptorsAndDynamicInterceptionAdvice (Ljava/lang/reflect/Method;Ljava/lang/Class;)Ljava/util/List; 51 <appendix> member <vmtarget> ; # org/springframework/aop/framework/AdvisedSupport$$Lambda+0x000002b5d3a40000
+instanceKlass org/springframework/aop/framework/AdvisedSupport$MethodCacheKey
+instanceKlass java/lang/invoke/MethodHandleImpl$CountingWrapper$1
+instanceKlass org/springframework/aop/framework/AdvisedSupport$AdvisorKeyEntry
+instanceKlass org/springframework/aop/framework/CglibAopProxy$ProxyCallbackFilter
+instanceKlass org/springframework/aop/framework/CglibAopProxy$HashCodeInterceptor
+instanceKlass org/springframework/aop/framework/CglibAopProxy$EqualsInterceptor
+instanceKlass org/springframework/aop/framework/CglibAopProxy$SerializableNoOp
+instanceKlass org/springframework/aop/framework/CglibAopProxy$StaticDispatcher
+instanceKlass org/springframework/aop/framework/CglibAopProxy$StaticUnadvisedInterceptor
+instanceKlass org/springframework/aop/framework/CglibAopProxy$DynamicAdvisedInterceptor
+instanceKlass  @bci org/springframework/aop/framework/CglibAopProxy validateClassIfNecessary (Ljava/lang/Class;Ljava/lang/ClassLoader;)V 33 <appendix> member <vmtarget> ; # org/springframework/aop/framework/CglibAopProxy$$Lambda+0x000002b5d3a3d228
+instanceKlass org/springframework/aop/framework/CglibAopProxy$AdvisedDispatcher
+instanceKlass org/springframework/aop/framework/CglibAopProxy
+instanceKlass org/aspectj/util/PartialOrder
+instanceKlass org/springframework/aop/aspectj/autoproxy/AspectJAwareAdvisorAutoProxyCreator$PartiallyComparableAdvisorHolder
+instanceKlass org/springframework/data/repository/core/support/RepositoryFactorySupport$ImplementationMethodExecutionInterceptor
+instanceKlass org/hibernate/type/descriptor/java/AbstractJavaType
+instanceKlass jakarta/persistence/Tuple
+instanceKlass  @bci org/hibernate/query/sqm/function/SelfRenderingSqmFunction resolveResultType (Lorg/hibernate/type/spi/TypeConfiguration;)Lorg/hibernate/query/ReturnableType; 1 <appendix> argL0 ; # org/hibernate/query/sqm/function/SelfRenderingSqmFunction$$Lambda+0x000002b5d3a3b4b0
+instanceKlass org/hibernate/query/hql/internal/SemanticQueryBuilder$7
+instanceKlass  @bci org/hibernate/query/hql/internal/SemanticQueryBuilder visitFinalFunctionArgument (Lorg/antlr/v4/runtime/tree/ParseTree;)Lorg/hibernate/query/sqm/tree/expression/SqmExpression; 5 <appendix> member <vmtarget> ; # org/hibernate/query/hql/internal/SemanticQueryBuilder$$Lambda+0x000002b5d3a3ac60
+instanceKlass org/hibernate/internal/util/QuotingHelper
+instanceKlass  @bci org/springframework/data/jpa/repository/query/HqlQueryRenderer visitFunctionArguments (Lorg/springframework/data/jpa/repository/query/HqlParser$FunctionArgumentsContext;)Ljava/util/List; 39 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/HqlQueryRenderer$$Lambda+0x000002b5d3a3a830
+instanceKlass  @bci org/springframework/data/jpa/repository/query/HqlQueryRenderer visitFunctionName (Lorg/springframework/data/jpa/repository/query/HqlParser$FunctionNameContext;)Ljava/util/List; 14 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/HqlQueryRenderer$$Lambda+0x000002b5d3a3a600
+# instanceKlass java/lang/invoke/LambdaForm$MH+0x000002b5d3a3c000
+instanceKlass  @bci org/springframework/data/domain/Range contains (Ljava/lang/Object;Ljava/util/Comparator;)Z 48 <appendix> member <vmtarget> ; # org/springframework/data/domain/Range$$Lambda+0x000002b5d3a3a180
+instanceKlass  @bci org/springframework/data/domain/Range contains (Ljava/lang/Object;Ljava/util/Comparator;)Z 16 <appendix> member <vmtarget> ; # org/springframework/data/domain/Range$$Lambda+0x000002b5d3a39f40
+instanceKlass  @bci org/springframework/data/domain/Range contains (Ljava/lang/Comparable;)Z 2 <appendix> argL0 ; # org/springframework/data/domain/Range$$Lambda+0x000002b5d3a39cb0
+instanceKlass org/springframework/data/domain/Range$RangeBuilder
+instanceKlass org/springframework/data/domain/Range$Bound
+instanceKlass  @bci org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser createSpelExtractor (Ljava/lang/String;ZI)Lorg/springframework/data/repository/query/SpelQueryContext$SpelExtractor; 15 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser$$Lambda+0x000002b5d3a39670
+instanceKlass  @bci org/hibernate/internal/SessionImpl applyQuerySettingsAndHints (Lorg/hibernate/query/Query;)V 15 <appendix> argL0 ; # org/hibernate/internal/SessionImpl$$Lambda+0x000002b5d3a39438
+instanceKlass  @bci org/hibernate/internal/SessionImpl applyQuerySettingsAndHints (Lorg/hibernate/query/Query;)V 10 <appendix> member <vmtarget> ; # org/hibernate/internal/SessionImpl$$Lambda+0x000002b5d3a391f8
+instanceKlass org/hibernate/jpa/internal/LegacySpecHelper
+instanceKlass  @bci org/hibernate/internal/SessionImpl applyLockOptionsHint (Lorg/hibernate/query/SelectionQuery;)V 35 <appendix> member <vmtarget> ; # org/hibernate/internal/SessionImpl$$Lambda+0x000002b5d3a38db8
+instanceKlass org/hibernate/query/spi/QueryParameterBindings$2
+instanceKlass org/hibernate/query/spi/QueryParameterBindings$1
+instanceKlass org/hibernate/query/spi/QueryParameterBinding
+instanceKlass org/hibernate/cache/MutableCacheKeyBuilder
+instanceKlass org/hibernate/cache/spi/QueryKey$ParameterBindingsMemento
+instanceKlass org/hibernate/query/internal/QueryParameterBindingsImpl
+instanceKlass org/hibernate/query/internal/QueryOptionsImpl
+instanceKlass org/hibernate/query/spi/QueryInterpretationCache$Key
+instanceKlass org/hibernate/query/spi/QueryParameterBindings
+instanceKlass org/hibernate/query/spi/NonSelectQueryPlan
+instanceKlass org/hibernate/query/ResultListTransformer
+instanceKlass org/hibernate/ScrollableResults
+instanceKlass org/hibernate/query/spi/MutableQueryOptions
+instanceKlass org/hibernate/query/spi/AbstractCommonQueryContract
+instanceKlass org/hibernate/query/spi/DomainQueryExecutionContext
+instanceKlass org/hibernate/query/sqm/internal/SqmInterpretationsKey$InterpretationsKeySource
+instanceKlass org/hibernate/query/sqm/internal/SqmInterpretationsKey$CacheabilityInfluencers
+instanceKlass org/hibernate/query/hql/spi/SqmQueryImplementor
+instanceKlass org/hibernate/query/spi/SqmQuery
+instanceKlass org/hibernate/query/spi/SimpleHqlInterpretationImpl
+instanceKlass org/hibernate/query/internal/ParameterMetadataImpl
+instanceKlass  @bci org/hibernate/query/sqm/internal/DomainParameterXref from (Lorg/hibernate/query/sqm/tree/SqmStatement;)Lorg/hibernate/query/sqm/internal/DomainParameterXref; 180 <appendix> argL0 ; # org/hibernate/query/sqm/internal/DomainParameterXref$$Lambda+0x000002b5d3a30000
+instanceKlass org/hibernate/query/spi/AbstractQueryParameter
+instanceKlass  @bci org/hibernate/query/sqm/internal/DomainParameterXref from (Lorg/hibernate/query/sqm/tree/SqmStatement;)Lorg/hibernate/query/sqm/internal/DomainParameterXref; 123 <appendix> member <vmtarget> ; # org/hibernate/query/sqm/internal/DomainParameterXref$$Lambda+0x000002b5d3a27808
+instanceKlass org/hibernate/query/sqm/internal/SqmUtil$1
+instanceKlass org/hibernate/query/sqm/tree/SqmStatement$ParameterResolutions
+instanceKlass org/hibernate/query/sqm/internal/SqmUtil
+instanceKlass org/hibernate/query/sqm/internal/DomainParameterXref
+instanceKlass org/hibernate/query/sqm/internal/SqmTreePrinter
+instanceKlass org/hibernate/metamodel/model/domain/DiscriminatorSqmPath
+instanceKlass  @bci org/hibernate/query/sqm/tree/domain/AbstractSqmPath resolvePath (Ljava/lang/String;Lorg/hibernate/query/sqm/SqmPathSource;)Lorg/hibernate/query/sqm/tree/domain/SqmPath; 57 <appendix> member <vmtarget> ; # org/hibernate/query/sqm/tree/domain/AbstractSqmPath$$Lambda+0x000002b5d3a1caf0
+instanceKlass org/hibernate/query/hql/internal/DomainPathPart
+instanceKlass org/hibernate/query/hql/internal/BasicDotIdentifierConsumer$BaseLocalSequencePart
+instanceKlass org/hibernate/query/sqm/SqmTreeCreationLogger
+instanceKlass org/hibernate/query/sqm/tree/domain/SqmPolymorphicRootDescriptor
+instanceKlass org/hibernate/query/hql/internal/SqmTreeCreationHelper
+instanceKlass org/hibernate/query/hql/internal/SqmPathRegistryImpl
+instanceKlass org/hibernate/query/hql/spi/SqmPathRegistry
+instanceKlass org/hibernate/query/sqm/internal/SqmCreationProcessingStateImpl
+instanceKlass  @bci org/hibernate/query/hql/internal/SemanticQueryBuilder visitStatement (Lorg/hibernate/grammars/hql/HqlParser$StatementContext;)Lorg/hibernate/query/sqm/tree/SqmStatement; 4 <appendix> argL0 ; # org/hibernate/query/hql/internal/SemanticQueryBuilder$$Lambda+0x000002b5d3a16fd8
+instanceKlass  @bci org/hibernate/type/spi/TypeConfiguration standardBasicTypeForJavaType (Ljava/lang/reflect/Type;Ljava/util/function/Function;)Lorg/hibernate/type/BasicType; 14 <appendix> member <vmtarget> ; # org/hibernate/type/spi/TypeConfiguration$$Lambda+0x000002b5d3a16d98
+instanceKlass  @bci org/hibernate/type/spi/TypeConfiguration standardBasicTypeForJavaType (Ljava/lang/Class;)Lorg/hibernate/type/BasicType; 9 <appendix> member <vmtarget> ; # org/hibernate/type/spi/TypeConfiguration$$Lambda+0x000002b5d3a16b58
+instanceKlass org/hibernate/query/hql/internal/BasicDotIdentifierConsumer
+instanceKlass org/hibernate/query/sqm/spi/ParameterDeclarationContext
+instanceKlass org/hibernate/query/sqm/tree/insert/SqmInsertStatement
+instanceKlass org/hibernate/query/hql/spi/SqmCreationProcessingState
+instanceKlass org/hibernate/query/hql/spi/DotIdentifierConsumer
+instanceKlass org/hibernate/grammars/hql/HqlParserVisitor
+instanceKlass org/hibernate/query/hql/spi/SqmCreationState
+instanceKlass org/hibernate/query/hql/internal/StandardHqlTranslator$1
+instanceKlass org/antlr/v4/runtime/RuntimeMetaData
+instanceKlass org/hibernate/query/hql/internal/HqlParseTreeBuilder
+instanceKlass org/hibernate/query/hql/HqlLogging
+instanceKlass  @bci org/springframework/data/jpa/repository/query/AbstractStringBasedJpaQuery <init> (Lorg/springframework/data/jpa/repository/query/JpaQueryMethod;Ljakarta/persistence/EntityManager;Ljava/lang/String;Ljava/lang/String;Lorg/springframework/data/jpa/repository/QueryRewriter;Lorg/springframework/data/repository/query/QueryMethodEvaluationContextProvider;Lorg/springframework/expression/spel/standard/SpelExpressionParser;)V 92 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/AbstractStringBasedJpaQuery$$Lambda+0x000002b5d39c04e8
+instanceKlass  @bci org/springframework/data/jpa/repository/query/AbstractStringBasedJpaQuery <init> (Lorg/springframework/data/jpa/repository/query/JpaQueryMethod;Ljakarta/persistence/EntityManager;Ljava/lang/String;Ljava/lang/String;Lorg/springframework/data/jpa/repository/QueryRewriter;Lorg/springframework/data/repository/query/QueryMethodEvaluationContextProvider;Lorg/springframework/expression/spel/standard/SpelExpressionParser;)V 79 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/AbstractStringBasedJpaQuery$$Lambda+0x000002b5d39c02c8
+instanceKlass org/springframework/data/jpa/repository/query/AbstractStringBasedJpaQuery$QuerySortRewriter
+instanceKlass  @bci org/springframework/data/jpa/repository/query/StringQuery hasNamedParameter ()Z 9 <appendix> argL0 ; # org/springframework/data/jpa/repository/query/StringQuery$$Lambda+0x000002b5d39bed60
+instanceKlass  @bci org/springframework/data/jpa/repository/query/HqlQueryRenderer visitWhereClause (Lorg/springframework/data/jpa/repository/query/HqlParser$WhereClauseContext;)Ljava/util/List; 32 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/HqlQueryRenderer$$Lambda+0x000002b5d39beb30
+instanceKlass  @bci org/springframework/data/jpa/repository/query/HqlQueryRenderer visitEntityWithJoins (Lorg/springframework/data/jpa/repository/query/HqlParser$EntityWithJoinsContext;)Ljava/util/List; 36 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/HqlQueryRenderer$$Lambda+0x000002b5d39be900
+instanceKlass  @bci org/springframework/data/jpa/repository/query/HqlQueryRenderer visitEntityName (Lorg/springframework/data/jpa/repository/query/HqlParser$EntityNameContext;)Ljava/util/List; 14 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/HqlQueryRenderer$$Lambda+0x000002b5d39be6d0
+instanceKlass  @bci org/springframework/data/jpa/repository/query/HqlQueryRenderer visitFromClause (Lorg/springframework/data/jpa/repository/query/HqlParser$FromClauseContext;)Ljava/util/List; 32 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/HqlQueryRenderer$$Lambda+0x000002b5d39be4a0
+instanceKlass  @bci org/springframework/data/jpa/repository/query/HqlQueryRenderer visitSimplePath (Lorg/springframework/data/jpa/repository/query/HqlParser$SimplePathContext;)Ljava/util/List; 36 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/HqlQueryRenderer$$Lambda+0x000002b5d39be270
+instanceKlass  @bci org/springframework/data/jpa/repository/query/HqlQueryRenderer visitSelectionList (Lorg/springframework/data/jpa/repository/query/HqlParser$SelectionListContext;)Ljava/util/List; 14 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/HqlQueryRenderer$$Lambda+0x000002b5d39be040
+instanceKlass  @bci org/springframework/data/jpa/repository/query/JpaQueryParsingToken <init> (Ljava/lang/String;Z)V 2 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/JpaQueryParsingToken$$Lambda+0x000002b5d39bde20
+instanceKlass  @bci org/springframework/data/jpa/repository/query/JpaQueryParsingToken <init> (Ljava/lang/String;)V 2 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/JpaQueryParsingToken$$Lambda+0x000002b5d39bdc00
+instanceKlass org/springframework/data/jpa/repository/query/JpaQueryParsingToken
+instanceKlass org/springframework/data/jpa/repository/query/JpaQueryTransformerSupport
+instanceKlass org/antlr/v4/runtime/tree/AbstractParseTreeVisitor
+instanceKlass org/springframework/data/jpa/repository/query/HqlVisitor
+instanceKlass org/antlr/v4/runtime/tree/ParseTreeVisitor
+instanceKlass org/antlr/v4/runtime/misc/FlexibleHashMap$Entry
+instanceKlass org/antlr/v4/runtime/misc/FlexibleHashMap
+instanceKlass org/antlr/v4/runtime/misc/DoubleKeyMap
+instanceKlass org/antlr/v4/runtime/tree/TerminalNodeImpl
+instanceKlass org/antlr/v4/runtime/atn/LexerIndexedCustomAction
+instanceKlass org/antlr/v4/runtime/atn/LexerActionExecutor
+instanceKlass org/antlr/v4/runtime/atn/LL1Analyzer
+instanceKlass org/antlr/v4/runtime/CommonToken
+instanceKlass org/antlr/v4/runtime/WritableToken
+instanceKlass org/antlr/v4/runtime/misc/MurmurHash
+instanceKlass org/antlr/v4/runtime/atn/ParserATNSimulator$1
+instanceKlass org/antlr/v4/runtime/atn/SemanticContext
+instanceKlass org/antlr/v4/runtime/DefaultErrorStrategy
+instanceKlass org/antlr/v4/runtime/BufferedTokenStream
+instanceKlass org/antlr/v4/runtime/tree/ParseTreeListener
+instanceKlass org/antlr/v4/runtime/tree/ErrorNode
+instanceKlass org/antlr/v4/runtime/tree/TerminalNode
+instanceKlass org/antlr/v4/runtime/atn/LexerATNSimulator$SimState
+instanceKlass org/antlr/v4/runtime/misc/AbstractEqualityComparator
+instanceKlass org/antlr/v4/runtime/misc/EqualityComparator
+instanceKlass org/antlr/v4/runtime/misc/Array2DHashSet
+instanceKlass org/antlr/v4/runtime/dfa/DFAState
+instanceKlass org/antlr/v4/runtime/atn/ATNConfigSet
+instanceKlass org/antlr/v4/runtime/atn/ATNConfig
+instanceKlass org/antlr/v4/runtime/misc/IntegerList
+instanceKlass org/antlr/v4/runtime/Token
+instanceKlass org/antlr/v4/runtime/CommonTokenFactory
+instanceKlass org/antlr/v4/runtime/TokenFactory
+instanceKlass org/antlr/v4/runtime/BaseErrorListener
+instanceKlass org/antlr/v4/runtime/CodePointCharStream$1
+instanceKlass org/antlr/v4/runtime/CodePointCharStream
+instanceKlass org/antlr/v4/runtime/CodePointBuffer$1
+instanceKlass org/antlr/v4/runtime/CodePointBuffer$Builder
+instanceKlass org/antlr/v4/runtime/CodePointBuffer
+instanceKlass org/antlr/v4/runtime/CharStreams
+instanceKlass org/antlr/v4/runtime/dfa/DFASerializer
+instanceKlass org/antlr/v4/runtime/dfa/DFA
+instanceKlass org/antlr/v4/runtime/atn/LexerSkipAction
+instanceKlass org/antlr/v4/runtime/atn/ATNDeserializer$1
+instanceKlass org/antlr/v4/runtime/misc/Interval
+instanceKlass org/antlr/v4/runtime/misc/IntervalSet
+instanceKlass org/antlr/v4/runtime/misc/Pair
+instanceKlass org/antlr/v4/runtime/misc/IntSet
+instanceKlass org/antlr/v4/runtime/atn/ATN
+instanceKlass org/antlr/v4/runtime/atn/ATNDeserializationOptions
+instanceKlass org/antlr/v4/runtime/atn/LexerAction
+instanceKlass org/antlr/v4/runtime/atn/ATNState
+instanceKlass org/antlr/v4/runtime/atn/Transition
+instanceKlass org/antlr/v4/runtime/atn/ATNDeserializer
+instanceKlass org/antlr/v4/runtime/VocabularyImpl
+instanceKlass org/antlr/v4/runtime/atn/PredictionContext
+instanceKlass org/antlr/v4/runtime/atn/PredictionContextCache
+instanceKlass org/antlr/v4/runtime/Vocabulary
+instanceKlass org/antlr/v4/runtime/atn/ATNSimulator
+instanceKlass  @bci org/springframework/data/jpa/repository/query/JpaQueryParserSupport$ParseState <init> (Lorg/springframework/data/jpa/repository/query/JpaQueryParserSupport;Ljava/lang/String;)V 17 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/JpaQueryParserSupport$ParseState$$Lambda+0x000002b5d3976d50
+instanceKlass org/springframework/data/jpa/repository/query/JpaQueryParserSupport$ParseState
+instanceKlass org/antlr/v4/runtime/RuleContext
+instanceKlass org/antlr/v4/runtime/tree/RuleNode
+instanceKlass org/antlr/v4/runtime/tree/ParseTree
+instanceKlass org/antlr/v4/runtime/tree/SyntaxTree
+instanceKlass org/antlr/v4/runtime/tree/Tree
+instanceKlass org/antlr/v4/runtime/Recognizer
+instanceKlass org/antlr/v4/runtime/TokenStream
+instanceKlass org/antlr/v4/runtime/TokenSource
+instanceKlass org/antlr/v4/runtime/CharStream
+instanceKlass org/antlr/v4/runtime/IntStream
+instanceKlass org/springframework/data/jpa/repository/query/JpaQueryParserSupport
+instanceKlass org/springframework/data/jpa/repository/query/JpaQueryEnhancer
+instanceKlass org/springframework/data/jpa/repository/query/QueryEnhancer
+instanceKlass org/springframework/data/jpa/repository/query/QueryEnhancerFactory
+instanceKlass  @bci org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser checkAndRegister (Lorg/springframework/data/jpa/repository/query/ParameterBinding;Ljava/util/List;)V 18 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser$$Lambda+0x000002b5d396e458
+instanceKlass  @bci org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser checkAndRegister (Lorg/springframework/data/jpa/repository/query/ParameterBinding;Ljava/util/List;)V 7 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser$$Lambda+0x000002b5d396e208
+# instanceKlass java/lang/invoke/LambdaForm$MH+0x000002b5d3970c00
+# instanceKlass java/lang/invoke/LambdaForm$MH+0x000002b5d3970800
+# instanceKlass java/lang/invoke/LambdaForm$MH+0x000002b5d3970400
+# instanceKlass java/lang/invoke/LambdaForm$MH+0x000002b5d3970000
+instanceKlass  @bci org/springframework/data/jpa/repository/query/StringQuery$ParameterBindings getBindings (Lorg/springframework/data/jpa/repository/query/ParameterBinding$BindingIdentifier;)Ljava/util/List; 5 <appendix> argL0 ; # org/springframework/data/jpa/repository/query/StringQuery$ParameterBindings$$Lambda+0x000002b5d396dfd0
+instanceKlass  @bci org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser parseParameterBindingsOfQueryIntoBindingsAndReturnCleanedQuery (Ljava/lang/String;Ljava/util/List;Lorg/springframework/data/jpa/repository/query/StringQuery$Metadata;)Ljava/lang/String; 451 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser$$Lambda+0x000002b5d396dd90
+instanceKlass  @bci org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser parseParameterBindingsOfQueryIntoBindingsAndReturnCleanedQuery (Ljava/lang/String;Ljava/util/List;Lorg/springframework/data/jpa/repository/query/StringQuery$Metadata;)Ljava/lang/String; 269 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser$$Lambda+0x000002b5d396d928
+instanceKlass  @bci org/springframework/data/repository/query/SpelQueryContext$QuotationMap isQuoted (I)Z 10 <appendix> member <vmtarget> ; # org/springframework/data/repository/query/SpelQueryContext$QuotationMap$$Lambda+0x000002b5d396d6e0
+instanceKlass org/springframework/data/domain/Range
+instanceKlass  @bci org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser parseParameterBindingsOfQueryIntoBindingsAndReturnCleanedQuery (Ljava/lang/String;Ljava/util/List;Lorg/springframework/data/jpa/repository/query/StringQuery$Metadata;)Ljava/lang/String; 95 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser$$Lambda+0x000002b5d396d2a8
+instanceKlass org/springframework/data/jpa/repository/query/StringQuery$ParameterBindings
+instanceKlass org/springframework/data/repository/query/SpelQueryContext$QuotationMap
+instanceKlass org/springframework/data/repository/query/SpelQueryContext$SpelExtractor
+instanceKlass org/springframework/data/repository/query/SpelQueryContext
+instanceKlass  @bci org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser createSpelExtractor (Ljava/lang/String;ZI)Lorg/springframework/data/repository/query/SpelQueryContext$SpelExtractor; 47 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser$$Lambda+0x000002b5d396c800
+instanceKlass  @bci org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser createSpelExtractor (Ljava/lang/String;ZI)Lorg/springframework/data/repository/query/SpelQueryContext$SpelExtractor; 23 <appendix> argL0 ; # org/springframework/data/jpa/repository/query/StringQuery$ParameterBindingParser$$Lambda+0x000002b5d396c5d8
+instanceKlass org/springframework/data/jpa/repository/query/StringQuery$Metadata
+instanceKlass org/springframework/data/jpa/repository/query/StringQuery
+instanceKlass org/springframework/data/util/Pair
+instanceKlass org/hibernate/query/sqm/tree/select/SqmOrderByClause
+instanceKlass  @bci org/springframework/data/jpa/repository/query/QueryParameterSetterFactory$CriteriaQueryParameterSetterFactory create (Lorg/springframework/data/jpa/repository/query/ParameterBinding;Lorg/springframework/data/jpa/repository/query/DeclaredQuery;)Lorg/springframework/data/jpa/repository/query/QueryParameterSetter; 103 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/QueryParameterSetterFactory$CriteriaQueryParameterSetterFactory$$Lambda+0x000002b5d396ab60
+instanceKlass org/springframework/data/jpa/repository/query/QueryParameterSetter$NamedOrIndexedQueryParameterSetter
+instanceKlass  @bci org/springframework/data/jpa/repository/query/QueryParameterSetterFactory$CriteriaQueryParameterSetterFactory create (Lorg/springframework/data/jpa/repository/query/ParameterBinding;Lorg/springframework/data/jpa/repository/query/DeclaredQuery;)Lorg/springframework/data/jpa/repository/query/QueryParameterSetter; 27 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/QueryParameterSetterFactory$CriteriaQueryParameterSetterFactory$$Lambda+0x000002b5d396a718
+instanceKlass  @bci org/springframework/data/jpa/repository/query/ParameterBinderFactory getBindings (Lorg/springframework/data/jpa/repository/query/JpaParameters;)Ljava/util/List; 59 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/ParameterBinderFactory$$Lambda+0x000002b5d396a0e8
+instanceKlass org/springframework/data/jpa/repository/query/ParameterBinding
+instanceKlass  @bci org/springframework/data/jpa/repository/query/ParameterBinderFactory getBindings (Lorg/springframework/data/jpa/repository/query/JpaParameters;)Ljava/util/List; 49 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/ParameterBinderFactory$$Lambda+0x000002b5d3969a28
+instanceKlass org/springframework/data/jpa/repository/query/ParameterBinding$BindingIdentifier
+instanceKlass org/springframework/data/jpa/repository/query/QueryParameterSetter
+instanceKlass org/springframework/data/jpa/repository/query/QueryParameterSetterFactory
+instanceKlass org/springframework/data/jpa/repository/query/ParameterBinding$ParameterOrigin
+instanceKlass org/springframework/data/jpa/repository/query/ParameterBinderFactory
+instanceKlass org/hibernate/query/sqm/tree/predicate/SqmWhereClause
+instanceKlass org/hibernate/query/sqm/function/AbstractSqmSelfRenderingFunctionDescriptor$1
+instanceKlass  @bci org/springframework/data/util/StreamUtils toUnmodifiableList ()Ljava/util/stream/Collector; 3 <appendix> argL0 ; # org/springframework/data/util/StreamUtils$$Lambda+0x000002b5d3968000
+instanceKlass org/hibernate/query/internal/QueryHelper
+instanceKlass org/hibernate/metamodel/model/domain/TupleType
+instanceKlass org/hibernate/query/sqm/internal/SqmCriteriaNodeBuilder$MultiValueParameterType
+instanceKlass org/hibernate/query/sqm/internal/TypecheckUtil
+instanceKlass org/hibernate/metamodel/model/domain/internal/PathHelper
+instanceKlass org/hibernate/query/sqm/tree/domain/SqmSimplePath
+instanceKlass  @bci org/hibernate/query/sqm/tree/domain/AbstractSqmFrom getJoins ()Ljava/util/Set; 9 <appendix> argL0 ; # org/hibernate/query/sqm/tree/domain/AbstractSqmFrom$$Lambda+0x000002b5d3960668
+instanceKlass  @bci org/hibernate/query/sqm/tree/domain/AbstractSqmFrom getFetches ()Ljava/util/Set; 9 <appendix> argL0 ; # org/hibernate/query/sqm/tree/domain/AbstractSqmFrom$$Lambda+0x000002b5d3960420
+instanceKlass  @bci java/util/regex/Pattern and (Ljava/util/regex/Pattern$CharPredicate;Ljava/util/regex/Pattern$CharPredicate;Z)Ljava/util/regex/Pattern$CharPredicate; 14 <appendix> member <vmtarget> ; # java/util/regex/Pattern$$Lambda+0x000002b5d3464e20
+instanceKlass  @bci java/util/regex/CharPredicates ctype (I)Ljava/util/regex/Pattern$CharPredicate; 1 <appendix> member <vmtarget> ; # java/util/regex/CharPredicates$$Lambda+0x000002b5d3464b98
+instanceKlass org/springframework/data/jpa/repository/query/QueryUtils
+instanceKlass org/springframework/data/jpa/repository/query/ParameterMetadataProvider$ParameterMetadata
+instanceKlass org/hibernate/query/named/NamedQueryMemento$ParameterMemento
+instanceKlass org/hibernate/query/spi/QueryParameterImplementor
+instanceKlass org/hibernate/query/QueryParameter
+instanceKlass org/hibernate/query/sqm/tree/expression/SqmParameter
+instanceKlass  @bci org/springframework/data/jpa/repository/query/ParameterMetadataProvider next (Lorg/springframework/data/repository/query/parser/Part;Ljava/lang/Class;Lorg/springframework/data/repository/query/Parameter;)Lorg/springframework/data/jpa/repository/query/ParameterMetadataProvider$ParameterMetadata; 24 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/ParameterMetadataProvider$$Lambda+0x000002b5d395e9d0
+instanceKlass  @bci org/springframework/data/jpa/repository/query/ParameterMetadataProvider next (Lorg/springframework/data/repository/query/parser/Part;)Lorg/springframework/data/jpa/repository/query/ParameterMetadataProvider$ParameterMetadata; 10 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/ParameterMetadataProvider$$Lambda+0x000002b5d395e7b0
+instanceKlass org/springframework/data/jpa/repository/query/JpaQueryCreator$PredicateBuilder
+instanceKlass  @bci org/springframework/data/repository/query/parser/AbstractQueryCreator createCriteria (Lorg/springframework/data/repository/query/parser/PartTree;)Ljava/lang/Object; 6 <appendix> argL0 ; # org/springframework/data/repository/query/parser/AbstractQueryCreator$$Lambda+0x000002b5d395e368
+instanceKlass org/springframework/data/domain/Sort$Order
+instanceKlass  @bci org/springframework/data/repository/query/parser/AbstractQueryCreator createQuery ()Ljava/lang/Object; 5 <appendix> argL0 ; # org/springframework/data/repository/query/parser/AbstractQueryCreator$$Lambda+0x000002b5d395d890
+instanceKlass org/hibernate/query/sqm/spi/SqmCreationHelper
+instanceKlass org/hibernate/query/sqm/tree/domain/SqmCorrelation
+instanceKlass org/hibernate/query/criteria/JpaCrossJoin
+instanceKlass org/hibernate/query/criteria/JpaDerivedJoin
+instanceKlass org/hibernate/query/criteria/JpaEntityJoin
+instanceKlass org/hibernate/query/sqm/tree/from/SqmFromClause
+instanceKlass org/hibernate/query/sqm/tree/select/SqmAliasedNode
+instanceKlass org/hibernate/query/sqm/tree/select/SqmAliasedExpressionContainer
+instanceKlass org/hibernate/query/sqm/tree/SqmCopyContext
+instanceKlass org/hibernate/query/criteria/JpaCteCriteria
+instanceKlass org/hibernate/query/criteria/JpaDerivedRoot
+instanceKlass org/hibernate/query/criteria/JpaDerivedFrom
+instanceKlass org/hibernate/query/sqm/tree/predicate/SqmWhereClauseContainer
+instanceKlass org/hibernate/query/sqm/tree/from/SqmFromClauseContainer
+instanceKlass org/hibernate/query/criteria/JpaQueryStructure
+instanceKlass org/hibernate/query/sqm/internal/ParameterCollector
+instanceKlass org/springframework/data/jpa/repository/query/ParameterMetadataProvider
+instanceKlass org/springframework/data/jpa/repository/query/QueryParameterSetter$QueryMetadataCache
+instanceKlass org/springframework/data/repository/query/parser/AbstractQueryCreator
+instanceKlass  @bci org/springframework/data/jpa/repository/query/PartTreeJpaQuery lambda$0 (Lorg/springframework/data/repository/query/parser/PartTree;)Ljava/util/Iterator; 4 <appendix> argL0 ; # org/springframework/data/jpa/repository/query/PartTreeJpaQuery$$Lambda+0x000002b5d3953c60
+instanceKlass  @bci org/springframework/data/jpa/repository/query/PartTreeJpaQuery validate (Lorg/springframework/data/repository/query/parser/PartTree;Lorg/springframework/data/jpa/repository/query/JpaParameters;Ljava/lang/String;)V 3 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/PartTreeJpaQuery$$Lambda+0x000002b5d3953a20
+instanceKlass org/springframework/data/repository/query/parser/OrderBySource
+instanceKlass  @bci org/springframework/data/mapping/PropertyPath from (Ljava/lang/String;Lorg/springframework/data/util/TypeInformation;)Lorg/springframework/data/mapping/PropertyPath; 25 <appendix> member <vmtarget> ; # org/springframework/data/mapping/PropertyPath$$Lambda+0x000002b5d39535d0
+instanceKlass org/springframework/data/mapping/PropertyPath$Key
+instanceKlass  @bci java/util/regex/Pattern union (Ljava/util/regex/Pattern$CharPredicate;Ljava/util/regex/Pattern$CharPredicate;Z)Ljava/util/regex/Pattern$CharPredicate; 14 <appendix> member <vmtarget> ; # java/util/regex/Pattern$$Lambda+0x000002b5d34644f8
+instanceKlass  @bci org/springframework/data/repository/query/parser/PartTree$OrPart <init> (Ljava/lang/String;Ljava/lang/Class;Z)V 30 <appendix> member <vmtarget> ; # org/springframework/data/repository/query/parser/PartTree$OrPart$$Lambda+0x000002b5d39526a0
+instanceKlass org/springframework/data/repository/query/parser/Part
+instanceKlass  @bci org/springframework/data/repository/query/parser/PartTree$OrPart <init> (Ljava/lang/String;Ljava/lang/Class;Z)V 18 <appendix> argL0 ; # org/springframework/data/repository/query/parser/PartTree$OrPart$$Lambda+0x000002b5d3952228
+instanceKlass  @bci org/springframework/data/repository/query/parser/PartTree$Predicate <init> (Ljava/lang/String;Ljava/lang/Class;)V 55 <appendix> member <vmtarget> ; # org/springframework/data/repository/query/parser/PartTree$Predicate$$Lambda+0x000002b5d3951fe8
+instanceKlass org/springframework/data/repository/query/parser/PartTree$OrPart
+instanceKlass  @bci org/springframework/data/repository/query/parser/PartTree$Predicate <init> (Ljava/lang/String;Ljava/lang/Class;)V 43 <appendix> argL0 ; # org/springframework/data/repository/query/parser/PartTree$Predicate$$Lambda+0x000002b5d3951a58
+instanceKlass  @bci java/util/regex/CharPredicates forUnicodeBlock (Ljava/lang/String;)Ljava/util/regex/Pattern$CharPredicate; 6 <appendix> member <vmtarget> ; # java/util/regex/CharPredicates$$Lambda+0x000002b5d3464298
+instanceKlass java/lang/Character$Subset
+instanceKlass org/springframework/data/repository/query/parser/PartTree$Predicate
+instanceKlass  @bci org/springframework/data/repository/query/parser/PartTree$Subject returnMaxResultsIfFirstKSubjectOrNull (Ljava/util/Optional;)Ljava/util/Optional; 1 <appendix> argL0 ; # org/springframework/data/repository/query/parser/PartTree$Subject$$Lambda+0x000002b5d39514d0
+instanceKlass  @bci org/springframework/data/repository/query/parser/PartTree$Subject matches (Ljava/util/Optional;Ljava/util/regex/Pattern;)Z 2 <appendix> member <vmtarget> ; # org/springframework/data/repository/query/parser/PartTree$Subject$$Lambda+0x000002b5d3951290
+instanceKlass  @bci org/springframework/data/repository/query/parser/PartTree$Subject <init> (Ljava/util/Optional;)V 6 <appendix> argL0 ; # org/springframework/data/repository/query/parser/PartTree$Subject$$Lambda+0x000002b5d3951058
+instanceKlass org/springframework/data/repository/query/parser/PartTree$Subject
+instanceKlass  @bci java/util/regex/CharPredicates category (I)Ljava/util/regex/Pattern$CharPredicate; 1 <appendix> member <vmtarget> ; # java/util/regex/CharPredicates$$Lambda+0x000002b5d3463850
+instanceKlass org/springframework/data/repository/query/parser/PartTree
+instanceKlass  @bci org/springframework/data/jpa/repository/query/AbstractJpaQuery <init> (Lorg/springframework/data/jpa/repository/query/JpaQueryMethod;Ljakarta/persistence/EntityManager;)V 62 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/AbstractJpaQuery$$Lambda+0x000002b5d3950868
+instanceKlass  @bci org/springframework/data/jpa/repository/query/AbstractJpaQuery <init> (Lorg/springframework/data/jpa/repository/query/JpaQueryMethod;Ljakarta/persistence/EntityManager;)V 6 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/AbstractJpaQuery$$Lambda+0x000002b5d3950648
+instanceKlass org/springframework/data/jpa/repository/query/ParameterBinder
+instanceKlass org/springframework/data/jpa/repository/query/PartTreeJpaQuery$QueryPreparer
+instanceKlass org/hibernate/resource/transaction/backend/jdbc/internal/JdbcResourceLocalTransactionCoordinatorImpl$TransactionDriverControlImpl
+instanceKlass  @bci org/hibernate/internal/AbstractSharedSessionContract buildNamedQuery (Ljava/lang/String;Ljava/lang/Class;)Lorg/hibernate/query/spi/QueryImplementor; 11 <appendix> member <vmtarget> ; # org/hibernate/internal/AbstractSharedSessionContract$$Lambda+0x000002b5d394ef60
+instanceKlass org/hibernate/query/sql/spi/NamedNativeQueryMemento
+instanceKlass  @bci org/hibernate/internal/AbstractSharedSessionContract buildNamedQuery (Ljava/lang/String;Ljava/lang/Class;)Lorg/hibernate/query/spi/QueryImplementor; 4 <appendix> member <vmtarget> ; # org/hibernate/internal/AbstractSharedSessionContract$$Lambda+0x000002b5d394eb28
+instanceKlass org/hibernate/query/sqm/spi/NamedSqmQueryMemento
+instanceKlass org/springframework/data/repository/query/ParametersParameterAccessor
+instanceKlass org/springframework/data/jpa/repository/query/JpaQueryExecution
+instanceKlass org/springframework/data/repository/query/ParameterAccessor
+instanceKlass org/springframework/data/jpa/repository/query/AbstractJpaQuery
+instanceKlass org/springframework/data/jpa/repository/query/EmptyDeclaredQuery
+instanceKlass org/springframework/data/jpa/repository/query/DeclaredQuery
+instanceKlass  @bci org/springframework/data/jpa/repository/query/JpaQueryMethod <init> (Ljava/lang/reflect/Method;Lorg/springframework/data/repository/core/RepositoryMetadata;Lorg/springframework/data/projection/ProjectionFactory;Lorg/springframework/data/jpa/provider/QueryExtractor;)V 134 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/JpaQueryMethod$$Lambda+0x000002b5d394bde0
+instanceKlass  @bci org/springframework/data/jpa/repository/query/JpaQueryMethod <init> (Ljava/lang/reflect/Method;Lorg/springframework/data/repository/core/RepositoryMetadata;Lorg/springframework/data/projection/ProjectionFactory;Lorg/springframework/data/jpa/provider/QueryExtractor;)V 121 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/JpaQueryMethod$$Lambda+0x000002b5d394bbc0
+instanceKlass  @bci org/springframework/data/jpa/repository/query/JpaQueryMethod <init> (Ljava/lang/reflect/Method;Lorg/springframework/data/repository/core/RepositoryMetadata;Lorg/springframework/data/projection/ProjectionFactory;Lorg/springframework/data/jpa/provider/QueryExtractor;)V 108 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/JpaQueryMethod$$Lambda+0x000002b5d394b9a0
+instanceKlass  @bci org/springframework/data/jpa/repository/query/JpaQueryMethod <init> (Ljava/lang/reflect/Method;Lorg/springframework/data/repository/core/RepositoryMetadata;Lorg/springframework/data/projection/ProjectionFactory;Lorg/springframework/data/jpa/provider/QueryExtractor;)V 95 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/JpaQueryMethod$$Lambda+0x000002b5d394b780
+instanceKlass  @bci org/springframework/data/jpa/repository/query/JpaQueryMethod <init> (Ljava/lang/reflect/Method;Lorg/springframework/data/repository/core/RepositoryMetadata;Lorg/springframework/data/projection/ProjectionFactory;Lorg/springframework/data/jpa/provider/QueryExtractor;)V 82 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/JpaQueryMethod$$Lambda+0x000002b5d394b560
+instanceKlass org/springframework/data/jpa/repository/query/JpaEntityGraph
+instanceKlass  @bci org/springframework/data/jpa/repository/query/JpaQueryMethod <init> (Ljava/lang/reflect/Method;Lorg/springframework/data/repository/core/RepositoryMetadata;Lorg/springframework/data/projection/ProjectionFactory;Lorg/springframework/data/jpa/provider/QueryExtractor;)V 68 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/JpaQueryMethod$$Lambda+0x000002b5d394b118
+instanceKlass org/springframework/data/jpa/repository/Modifying
+instanceKlass  @bci org/springframework/data/jpa/repository/query/JpaQueryMethod <init> (Ljava/lang/reflect/Method;Lorg/springframework/data/repository/core/RepositoryMetadata;Lorg/springframework/data/projection/ProjectionFactory;Lorg/springframework/data/jpa/provider/QueryExtractor;)V 55 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/JpaQueryMethod$$Lambda+0x000002b5d394ad00
+instanceKlass org/springframework/data/jpa/repository/QueryHints
+instanceKlass  @bci org/springframework/data/jpa/repository/query/JpaQueryMethod <init> (Ljava/lang/reflect/Method;Lorg/springframework/data/repository/core/RepositoryMetadata;Lorg/springframework/data/projection/ProjectionFactory;Lorg/springframework/data/jpa/provider/QueryExtractor;)V 42 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/JpaQueryMethod$$Lambda+0x000002b5d394a8e8
+instanceKlass  @bci org/springframework/data/repository/query/QueryMethod validate ()V 101 <appendix> member <vmtarget> ; # org/springframework/data/repository/query/QueryMethod$$Lambda+0x000002b5d394a6c8
+instanceKlass  @bci org/springframework/data/repository/util/ClassUtils hasParameterAssignableToType (Ljava/lang/reflect/Method;Ljava/lang/Class;)Z 18 <appendix> member <vmtarget> ; # org/springframework/data/repository/util/ClassUtils$$Lambda+0x000002b5d394a478
+instanceKlass  @bci org/springframework/data/repository/query/QueryMethod$QueryMethodValidator <clinit> ()V 0 <appendix> argL0 ; # org/springframework/data/repository/query/QueryMethod$QueryMethodValidator$$Lambda+0x000002b5d394a230
+instanceKlass org/springframework/data/repository/query/QueryMethod$QueryMethodValidator
+instanceKlass  @bci org/springframework/data/repository/query/QueryMethod <init> (Ljava/lang/reflect/Method;Lorg/springframework/data/repository/core/RepositoryMetadata;Lorg/springframework/data/projection/ProjectionFactory;)V 112 <appendix> member <vmtarget> ; # org/springframework/data/repository/query/QueryMethod$$Lambda+0x000002b5d3949e10
+instanceKlass org/springframework/data/repository/query/ResultProcessor$ProjectingConverter
+instanceKlass  @bci org/springframework/data/repository/query/ReturnedType of (Ljava/lang/Class;Ljava/lang/Class;Lorg/springframework/data/projection/ProjectionFactory;)Lorg/springframework/data/repository/query/ReturnedType; 33 <appendix> member <vmtarget> ; # org/springframework/data/repository/query/ReturnedType$$Lambda+0x000002b5d3949990
+instanceKlass org/springframework/data/repository/query/ReturnedType$CacheKey
+instanceKlass org/springframework/data/repository/query/ReturnedType
+instanceKlass org/springframework/data/geo/GeoResults
+instanceKlass org/springframework/data/repository/query/ResultProcessor
+instanceKlass  @bci org/springframework/data/repository/query/QueryMethod <init> (Ljava/lang/reflect/Method;Lorg/springframework/data/repository/core/RepositoryMetadata;Lorg/springframework/data/projection/ProjectionFactory;)V 86 <appendix> member <vmtarget> ; # org/springframework/data/repository/query/QueryMethod$$Lambda+0x000002b5d3948a58
+instanceKlass  @bci org/springframework/data/repository/query/Parameters <init> (Ljava/util/List;)V 187 <appendix> member <vmtarget> ; # org/springframework/data/repository/query/Parameters$$Lambda+0x000002b5d3948838
+instanceKlass  @bci org/springframework/data/repository/query/Parameters <init> (Lorg/springframework/data/repository/query/ParametersSource;Ljava/util/function/Function;)V 274 <appendix> member <vmtarget> ; # org/springframework/data/repository/query/Parameters$$Lambda+0x000002b5d3948618
+instanceKlass org/springframework/data/jpa/repository/Temporal
+instanceKlass  @bci org/springframework/data/repository/query/Parameter <init> (Lorg/springframework/core/MethodParameter;Lorg/springframework/data/util/TypeInformation;)V 59 <appendix> member <vmtarget> ; # org/springframework/data/repository/query/Parameter$$Lambda+0x000002b5d3948200
+instanceKlass org/springframework/data/repository/util/ReactiveWrapperConverters$RegistryHolder
+instanceKlass org/springframework/data/repository/util/ReactiveWrapperConverters
+instanceKlass  @bci org/springframework/data/repository/query/Parameter <clinit> ()V 49 <appendix> member <vmtarget> ; # org/springframework/data/repository/query/Parameter$$Lambda+0x000002b5d3947a80
+instanceKlass  @bci org/springframework/data/jpa/repository/query/JpaParameters <init> (Lorg/springframework/data/repository/query/ParametersSource;)V 3 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/query/JpaParameters$$Lambda+0x000002b5d3947840
+instanceKlass org/springframework/data/repository/query/Parameter
+instanceKlass org/springframework/data/repository/query/ParametersSource$2
+instanceKlass org/springframework/data/repository/query/ParametersSource
+instanceKlass  @bci org/springframework/data/repository/util/QueryExecutionConverters supports (Ljava/lang/Class;)Z 11 <appendix> member <vmtarget> ; # org/springframework/data/repository/util/QueryExecutionConverters$$Lambda+0x000002b5d3946cc8
+instanceKlass  @bci org/springframework/data/repository/query/QueryMethod <init> (Ljava/lang/reflect/Method;Lorg/springframework/data/repository/core/RepositoryMetadata;Lorg/springframework/data/projection/ProjectionFactory;)V 47 <appendix> member <vmtarget> ; # org/springframework/data/repository/query/QueryMethod$$Lambda+0x000002b5d3946a98
+instanceKlass  @bci org/springframework/data/repository/util/ClassUtils getNumberOfOccurrences (Ljava/lang/reflect/Method;Ljava/lang/Class;)I 13 <appendix> member <vmtarget> ; # org/springframework/data/repository/util/ClassUtils$$Lambda+0x000002b5d3946848
+instanceKlass  @bci org/springframework/data/repository/query/QueryMethod <init> (Ljava/lang/reflect/Method;Lorg/springframework/data/repository/core/RepositoryMetadata;Lorg/springframework/data/projection/ProjectionFactory;)V 31 <appendix> member <vmtarget> ; # org/springframework/data/repository/query/QueryMethod$$Lambda+0x000002b5d39465f8
+instanceKlass org/springframework/data/domain/Limit
+instanceKlass org/springframework/data/domain/ScrollPosition
+instanceKlass org/springframework/data/repository/query/Parameters
+instanceKlass  @bci org/springframework/data/repository/core/support/QueryExecutorMethodInterceptor <init> (Lorg/springframework/data/repository/core/RepositoryInformation;Lorg/springframework/data/projection/ProjectionFactory;Ljava/util/Optional;Lorg/springframework/data/repository/core/NamedQueries;Ljava/util/List;Ljava/util/List;)V 106 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/QueryExecutorMethodInterceptor$$Lambda+0x000002b5d3944d88
+instanceKlass org/springframework/data/repository/core/support/QueryExecutionResultHandler
+instanceKlass org/springframework/data/repository/core/support/RepositoryInvocationMulticaster$DefaultRepositoryInvocationMulticaster
+instanceKlass org/springframework/data/repository/core/support/RepositoryMethodInvoker
+instanceKlass org/springframework/data/repository/core/support/QueryExecutorMethodInterceptor
+instanceKlass org/springframework/data/jpa/repository/query/JpaQueryLookupStrategy$AbstractQueryLookupStrategy
+instanceKlass org/springframework/data/jpa/repository/query/JpaQueryLookupStrategy$NoQuery
+instanceKlass org/springframework/data/repository/query/QueryLookupStrategy
+instanceKlass org/springframework/data/repository/query/RepositoryQuery
+instanceKlass org/springframework/data/jpa/repository/query/JpaQueryLookupStrategy
+instanceKlass  @bci org/springframework/data/projection/DefaultMethodInvokingMethodInterceptor hasDefaultMethods (Ljava/lang/Class;)Z 15 <appendix> argL0 ; # org/springframework/data/projection/DefaultMethodInvokingMethodInterceptor$$Lambda+0x000002b5d3942ae8
+instanceKlass  @bci org/springframework/data/projection/DefaultMethodInvokingMethodInterceptor hasDefaultMethods (Ljava/lang/Class;)Z 10 <appendix> member <vmtarget> ; # org/springframework/data/projection/DefaultMethodInvokingMethodInterceptor$$Lambda+0x000002b5d39428c8
+instanceKlass  @bci org/springframework/data/repository/core/support/EventPublishingRepositoryProxyPostProcessor$EventPublishingMethod of (Ljava/lang/Class;)Lorg/springframework/data/repository/core/support/EventPublishingRepositoryProxyPostProcessor$EventPublishingMethod; 36 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/EventPublishingRepositoryProxyPostProcessor$EventPublishingMethod$$Lambda+0x000002b5d39426a8
+instanceKlass org/springframework/data/util/AnnotationDetectionMethodCallback
+instanceKlass org/springframework/data/domain/DomainEvents
+instanceKlass org/springframework/data/repository/core/support/EventPublishingRepositoryProxyPostProcessor$EventPublishingMethod
+instanceKlass org/springframework/data/jpa/repository/query/Procedure
+instanceKlass org/springframework/aop/DynamicIntroductionAdvice
+instanceKlass  @bci org/springframework/data/repository/core/RepositoryInformationSupport isQueryMethod (Ljava/lang/reflect/Method;)Z 10 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/RepositoryInformationSupport$$Lambda+0x000002b5d3941978
+instanceKlass  @bci org/springframework/data/repository/core/support/MethodLookups$RepositoryAwareMethodLookup lambda$getLookups$3 (Lorg/springframework/data/repository/core/support/MethodLookup$InvokedMethod;Ljava/lang/reflect/Method;)Z 24 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/MethodLookups$RepositoryAwareMethodLookup$$Lambda+0x000002b5d3941240
+instanceKlass  @bci org/springframework/data/repository/core/support/MethodLookups$RepositoryAwareMethodLookup lambda$getLookups$3 (Lorg/springframework/data/repository/core/support/MethodLookup$InvokedMethod;Ljava/lang/reflect/Method;)Z 14 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/MethodLookups$RepositoryAwareMethodLookup$$Lambda+0x000002b5d3940ff0
+instanceKlass  @bci org/springframework/data/repository/core/support/MethodLookups$RepositoryAwareMethodLookup lambda$getLookups$3 (Lorg/springframework/data/repository/core/support/MethodLookup$InvokedMethod;Ljava/lang/reflect/Method;)Z 5 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/MethodLookups$RepositoryAwareMethodLookup$$Lambda+0x000002b5d3940da0
+instanceKlass  @bci org/springframework/data/jpa/repository/support/CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor <init> (Lorg/springframework/data/repository/core/RepositoryInformation;)V 47 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/support/CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor$$Lambda+0x000002b5d3940b70
+instanceKlass  @bci org/springframework/data/jpa/repository/support/CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor <init> (Lorg/springframework/data/repository/core/RepositoryInformation;)V 41 <appendix> member <vmtarget> ; # org/springframework/data/jpa/repository/support/CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor$$Lambda+0x000002b5d3940950
+instanceKlass org/springframework/data/jpa/repository/support/CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryFactorySupport getRepository (Ljava/lang/Class;Lorg/springframework/data/repository/core/support/RepositoryComposition$RepositoryFragments;)Ljava/lang/Object; 339 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/RepositoryFactorySupport$$Lambda+0x000002b5d39404e8
+instanceKlass org/springframework/aop/interceptor/ExposeInvocationInterceptor
+instanceKlass java/lang/Package$1PackageInfoProxy
+instanceKlass  @bci java/lang/Package getPackageInfo ()Ljava/lang/Class; 41 <appendix> member <vmtarget> ; # java/lang/Package$$Lambda+0x000002b5d3462b58
+instanceKlass org/springframework/lang/NonNullApi
+instanceKlass  @bci org/springframework/data/util/NullableUtils findClasses ([Ljava/lang/String;)Ljava/util/Set; 24 <appendix> argL0 ; # org/springframework/data/util/NullableUtils$$Lambda+0x000002b5d3938c80
+instanceKlass  @bci org/springframework/data/util/NullableUtils findClasses ([Ljava/lang/String;)Ljava/util/Set; 14 <appendix> argL0 ; # org/springframework/data/util/NullableUtils$$Lambda+0x000002b5d3938a38
+instanceKlass  @bci org/springframework/data/util/NullableUtils findClasses ([Ljava/lang/String;)Ljava/util/Set; 4 <appendix> argL0 ; # org/springframework/data/util/NullableUtils$$Lambda+0x000002b5d3938800
+instanceKlass org/springframework/data/util/NullableUtils
+instanceKlass org/springframework/data/repository/core/support/MethodInvocationValidator
+instanceKlass org/springframework/aop/target/SingletonTargetSource
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryFactorySupport$RepositoryValidator containsFragmentImplementation (Lorg/springframework/data/repository/core/support/RepositoryComposition;Ljava/lang/Class;)Z 39 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/RepositoryFactorySupport$RepositoryValidator$$Lambda+0x000002b5d3939700
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryComposition$RepositoryFragments findMethod (Lorg/springframework/data/repository/core/support/MethodLookup$InvokedMethod;Lorg/springframework/data/repository/core/support/MethodLookup;Ljava/util/function/Supplier;)Ljava/lang/reflect/Method; 44 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/RepositoryComposition$RepositoryFragments$$Lambda+0x000002b5d39394b0
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryComposition$RepositoryFragments methods ()Ljava/util/stream/Stream; 4 <appendix> argL0 ; # org/springframework/data/repository/core/support/RepositoryComposition$RepositoryFragments$$Lambda+0x000002b5d3939278
+instanceKlass  @bci org/springframework/data/repository/core/support/MethodLookups$RepositoryAwareMethodLookup getLookups ()Ljava/util/List; 1 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/MethodLookups$RepositoryAwareMethodLookup$$Lambda+0x000002b5d3939000
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryComposition lambda$getMethod$2 (Ljava/lang/reflect/Method;)Ljava/lang/reflect/Method; 17 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/RepositoryComposition$$Lambda+0x000002b5d393bc68
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryComposition getMethod (Ljava/lang/reflect/Method;)Ljava/lang/reflect/Method; 6 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/RepositoryComposition$$Lambda+0x000002b5d393ba28
+instanceKlass org/springframework/data/repository/query/ReactiveQueryByExampleExecutor
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryFactorySupport$RepositoryValidator <clinit> ()V 62 <appendix> argL0 ; # org/springframework/data/repository/core/support/RepositoryFactorySupport$RepositoryValidator$$Lambda+0x000002b5d393b608
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryFactorySupport$RepositoryValidator <clinit> ()V 47 <appendix> argL0 ; # org/springframework/data/repository/core/support/RepositoryFactorySupport$RepositoryValidator$$Lambda+0x000002b5d393b3e0
+instanceKlass org/springframework/data/querydsl/ReactiveQuerydslPredicateExecutor
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryFactorySupport$RepositoryValidator <clinit> ()V 32 <appendix> argL0 ; # org/springframework/data/repository/core/support/RepositoryFactorySupport$RepositoryValidator$$Lambda+0x000002b5d393afc0
+instanceKlass org/springframework/data/querydsl/QuerydslPredicateExecutor
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryFactorySupport$RepositoryValidator <clinit> ()V 17 <appendix> argL0 ; # org/springframework/data/repository/core/support/RepositoryFactorySupport$RepositoryValidator$$Lambda+0x000002b5d393aba0
+instanceKlass org/springframework/data/repository/core/support/RepositoryFactorySupport$RepositoryValidator
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryFragment$ImplementedRepositoryFragment <init> (Ljava/util/Optional;Ljava/lang/Object;)V 18 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/RepositoryFragment$ImplementedRepositoryFragment$$Lambda+0x000002b5d393a000
+instanceKlass org/springframework/data/repository/core/support/RepositoryFragment$ImplementedRepositoryFragment
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryFactorySupport instantiateClass (Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object; 18 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/RepositoryFactorySupport$$Lambda+0x000002b5d393fb08
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryFactorySupport instantiateClass (Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object; 8 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/RepositoryFactorySupport$$Lambda+0x000002b5d393f8c8
+instanceKlass  @bci org/springframework/data/util/ReflectionUtils findConstructor (Ljava/lang/Class;[Ljava/lang/Object;)Ljava/util/Optional; 20 <appendix> member <vmtarget> ; # org/springframework/data/util/ReflectionUtils$$Lambda+0x000002b5d393f678
+instanceKlass org/springframework/data/jpa/domain/Specification
+instanceKlass org/springframework/data/jpa/repository/support/JpaMetamodelEntityInformation$IdMetadata
+instanceKlass org/springframework/data/jpa/repository/query/DefaultJpaEntityMetadata
+instanceKlass org/springframework/data/domain/Persistable
+instanceKlass org/springframework/data/repository/core/support/AbstractEntityInformation
+instanceKlass org/springframework/data/jpa/repository/support/JpaEntityInformation
+instanceKlass org/springframework/data/jpa/repository/query/JpaEntityMetadata
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryFactorySupport getRepository (Ljava/lang/Class;Lorg/springframework/data/repository/core/support/RepositoryComposition$RepositoryFragments;)Ljava/lang/Object; 145 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/RepositoryFactorySupport$$Lambda+0x000002b5d393dc88
+instanceKlass org/springframework/data/repository/core/support/RepositoryFragment$StructuralRepositoryFragment
+instanceKlass  @bci org/springframework/data/repository/core/support/DefaultRepositoryInformation <init> (Lorg/springframework/data/repository/core/RepositoryMetadata;Ljava/lang/Class;Lorg/springframework/data/repository/core/support/RepositoryComposition;)V 8 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/DefaultRepositoryInformation$$Lambda+0x000002b5d393d800
+instanceKlass  @bci org/springframework/data/repository/core/support/DefaultRepositoryInformation <init> (Lorg/springframework/data/repository/core/RepositoryMetadata;Ljava/lang/Class;Lorg/springframework/data/repository/core/support/RepositoryComposition;)V 2 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/DefaultRepositoryInformation$$Lambda+0x000002b5d393d5e0
+instanceKlass org/springframework/data/repository/core/RepositoryInformationSupport
+instanceKlass org/springframework/data/jpa/repository/support/SimpleJpaRepository
+instanceKlass org/springframework/data/jpa/repository/support/JpaRepositoryImplementation
+instanceKlass org/springframework/data/jpa/repository/JpaSpecificationExecutor
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryFactorySupport getRepositoryInformation (Lorg/springframework/data/repository/core/RepositoryMetadata;Lorg/springframework/data/repository/core/support/RepositoryComposition;)Lorg/springframework/data/repository/core/RepositoryInformation; 18 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/RepositoryFactorySupport$$Lambda+0x000002b5d393c000
+instanceKlass org/springframework/util/ConcurrentReferenceHashMap$EntryIterator
+instanceKlass org/springframework/data/repository/core/support/RepositoryFactorySupport$RepositoryInformationCacheKey
+instanceKlass org/springframework/data/jpa/repository/support/QueryHints
+instanceKlass org/springframework/aop/framework/JdkDynamicAopProxy$ProxiedInterfacesCache
+instanceKlass org/springframework/aop/framework/JdkDynamicAopProxy
+instanceKlass org/springframework/data/jpa/repository/support/CrudMethodMetadataPostProcessor$ThreadBoundTargetSource
+instanceKlass org/springframework/data/jpa/repository/support/CrudMethodMetadata
+instanceKlass org/springframework/aop/framework/AopProxy
+instanceKlass org/springframework/aop/framework/DefaultAopProxyFactory
+instanceKlass org/springframework/aop/framework/DefaultAdvisorChainFactory
+instanceKlass org/springframework/aop/target/EmptyTargetSource
+instanceKlass org/springframework/aop/framework/AopProxyFactory
+instanceKlass org/springframework/aop/framework/AdvisorChainFactory
+instanceKlass  @bci org/springframework/data/repository/core/support/MethodLookup and (Lorg/springframework/data/repository/core/support/MethodLookup;)Lorg/springframework/data/repository/core/support/MethodLookup; 8 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/MethodLookup$$Lambda+0x000002b5d3935a90
+instanceKlass org/springframework/data/repository/core/support/MethodLookups$RepositoryAwareMethodLookup
+instanceKlass  @bci org/springframework/data/repository/core/support/MethodLookups direct ()Lorg/springframework/data/repository/core/support/MethodLookup; 7 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/MethodLookups$$Lambda+0x000002b5d3935620
+instanceKlass  @bci org/springframework/data/repository/core/support/MethodLookups direct ()Lorg/springframework/data/repository/core/support/MethodLookup; 0 <appendix> argL0 ; # org/springframework/data/repository/core/support/MethodLookups$$Lambda+0x000002b5d39353b0
+instanceKlass org/springframework/data/repository/core/support/MethodLookups
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryComposition <clinit> ()V 8 <appendix> argL0 ; # org/springframework/data/repository/core/support/RepositoryComposition$$Lambda+0x000002b5d3934f90
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryComposition <clinit> ()V 0 <appendix> argL0 ; # org/springframework/data/repository/core/support/RepositoryComposition$$Lambda+0x000002b5d3934d68
+instanceKlass  @bci org/springframework/data/repository/core/support/RepositoryFactorySupport getRepository (Ljava/lang/Class;Lorg/springframework/data/repository/core/support/RepositoryComposition$RepositoryFragments;)Ljava/lang/Object; 61 <appendix> member <vmtarget> ; # org/springframework/data/repository/core/support/RepositoryFactorySupport$$Lambda+0x000002b5d3934b38
+instanceKlass org/springframework/beans/factory/config/NamedBeanHolder
+instanceKlass org/springframework/beans/factory/NamedBean
+# instanceKlass java/lang/invoke/LambdaForm$MH+0x000002b5d3938000
+instanceKlass  @bci org/springframework/data/mapping/model/ClassGeneratingPropertyAccessorFactory hasUniquePropertyHashCodes (Lorg/springframework/data/mapping/PersistentEntity;)Z 32 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/ClassGeneratingPropertyAccessorFactory$$Lambda+0x000002b5d39344f0
+instanceKlass org/springframework/data/mapping/SimpleAssociationHandler
+instanceKlass  @bci org/springframework/data/mapping/model/ClassGeneratingPropertyAccessorFactory hasUniquePropertyHashCodes (Lorg/springframework/data/mapping/PersistentEntity;)Z 19 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/ClassGeneratingPropertyAccessorFactory$$Lambda+0x000002b5d39340d8
+instanceKlass org/springframework/data/mapping/SimplePropertyHandler
+instanceKlass  @bci org/springframework/data/mapping/context/AbstractMappingContext$PersistentPropertyFilter matches (Lorg/springframework/data/mapping/model/Property;)Z 24 <appendix> member <vmtarget> ; # org/springframework/data/mapping/context/AbstractMappingContext$PersistentPropertyFilter$$Lambda+0x000002b5d3933c90
+instanceKlass  @bci org/springframework/data/util/TypeDiscoverer getPropertyInformation (Ljava/lang/String;)Ljava/util/Optional; 50 <appendix> argL0 ; # org/springframework/data/util/TypeDiscoverer$$Lambda+0x000002b5d3933a58
+instanceKlass  @bci org/springframework/data/util/TypeDiscoverer getPropertyInformation (Ljava/lang/String;)Ljava/util/Optional; 42 <appendix> member <vmtarget> ; # org/springframework/data/util/TypeDiscoverer$$Lambda+0x000002b5d3933818
+instanceKlass  @bci org/springframework/data/mapping/context/AbstractMappingContext$PersistentPropertyCreator addPropertiesForRemainingDescriptors ()V 54 <appendix> member <vmtarget> ; # org/springframework/data/mapping/context/AbstractMappingContext$PersistentPropertyCreator$$Lambda+0x000002b5d39335e8
+instanceKlass  @bci org/springframework/data/mapping/context/AbstractMappingContext$PersistentPropertyCreator addPropertiesForRemainingDescriptors ()V 43 <appendix> member <vmtarget> ; # org/springframework/data/mapping/context/AbstractMappingContext$PersistentPropertyCreator$$Lambda+0x000002b5d3933398
+instanceKlass  @bci org/springframework/data/mapping/context/AbstractMappingContext$PersistentPropertyCreator addPropertiesForRemainingDescriptors ()V 25 <appendix> member <vmtarget> ; # org/springframework/data/mapping/context/AbstractMappingContext$PersistentPropertyCreator$$Lambda+0x000002b5d3933158
+instanceKlass  @bci org/springframework/data/mapping/context/AbstractMappingContext$PersistentPropertyCreator addPropertiesForRemainingDescriptors ()V 14 <appendix> argL0 ; # org/springframework/data/mapping/context/AbstractMappingContext$PersistentPropertyCreator$$Lambda+0x000002b5d3932f10
+instanceKlass  @bci org/springframework/data/util/TypeDiscoverer lambda$new$0 ()Ljava/util/List; 10 <appendix> argL0 ; # org/springframework/data/util/TypeDiscoverer$$Lambda+0x000002b5d3932cd8
+instanceKlass java/util/WeakHashMap$HashIterator
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty lambda$new$8 ()Lorg/springframework/data/util/TypeInformation; 42 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d3932ab8
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty lambda$new$8 ()Lorg/springframework/data/util/TypeInformation; 33 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d3932878
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty lambda$new$8 ()Lorg/springframework/data/util/TypeInformation; 24 <appendix> argL0 ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d3932640
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty lambda$new$8 ()Lorg/springframework/data/util/TypeInformation; 16 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d3932400
+instanceKlass  @bci org/springframework/data/mapping/model/AbstractPersistentProperty detectEntityTypes (Lorg/springframework/data/mapping/model/SimpleTypeHolder;)Ljava/util/Set; 41 <appendix> argL0 ; # org/springframework/data/mapping/model/AbstractPersistentProperty$$Lambda+0x000002b5d39321b8
+instanceKlass  @bci org/springframework/data/mapping/model/AbstractPersistentProperty detectEntityTypes (Lorg/springframework/data/mapping/model/SimpleTypeHolder;)Ljava/util/Set; 31 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AbstractPersistentProperty$$Lambda+0x000002b5d3931f68
+instanceKlass  @bci org/springframework/data/jpa/util/JpaMetamodel isSingleIdAttribute (Ljava/lang/Class;Ljava/lang/String;Ljava/lang/Class;)Z 48 <appendix> member <vmtarget> ; # org/springframework/data/jpa/util/JpaMetamodel$$Lambda+0x000002b5d3931d28
+instanceKlass  @bci org/springframework/data/jpa/util/JpaMetamodel isSingleIdAttribute (Ljava/lang/Class;Ljava/lang/String;Ljava/lang/Class;)Z 39 <appendix> member <vmtarget> ; # org/springframework/data/jpa/util/JpaMetamodel$$Lambda+0x000002b5d3931ad8
+instanceKlass  @bci org/springframework/data/jpa/util/JpaMetamodel getSingularIdAttribute (Ljakarta/persistence/metamodel/EntityType;)Ljava/util/Optional; 24 <appendix> argL0 ; # org/springframework/data/jpa/util/JpaMetamodel$$Lambda+0x000002b5d3931890
+instanceKlass  @bci org/springframework/data/jpa/util/JpaMetamodel isSingleIdAttribute (Ljava/lang/Class;Ljava/lang/String;Ljava/lang/Class;)Z 30 <appendix> argL0 ; # org/springframework/data/jpa/util/JpaMetamodel$$Lambda+0x000002b5d3931658
+instanceKlass  @bci org/springframework/data/jpa/util/JpaMetamodel isSingleIdAttribute (Ljava/lang/Class;Ljava/lang/String;Ljava/lang/Class;)Z 15 <appendix> member <vmtarget> ; # org/springframework/data/jpa/util/JpaMetamodel$$Lambda+0x000002b5d3931408
+instanceKlass  @bci org/springframework/data/mapping/context/AbstractMappingContext$PersistentPropertyCreator createAndRegisterProperty (Lorg/springframework/data/mapping/model/Property;)V 119 <appendix> member <vmtarget> ; # org/springframework/data/mapping/context/AbstractMappingContext$PersistentPropertyCreator$$Lambda+0x000002b5d39311d8
+instanceKlass  @bci org/springframework/data/jpa/util/JpaMetamodel lambda$0 (Ljakarta/persistence/metamodel/Metamodel;)Ljava/util/Collection; 21 <appendix> argL0 ; # org/springframework/data/jpa/util/JpaMetamodel$$Lambda+0x000002b5d3930f90
+instanceKlass  @bci org/springframework/data/jpa/util/JpaMetamodel lambda$0 (Ljakarta/persistence/metamodel/Metamodel;)Ljava/util/Collection; 11 <appendix> argL0 ; # org/springframework/data/jpa/util/JpaMetamodel$$Lambda+0x000002b5d3930d58
+instanceKlass  @bci org/springframework/data/util/NullableWrapperConverters supports (Ljava/lang/Class;)Z 10 <appendix> argL0 ; # org/springframework/data/util/NullableWrapperConverters$$Lambda+0x000002b5d3930b20
+instanceKlass  @bci org/springframework/data/jpa/mapping/JpaPersistentPropertyImpl lambda$2 (Lorg/springframework/data/jpa/util/JpaMetamodel;)Ljava/lang/Boolean; 9 <appendix> member <vmtarget> ; # org/springframework/data/jpa/mapping/JpaPersistentPropertyImpl$$Lambda+0x000002b5d39308d0
+instanceKlass  @bci org/springframework/data/mapping/model/BasicPersistentEntity addPersistentProperty (Lorg/springframework/data/mapping/PersistentProperty;)V 71 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/BasicPersistentEntity$$Lambda+0x000002b5d3930690
+instanceKlass  @bci org/springframework/data/jpa/mapping/JpaPersistentPropertyImpl <init> (Lorg/springframework/data/jpa/util/JpaMetamodel;Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 68 <appendix> member <vmtarget> ; # org/springframework/data/jpa/mapping/JpaPersistentPropertyImpl$$Lambda+0x000002b5d3930470
+instanceKlass  @bci org/springframework/data/jpa/mapping/JpaPersistentPropertyImpl <init> (Lorg/springframework/data/jpa/util/JpaMetamodel;Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 54 <appendix> member <vmtarget> ; # org/springframework/data/jpa/mapping/JpaPersistentPropertyImpl$$Lambda+0x000002b5d3930250
+instanceKlass  @bci org/springframework/data/jpa/mapping/JpaPersistentPropertyImpl lambda$0 ()Ljava/lang/Boolean; 16 <appendix> member <vmtarget> ; # org/springframework/data/jpa/mapping/JpaPersistentPropertyImpl$$Lambda+0x000002b5d3930000
+instanceKlass org/springframework/data/annotation/Reference
+instanceKlass org/springframework/data/annotation/Transient
+instanceKlass  @bci org/springframework/data/mapping/model/BasicPersistentEntity doFindAnnotation (Ljava/lang/Class;)Ljava/util/Optional; 6 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/BasicPersistentEntity$$Lambda+0x000002b5d392f590
+instanceKlass org/springframework/data/annotation/AccessType
+instanceKlass  @bci org/springframework/data/jpa/mapping/JpaPersistentPropertyImpl <init> (Lorg/springframework/data/jpa/util/JpaMetamodel;Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 16 <appendix> member <vmtarget> ; # org/springframework/data/jpa/mapping/JpaPersistentPropertyImpl$$Lambda+0x000002b5d392f178
+instanceKlass  @bci org/springframework/core/annotation/AnnotatedElementUtils findMergedAnnotation (Ljava/lang/reflect/AnnotatedElement;Ljava/lang/Class;)Ljava/lang/annotation/Annotation; 41 <appendix> argL0 ; # org/springframework/core/annotation/AnnotatedElementUtils$$Lambda+0x000002b5d392ef30
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty lambda$doFindAnnotation$12 (Ljava/lang/Class;)Ljava/util/Optional; 15 <appendix> argL0 ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d392ecf8
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty lambda$doFindAnnotation$12 (Ljava/lang/Class;)Ljava/util/Optional; 5 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d392eab8
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty doFindAnnotation (Ljava/lang/Class;)Ljava/util/Optional; 26 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d392e878
+instanceKlass  @bci org/springframework/core/annotation/AnnotatedElementUtils getMergedAnnotation (Ljava/lang/reflect/AnnotatedElement;Ljava/lang/Class;)Ljava/lang/annotation/Annotation; 41 <appendix> argL0 ; # org/springframework/core/annotation/AnnotatedElementUtils$$Lambda+0x000002b5d392e630
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty populateAnnotationCache (Lorg/springframework/data/mapping/model/Property;)V 37 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d392e400
+instanceKlass  @bci org/springframework/data/util/Optionals lambda$toStream$0 (Ljava/util/Optional;)Ljava/util/stream/Stream; 9 <appendix> argL0 ; # org/springframework/data/util/Optionals$$Lambda+0x000002b5d392e1e8
+instanceKlass  @bci org/springframework/data/util/Optionals lambda$toStream$0 (Ljava/util/Optional;)Ljava/util/stream/Stream; 1 <appendix> argL0 ; # org/springframework/data/util/Optionals$$Lambda+0x000002b5d392dfb0
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty populateAnnotationCache (Lorg/springframework/data/mapping/model/Property;)V 22 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d392dd80
+instanceKlass  @bci org/springframework/data/util/Optionals toStream ([Ljava/util/Optional;)Ljava/util/stream/Stream; 15 <appendix> argL0 ; # org/springframework/data/util/Optionals$$Lambda+0x000002b5d392db48
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty <init> (Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 98 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d392d928
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty <init> (Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 85 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d392d708
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty <init> (Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 72 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d392d4e8
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty <init> (Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 59 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d392d2c8
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty <init> (Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 46 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d392d0a8
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty <init> (Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 33 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d392ce88
+instanceKlass  @bci org/springframework/data/mapping/model/AnnotationBasedPersistentProperty <init> (Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 20 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AnnotationBasedPersistentProperty$$Lambda+0x000002b5d392cc68
+instanceKlass  @bci org/springframework/data/mapping/model/AbstractPersistentProperty <init> (Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 262 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AbstractPersistentProperty$$Lambda+0x000002b5d392ca48
+instanceKlass  @bci org/springframework/data/mapping/model/Property findWither (Lorg/springframework/data/util/TypeInformation;Ljava/lang/String;Ljava/lang/Class;)Ljava/util/Optional; 42 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/Property$$Lambda+0x000002b5d392c818
+instanceKlass  @bci org/springframework/data/mapping/model/Property findWither (Lorg/springframework/data/util/TypeInformation;Ljava/lang/String;Ljava/lang/Class;)Ljava/util/Optional; 34 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/Property$$Lambda+0x000002b5d392c5f8
+instanceKlass  @bci org/springframework/data/mapping/model/AbstractPersistentProperty <init> (Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 152 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AbstractPersistentProperty$$Lambda+0x000002b5d392c3d8
+instanceKlass  @bci org/springframework/data/mapping/model/AbstractPersistentProperty <init> (Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 113 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AbstractPersistentProperty$$Lambda+0x000002b5d392c1b8
+instanceKlass  @bci org/springframework/data/mapping/model/AbstractPersistentProperty <init> (Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 100 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AbstractPersistentProperty$$Lambda+0x000002b5d392bf98
+instanceKlass  @bci org/springframework/data/mapping/model/AbstractPersistentProperty <init> (Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 86 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AbstractPersistentProperty$$Lambda+0x000002b5d392bd78
+instanceKlass  @bci org/springframework/data/mapping/model/AbstractPersistentProperty <init> (Lorg/springframework/data/mapping/model/Property;Lorg/springframework/data/mapping/PersistentEntity;Lorg/springframework/data/mapping/model/SimpleTypeHolder;)V 63 <appendix> member <vmtarget> ; # org/springframework/data/mapping/model/AbstractPersistentProperty$$Lambda+0x000002b5d392bb58
+instanceKlass org/springframework/data/mapping/Association
+instanceKlass  @bci org/springframework/data/mapping/model/Property lambda$new$3 ()Ljava/lang/String; 6 <appendix> argL0 ; # org/springframework/data/mapping/model/Property$$Lambda+0x000002b5d392b708
+instanceKlass  @bci org/springframework/data/mapping/model/Property lambda$new$3 ()Ljava/lang/String; 1 <appendix> argL0 ; # org/springframework/data/mapping/model/Property$$Lambda+0x000002b5d392b4d0
+instanceKlass org/springframework/data/mapping/model/AbstractPersistentProperty
