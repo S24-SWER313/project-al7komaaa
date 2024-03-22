@@ -41,7 +41,7 @@ public EntityModel<User> toModeluserprofile(User user, HttpServletRequest reques
   Link addFriendLink = linkTo(methodOn(Controller.class).addFriend(request, user.getId())).withRel("Add Friend");
   Link deleteFriendLink = linkTo(methodOn(Controller.class).deleteUserFriend( user.getId(), request)).withRel("Remove friend");
  Link selfLink = linkTo(methodOn(Controller.class).getUserById(user.getId(), request)).withSelfRel();
-  Link userPostLink = linkTo(methodOn(PostController.class).findfriendPosts(request, user.getId())).withRel("posts");
+  Link userPostLink = linkTo(methodOn(PostController.class).findFriendPosts(request, user.getId())).withRel("posts");
 
   if(user.isFriend())
   return EntityModel.of(user, selfLink, deleteFriendLink, userPostLink);
