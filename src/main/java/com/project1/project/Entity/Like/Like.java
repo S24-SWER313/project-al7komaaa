@@ -13,7 +13,8 @@ public class Like {
     private Long likeId;
 
     private likeType type ;
-    @JsonIgnore   @ManyToOne 
+    @JsonIgnore  
+     @ManyToOne 
     @JoinColumn(name = "post_id")
     public Post post;
   @JsonIgnore
@@ -23,6 +24,7 @@ public class Like {
     @OneToOne //many to one
     @JoinColumn(name = "user_id")
     public User user;
+   
 
     public Like( likeType type) {
       

@@ -38,6 +38,7 @@ import com.project1.project.Entity.Post.PostRepo;
 import com.project1.project.Entity.Share.Share;
 import com.project1.project.Entity.Share.ShareRepo;
 import com.project1.project.Entity.User.User;
+import com.project1.project.Entity.User.UserModelAss;
 import com.project1.project.Entity.User.UserRepo;
 import com.project1.project.Payload.Response.MessageResponse;
 import com.project1.project.Security.Jwt.JwtUtils;
@@ -64,6 +65,8 @@ public class PostController {
     @Autowired
     private  PostModelAss postmodelAss;
 
+    @Autowired
+    private  UserModelAss usermodelAss;
 
     @Autowired
     private  CommentModelAss commentmodelAss;
@@ -71,7 +74,8 @@ public class PostController {
 
     @Autowired
     private  LikeRepo likeRepo;
-    
+
+       List<EntityModel<Post>> l=new ArrayList<>();
     @PostMapping("/create")
     public ResponseEntity<?> createPost(HttpServletRequest request, @RequestBody Post post) {
         // @RequestHeader("Authorization") String jwt,
@@ -95,17 +99,14 @@ public class PostController {
 
     @GetMapping("/{postId}/comment")
     public ResponseEntity<CollectionModel<EntityModel<Comment>>> getAllPostComments(@PathVariable Long postId, HttpServletRequest request) {
-        // التحقق من وجود المنشور
+       
         Optional<Post> postOptional = postRepo.findById(postId);
         if (!postOptional.isPresent()) {
-            // إرجاع رمز الحالة "Not Found" إذا لم يتم العثور على المنشور
             return ResponseEntity.notFound().build();
         }
         
-        // العثور على قائمة الإعجابات للمنشور المعطى
         List<Comment> comments = postOptional.get().postComments;
         
-        // إرجاع قائمة الإعجابات مع رمز الحالة "OK"
        
         List<EntityModel<Comment>> commentModels = comments.stream()
         .map(com -> commentmodelAss.commentDelEdit(com, request))
@@ -229,11 +230,12 @@ public class PostController {
 
     ////////////////////////////////////////////////////////////////////
     @GetMapping("/user/like")
-    public List<Post> findByLikesContainsUser( HttpServletRequest request) {// البوستات الي اليوزر حاط لايك عليهم
-        String jwt = parseJwt(request);
+    public ResponseEntity<CollectionModel<EntityModel<Post>>>  findByLikesContainsUser( HttpServletRequest request) {// البوستات الي اليوزر حاط لايك عليهم
+      User user=null;
+      String jwt = parseJwt(request);
         if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
           String username = jwtUtils.getUserNameFromJwtToken(jwt);
-        User user = userRepo.findByUsername(username)
+         user = userRepo.findByUsername(username)
                             .orElseThrow(() -> new RuntimeException("User not found"));
                           List<Like>likeList=likeRepo.findByUser(user);
                     List<Post> likePost=likeList.stream().map(e->e.post).collect(Collectors.toList());
@@ -270,20 +272,49 @@ public class PostController {
     }
 }
 
-    @GetMapping("/{postId}/likes")
-    public ResponseEntity<List<Like>> getAllPostLikes(@PathVariable Long postId) {
-        // التحقق من وجود المنشور
-        Optional<Post> postOptional = postRepo.findById(postId);
-        if (!postOptional.isPresent()) {
-            // إرجاع رمز الحالة "Not Found" إذا لم يتم العثور على المنشور
-            return ResponseEntity.notFound().build();
+  public ResponseEntity<?> createLikePost(@RequestBody Like like, @PathVariable Long postId, HttpServletRequest request) {
+    String jwt = parseJwt(request);
+    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        User user = userRepo.findByUsername(username).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
+        like.setUser(user);
+        Post post = postRepo.findById(postId).orElse(null);
+        if (post == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
+        }
+        like.setPost(post);
+        user.likes.add(like);
+        post.like.add(like);
+        userRepo.save(user);
+        postRepo.save(post);
+        if (post.like.stream().anyMatch(l -> l.user.getId().equals(user.getId()))) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User has already liked the post");
+      }
+        Like savedLike = likeRepo.save(like);
+        return ResponseEntity.status(HttpStatus.CREATED).body(like);
+    } else {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token");
+    }
+}
+
+    @GetMapping("/{postId}/likes")
+    public ResponseEntity<List<EntityModel<Like>>> getAllPostLikes(@PathVariable Long postId) {
+        Optional<Post> postOptional = postRepo.findById(postId);
         
-        // العثور على قائمة الإعجابات للمنشور المعطى
-        List<Like> likes = postRepo.findLikes(postId);
-        
-        // إرجاع قائمة الإعجابات مع رمز الحالة "OK"
-        return ResponseEntity.ok(likes);
+        if (!postOptional.isPresent()) {
+          return ResponseEntity.notFound().build();
+      }
+      List<Like> likes = postRepo.findLikes(postId);
+
+        List<EntityModel<Like>> entityModels =likes.stream()
+    .map(us -> postmodelAss.toModelPostLike(us))
+    .collect(Collectors.toList());
+
+    
+        return ResponseEntity.ok(entityModels);
     }
     
 
@@ -344,14 +375,23 @@ Share share=shareRepo.findById(shareId).get();
 
 
     @GetMapping("/userPosts")
-    public List<Post> findUserPosts(HttpServletRequest request) {
+    public ResponseEntity<CollectionModel<EntityModel<Post>>>  findUserPosts(HttpServletRequest request) {
+      User user=null;
       String jwt = parseJwt(request);
       if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
-        User user=userRepo.findByUsername(username).get() ;
-        return userRepo.findPostsByUserId(user.getId());
-    }
-  return null;}
+         user=userRepo.findByUsername(username).get() ;
+        List<EntityModel<Post>> users =userRepo.findPostsByUserId(user.getId()).stream()
+        .map(e->postmodelAss.toModelpostId(e))
+        .collect(Collectors.toList());
+    
+          if (users.isEmpty()) {
+              throw new NFException(User.class);
+          }
+          return ResponseEntity.ok(CollectionModel.of(users,linkTo(methodOn(PostController.class).findById(user.getId())).withRel("Go to Post")));
+     }
+   
+     return ResponseEntity.ok(CollectionModel.of(l,linkTo(methodOn(Controller.class).getUserById(user.getId())).withRel("User Profile")));}
     
 private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
      
@@ -400,10 +440,11 @@ private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
   
 
 @GetMapping("/postUser/{postid}")
-public User postUser(@PathVariable Long postid){
+public ResponseEntity<EntityModel<User>> postUser(@PathVariable Long postid){
  Post post = postRepo.findById(postid).get();
- 
-  return post.user;
+
+      
+  return ResponseEntity.ok(usermodelAss.toModeluserprofile(post.user));
 
 }
 

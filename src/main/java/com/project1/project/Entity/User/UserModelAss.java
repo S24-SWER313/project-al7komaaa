@@ -14,7 +14,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @Component
 public class UserModelAss implements RepresentationModelAssembler<User, EntityModel<User>> {
-
+  HttpServletRequest request;
     @Override
     public EntityModel<User> toModel(User user) {
     
@@ -25,8 +25,8 @@ return null;
     }
     
 
-public EntityModel<User> toModelfriendself(User user, HttpServletRequest request) {
-    Link selfLink = linkTo(methodOn(Controller.class).getUserById(user.getId(), request)).withRel("view Profile");
+public EntityModel<User> toModelfriendself(User user) {
+    Link selfLink = linkTo(methodOn(Controller.class).getUserById(user.getId())).withRel("view Profile");
     Link addFriendLink = linkTo(methodOn(Controller.class).addFriend(request, user.getId())).withRel("Add Friend");
     Link deleteFriendLink = linkTo(methodOn(Controller.class).deleteUserFriend( user.getId(), request)).withRel("Remove friend");
 
@@ -37,7 +37,7 @@ public EntityModel<User> toModelfriendself(User user, HttpServletRequest request
     
 }
 
-public EntityModel<User> toModeluserprofile(User user, HttpServletRequest request) {
+public EntityModel<User> toModeluserprofile(User user) {
   Link addFriendLink = linkTo(methodOn(Controller.class).addFriend(request, user.getId())).withRel("Add Friend");
   Link deleteFriendLink = linkTo(methodOn(Controller.class).deleteUserFriend( user.getId(), request)).withRel("Remove friend");
  Link selfLink = linkTo(methodOn(Controller.class).getUserById(user.getId(), request)).withSelfRel();

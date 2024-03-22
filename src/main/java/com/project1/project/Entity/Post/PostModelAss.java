@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 
 import com.project1.project.Controllers.PostController;
 import com.project1.project.Entity.Comment.Comment;
+import com.project1.project.Entity.Like.Like;
 import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserRepo;
 import com.project1.project.Security.Jwt.JwtUtils;
@@ -36,10 +37,10 @@ public class PostModelAss implements RepresentationModelAssembler<Post, EntityMo
 
 
     }
-    
-   User user;
+
+   
         public EntityModel<Post> toModelpostId(Post post)  {
-         
+             User user=null;
           String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
@@ -60,7 +61,32 @@ public class PostModelAss implements RepresentationModelAssembler<Post, EntityMo
     
           
 
-        }
+        } 
+         
+
+        public EntityModel<Like> toModelPostLike(Like like)  {
+         // User user=null;
+            String jwt = parseJwt(request);
+              if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+                  String username = jwtUtils.getUserNameFromJwtToken(jwt);
+              User  user=userRepo.findByUsername(username).get();
+             
+             Post post = like.post;
+     
+             if (like.user.getId()==user.getId()){
+             return EntityModel.of(like,
+             linkTo(methodOn(PostController.class).findById(post.getPostId())).withRel("the post "),
+           // linkTo(methodOn(PostController.class).getAllPostLikes(like.getPostId())).withRel("the post's like"),
+            linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId(),request)).withRel("the post's comment"),
+            linkTo(methodOn(PostController.class).UnCreatelikePost(like.getLikeId())).withRel("delete your like"));
+          }else{    return EntityModel.of(like,
+            linkTo(methodOn(PostController.class).findById(post.getPostId())).withRel("the post "),
+            linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId(),request)).withRel("the post's comment"));   
+         }
+      
+               } return null;   
+  
+          }
 
     
 
