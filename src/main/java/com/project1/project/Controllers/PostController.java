@@ -279,37 +279,30 @@ public class PostController {
         if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
             String username = jwtUtils.getUserNameFromJwtToken(jwt);
             
-            // التحقق من وجود المستخدم
             User user = userRepo.findByUsername(username).orElse(null);
             if (user == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
             }
             
-            // التحقق من وجود المنشور
             Post post = postRepo.findById(postId).orElse(null);
             if (post == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
             }
             
-            // تعيين العلاقات بين المستخدم والإعجاب والمنشور
             like.setUser(user);
             like.setPost(post);
             
-            // التحقق من عدم تكرار الإعجاب
             if (post.like.stream().anyMatch(l -> l.user.getId().equals(user.getId()))) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User has already liked the post");
             }
             
-            // حفظ الإعجاب في قاعدة البيانات
             Like savedLike = likeRepo.save(like);
             
-            // إضافة الإعجاب إلى قائمة الإعجابات للمستخدم والمنشور
-            // user.likes.add(savedLike);
-            // post.like.add(savedLike);
+            user.likes.add(savedLike);
+            post.like.add(savedLike);
             
-            // حفظ التغييرات في قاعدة البيانات
-            // userRepo.save(user);
-            // postRepo.save(post);
+            userRepo.save(user);
+            postRepo.save(post);
             
             return ResponseEntity.status(HttpStatus.CREATED).body(savedLike);
         } else {
