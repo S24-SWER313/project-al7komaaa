@@ -35,7 +35,7 @@ import com.project1.project.Payload.Response.MessageResponse;
 import com.project1.project.Security.Jwt.JwtUtils;
 import com.project1.project.Security.Services.UserDetailsImpl;
 
-//maii
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
