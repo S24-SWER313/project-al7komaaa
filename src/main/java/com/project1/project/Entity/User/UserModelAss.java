@@ -40,13 +40,8 @@ public EntityModel<User> toModelfriendself(User user) {
 public EntityModel<User> toModeluserprofile(User user) {
   Link addFriendLink = linkTo(methodOn(Controller.class).addFriend(request, user.getId())).withRel("Add Friend");
   Link deleteFriendLink = linkTo(methodOn(Controller.class).deleteUserFriend( user.getId(), request)).withRel("Remove friend");
-<<<<<<< HEAD
- Link selfLink = linkTo(methodOn(Controller.class).getUserById(user.getId(), request)).withSelfRel();
-  Link userPostLink = linkTo(methodOn(PostController.class).findFriendPosts(request, user.getId())).withRel("posts");
-=======
  Link selfLink = linkTo(methodOn(Controller.class).getUserById(user.getId())).withSelfRel();
-  Link userPostLink = linkTo(methodOn(PostController.class).findfriendPosts(request, user.getId())).withRel("posts");
->>>>>>> 34d85c99b87085378e71f12250f818dcb1eb8fd3
+  Link userPostLink = linkTo(methodOn(PostController.class).findFriendPosts(request, user.getId())).withRel("posts");
 
   if(user.isFriend())
   return EntityModel.of(user, selfLink, deleteFriendLink, userPostLink);
