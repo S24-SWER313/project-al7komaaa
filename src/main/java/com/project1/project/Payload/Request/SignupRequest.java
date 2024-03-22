@@ -17,7 +17,7 @@ public class SignupRequest {
   
 
   @NotBlank
-  @Size(min = 6, max = 40)
+  @Size(min = 6, max = 40 , message = " the password size must be between 6 and 40")
   private String password;
 
   public String getUsername() {

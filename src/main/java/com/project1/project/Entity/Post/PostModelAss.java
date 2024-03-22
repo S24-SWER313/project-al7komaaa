@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 import com.project1.project.Controllers.PostController;
 import com.project1.project.Entity.Comment.Comment;
 import com.project1.project.Entity.Like.Like;
+import com.project1.project.Entity.Share.Share;
 import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserRepo;
 import com.project1.project.Security.Jwt.JwtUtils;
@@ -107,8 +108,30 @@ private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
     }
 
     return null;
+
+
   }
 
+  
 
+        public EntityModel<Share> toModelsharepostId(Share share)  {
+             User user=null;
+          String jwt = parseJwt(request);
+            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+                String username = jwtUtils.getUserNameFromJwtToken(jwt);
+             user=userRepo.findByUsername(username).get();
+           }
+           if (share.user.getId().equals(user.getId())){
+           return EntityModel.of(share,
+           linkTo(methodOn(PostController.class).findById(share.getPost().getPostId())).withRel("the post you shared"),
+          // linkTo(methodOn(PostController.class).getAllPostLikes(share.getPostId())).withRel("the post's like"),
+          // linkTo(methodOn(PostController.class).getAllPostComments(share.getPostId(),request)).withRel("the post's comment"),
+          linkTo(methodOn(PostController.class).deleteShearById(share.getShareId(),request)).withRel("delete your share post"));
+        }else{    return EntityModel.of(share,
+                    linkTo(methodOn(PostController.class).findById(share.getPost().getPostId())).withRel("the post you shared"));
+                  //  linkTo(methodOn(PostController.class).getAllPostLikes(share.getPostId())).withRel("the post's like"),
+                  //  linkTo(methodOn(PostController.class).getAllPostComments(share.getPostId(),request)).withRel("the post's comment"));
+    
+       }}
 
 }
