@@ -239,21 +239,39 @@ public class PostController {
                             .orElseThrow(() -> new RuntimeException("User not found"));
                           List<Like>likeList=likeRepo.findByUser(user);
                     List<Post> likePost=likeList.stream().map(e->e.post).collect(Collectors.toList());
-                    ///////////////////
-                    List<EntityModel<Post>> users =likePost.stream()
-      .map(e->postmodelAss.toModelpostId(e))
-      .collect(Collectors.toList());
-  
-        if (users.isEmpty()) {
-            throw new NFException(User.class);
-        }
-        return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(Controller.class).getUserById(user.getId())).withRel("User Profile")));
-     
+                    return likePost;}
+                    return null;
     }
-               
-    return ResponseEntity.ok(CollectionModel.of(l,linkTo(methodOn(Controller.class).getUserById(user.getId())).withRel("User Profile")));}
   
     @PostMapping("/{postId}/like")
+  public ResponseEntity<?> createLikePost(@RequestBody Like like, @PathVariable Long postId, HttpServletRequest request) {
+    String jwt = parseJwt(request);
+    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        User user = userRepo.findByUsername(username).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        like.setUser(user);
+        Post post = postRepo.findById(postId).orElse(null);
+        if (post == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
+        }
+        like.setPost(post);
+        user.likes.add(like);
+        post.like.add(like);
+        userRepo.save(user);
+        postRepo.save(post);
+        if (post.like.stream().anyMatch(l -> l.user.getId().equals(user.getId()))) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User has already liked the post");
+      }
+        Like savedLike = likeRepo.save(like);
+        return ResponseEntity.status(HttpStatus.CREATED).body(like);
+    } else {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token");
+    }
+}
+
   public ResponseEntity<?> createLikePost(@RequestBody Like like, @PathVariable Long postId, HttpServletRequest request) {
     String jwt = parseJwt(request);
     if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
@@ -395,31 +413,31 @@ private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
   }
 
 
-@GetMapping("/FriendPosts/{friendId}")
-public ResponseEntity<?> findFriendPosts(HttpServletRequest request , @PathVariable Long friendId) {
-    String jwt = parseJwt(request);
-    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-        String username = jwtUtils.getUserNameFromJwtToken(jwt);
-        Optional<User> optionalUser = userRepo.findByUsername(username);
-        Optional<User> optionalFriend = userRepo.findById(friendId);
-        if (optionalUser.isPresent() && optionalFriend.isPresent()) {
-            User user = optionalUser.get();
-            User friend = optionalFriend.get();
-            boolean isFriend = user.friends.contains(friend);
-            if (isFriend) {
-                List<Post> friendPosts = userRepo.findPostsByUserId(friendId);
-                return ResponseEntity.ok(friendPosts);
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("This acount is private to see posts added friend.");
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or friend not found.");
-        }
-    } else {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access. sign in");
-    }
-}
-
+  @GetMapping("/FriendPosts/{friendId}")
+  public ResponseEntity<?> findFriendPosts(HttpServletRequest request , @PathVariable Long friendId) {
+      String jwt = parseJwt(request);
+      if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+          String username = jwtUtils.getUserNameFromJwtToken(jwt);
+          Optional<User> optionalUser = userRepo.findByUsername(username);
+          Optional<User> optionalFriend = userRepo.findById(friendId);
+          if (optionalUser.isPresent() && optionalFriend.isPresent()) {
+              User user = optionalUser.get();
+              User friend = optionalFriend.get();
+              boolean isFriend = user.friends.contains(friend);
+              if (isFriend) {
+                  List<Post> friendPosts = userRepo.findPostsByUserId(friendId);
+                  return ResponseEntity.ok(friendPosts);
+              } else {
+                  return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("This acount is private to see posts added friend.");
+              }
+          } else {
+              return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or friend not found.");
+          }
+      } else {
+          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access. sign in");
+      }
+  }
+  
 
 @GetMapping("/postUser/{postid}")
 public ResponseEntity<EntityModel<User>> postUser(@PathVariable Long postid){
