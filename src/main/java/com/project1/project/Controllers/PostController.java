@@ -192,7 +192,7 @@ public class PostController {
 
   /////////////////////////////////////////////////////////////////////
   @PostMapping("/comment/{postId}/post")
-  public ResponseEntity<MessageResponse> createComment(HttpServletRequest request, @RequestBody Comment comment,
+  public ResponseEntity<?> createComment(HttpServletRequest request, @RequestBody Comment comment,
       @PathVariable Long postId) {
 
     String jwt = parseJwt(request);
@@ -213,7 +213,7 @@ public class PostController {
       
       commentRepo.save(comment);
     }
-    return ResponseEntity.ok(new MessageResponse("Share created successfully!"));
+    return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment,request));
 
   }
 
@@ -235,7 +235,7 @@ public class PostController {
       }
       return ResponseEntity.ok(new MessageResponse("Delete successfully!"));
     }
-    return null;
+    return ResponseEntity.ok(new MessageResponse("you are not authenticated!"));
   }
 
   private boolean userHasPermissionToDeleteComment(Long commentId, Long userId) {
@@ -388,7 +388,7 @@ public class PostController {
 
   // }
   @DeleteMapping(("/share/{shareId}"))
-  public String deleteShearById(@PathVariable Long shareId, HttpServletRequest request)  {
+  public ResponseEntity<MessageResponse> deleteShearById(@PathVariable Long shareId, HttpServletRequest request)  {
 
     String jwt = parseJwt(request);
     if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
@@ -398,12 +398,12 @@ public class PostController {
       Share share = shareRepo.findById(shareId).get();
       if (userHasPermissionToDeletePost(share.user.getId(), user.getId())) {
         shareRepo.deleteById(shareId);
-        return "done";
+        return ResponseEntity.ok(new MessageResponse("delete share successfully"));
       } else {
-        return ("User is not authorized to delete this post");
+        return ResponseEntity.ok(new MessageResponse("User is not authorized to delete this post"));
       }
     }
-    return null;
+    return ResponseEntity.ok(new MessageResponse("you are not authorized!"));
 
   }
 
@@ -459,7 +459,8 @@ public class PostController {
         boolean isFriend = user.friends.contains(friend);
         if (isFriend) {
           List<Post> friendPosts = userRepo.findPostsByUserId(friendId);
-          return ResponseEntity.ok(friendPosts);
+          
+          return ResponseEntity.ok(postmodelAss.toModelpostId(friendPosts));
         } else {
           return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
               .body("This acount is private to see posts added friend.");
