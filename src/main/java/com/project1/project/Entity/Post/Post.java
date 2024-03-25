@@ -29,7 +29,6 @@ private String content;
     public List<Comment> postComments;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL) //t8ayarat
     public List<Like> like;
-
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Share> shares;
     public Post() {

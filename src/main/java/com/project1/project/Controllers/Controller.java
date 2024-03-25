@@ -54,7 +54,8 @@ public class Controller {
   private JwtUtils jwtUtils;
     @Autowired
 private UserModelAss userModelAss;
-
+@Autowired
+HttpServletRequest request;
     public Controller(CommentRepo commentRepo, LikeRepo likeRepo, PostRepo postRepo, ShareRepo shareRepo,
             UserRepo userRepo) {
         this.commentRepo = commentRepo;
@@ -223,7 +224,15 @@ public ResponseEntity<String> deleteUserFriend(@PathVariable Long userid, HttpSe
 }
 
 
-
+@PutMapping("/privesity")
+public ResponseEntity<?> setPrivesity(@RequestBody boolean isprivete) {
+    User user = userFromToken(request);
+        if (user==null)
+return ResponseEntity.ok("make sure you signed up");
+user.setAccountIsPrivate(isprivete);
+userRepo.save(user);
+  return ResponseEntity.ok("the privisity of account is "+ isprivete);
+}
 
 
 
@@ -238,6 +247,14 @@ public ResponseEntity<String> deleteUserFriend(@PathVariable Long userid, HttpSe
 
     return null;
   }
-
+  public User userFromToken(HttpServletRequest request) {
+    String jwt = parseJwt(request);
+    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        return userRepo.findByUsername(username)
+                .orElse(null); 
+    }
+    return null;
+}
 
 }
