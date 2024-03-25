@@ -135,27 +135,25 @@ public class PostController {
   }
 
   @PostMapping("/share/{postId}")
-  public ResponseEntity<?> sharePost(@PathVariable Long postId, HttpServletRequest request,
-      @RequestBody String content) {
-
-    String jwt = parseJwt(request);
-    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-      String username = jwtUtils.getUserNameFromJwtToken(jwt);
-      User user = userRepo.findByUsername(username)
-          .orElseThrow(() -> new RuntimeException("User not found"));
-      Post post = postRepo.findById(postId).orElse(null);
-      if (post == null) {
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
+  public ResponseEntity<Share> sharePost(@PathVariable Long postId, HttpServletRequest request,
+                                         @RequestBody String content) {
+  
+      String jwt = parseJwt(request);
+      if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+          String username = jwtUtils.getUserNameFromJwtToken(jwt);
+          User user = userRepo.findByUsername(username)
+                  .orElseThrow(() -> new RuntimeException("User not found"));
+          Post post = postRepo.findById(postId).orElse(null);
+          if (post == null) {
+              return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+          }
+          Share share = new Share(content, user, post);
+          shareRepo.save(share);
+          return ResponseEntity.ok(share);
       }
-      Share share = new Share(content, user, post);
-      shareRepo.save(share);
-    // return ResponseEntity.ok(postmodelAss.toModelsharepostId(share));
-   // new MessageResponse("Share created successfully!")
-    }
-    return ResponseEntity.ok(new MessageResponse("Share created successfully!"));
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); 
   }
-
+  
   @GetMapping("/posts/{postId}")
   public ResponseEntity<EntityModel<Post>> findById(@PathVariable Long postId) {
     Post post = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
