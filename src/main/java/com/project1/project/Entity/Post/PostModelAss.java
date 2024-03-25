@@ -114,7 +114,7 @@ private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
 
   
 
-        public EntityModel<Share> toModelsharepostId(Share share)  {
+        public EntityModel<Share> toModelsharepostId(Share share, HttpServletRequest request)  {
              User user=null;
           String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {

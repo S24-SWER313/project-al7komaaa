@@ -135,7 +135,7 @@ public class PostController {
   }
 
   @PostMapping("/share/{postId}")
-  public ResponseEntity<Share> sharePost(@PathVariable Long postId, HttpServletRequest request,
+  public ResponseEntity<EntityModel<Share>> sharePost(@PathVariable Long postId, HttpServletRequest request,
                                          @RequestBody String content) {
   
       String jwt = parseJwt(request);
@@ -149,7 +149,8 @@ public class PostController {
           }
           Share share = new Share(content, user, post);
           shareRepo.save(share);
-          return ResponseEntity.ok(share);
+         // EntityModel<Share> entityModel = EntityModel.of();
+          return ResponseEntity.ok(postmodelAss.toModelsharepostId(share, request));
       }
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); 
   }
@@ -207,6 +208,9 @@ public class PostController {
       comment.setUser(user);
       comment.setPost(post);
       // user.comments.add(comment);
+      userRepo.save(user);
+      postRepo.save(post);
+      
       commentRepo.save(comment);
     }
     return ResponseEntity.ok(new MessageResponse("Share created successfully!"));
