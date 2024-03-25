@@ -457,10 +457,21 @@ public class PostController {
         User user = optionalUser.get();
         User friend = optionalFriend.get();
         boolean isFriend = user.friends.contains(friend);
+
         if (isFriend) {
           List<Post> friendPosts = userRepo.findPostsByUserId(friendId);
-          
-          return ResponseEntity.ok(postmodelAss.toModelpostId(friendPosts));
+          List<EntityModel<Post>> users = postRepo.findAll().stream()
+          .map(postmodelAss::toModel)
+          .collect(Collectors.toList());
+  
+      if (users.isEmpty()) {
+        MessageResponse errorMessage = new MessageResponse("No posts found.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+      }
+      return ResponseEntity
+          .ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
+   
+       //   return ResponseEntity.ok(postmodelAss.toModelpostId(friendPosts));
         } else {
           return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
               .body("This acount is private to see posts added friend.");
@@ -472,6 +483,7 @@ public class PostController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access. sign in");
     }
   }
+  
 
   @GetMapping("/postUser/{postid}")
   public ResponseEntity<EntityModel<User>> postUser(@PathVariable Long postid) {
