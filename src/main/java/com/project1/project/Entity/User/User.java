@@ -63,6 +63,8 @@ public class User {
     
     private LocalDate dateofbirth;
 
+    private boolean accountIsPrivate=false; 
+
     private String backgroudimage;
     private boolean isfriend;
     private String password;
@@ -245,6 +247,16 @@ if(lastName!=null){
 
     public void setRole(ArrayList<Role> role) {
         this.role = role;
+    }
+
+
+    public boolean getAccountIsPrivate() {
+        return accountIsPrivate;
+    }
+
+
+    public void setAccountIsPrivate(boolean accountIsPrivate) {
+        this.accountIsPrivate = accountIsPrivate;
     }
 
    

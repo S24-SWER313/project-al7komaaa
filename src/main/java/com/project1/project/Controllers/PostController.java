@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +50,8 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/post")
 public class PostController {
+  @Autowired
+  HttpServletRequest request;
   @Autowired
   private JwtUtils jwtUtils;
 
@@ -121,7 +124,11 @@ public class PostController {
 
   @GetMapping("/posts")
   public ResponseEntity<?> findAllPost() {
-    List<EntityModel<Post>> users = postRepo.findAll().stream()
+
+        User user = userFromToken(request);
+        if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    List<EntityModel<Post>> users = postRepo.findAll().stream().filter(e->e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser()))
         .map(postmodelAss::toModel)
         .collect(Collectors.toList());
 
@@ -132,34 +139,39 @@ public class PostController {
     return ResponseEntity
         .ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
 
+
   }
 
   @PostMapping("/share/{postId}")
-  public ResponseEntity<EntityModel<Share>> sharePost(@PathVariable Long postId, HttpServletRequest request,
+  public ResponseEntity<?> sharePost(@PathVariable Long postId,
                                          @RequestBody String content) {
   
-      String jwt = parseJwt(request);
-      if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-          String username = jwtUtils.getUserNameFromJwtToken(jwt);
-          User user = userRepo.findByUsername(username)
-                  .orElseThrow(() -> new RuntimeException("User not found"));
+                                          User user = userFromToken(request);
+                                          if (user==null)
+                                  return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
           Post post = postRepo.findById(postId).orElse(null);
           if (post == null) {
               return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
           }
+          if(!post.getUser().getAccountIsPrivate()){
           Share share = new Share(content, user, post);
           shareRepo.save(share);
          // EntityModel<Share> entityModel = EntityModel.of();
-          return ResponseEntity.ok(postmodelAss.toModelsharepostId(share, request));
-      }
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); 
+          return ResponseEntity.ok(postmodelAss.toModelsharepostId(share, request));}else{
+            return ResponseEntity.badRequest().body("this post is private");
+          }
+  
   }
   
   @GetMapping("/posts/{postId}")
-  public ResponseEntity<EntityModel<Post>> findById(@PathVariable Long postId) {
+  public ResponseEntity<?> findById(@PathVariable Long postId) {
     Post post = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
-    //
+    User user = userFromToken(request);
+        if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+if(!post.getUser().getAccountIsPrivate())
     return ResponseEntity.ok(postmodelAss.toModelpostId(post));
+    return ResponseEntity.badRequest().body("this post is private");
 
   }
 
@@ -493,4 +505,76 @@ public class PostController {
 
   }
 
+
+  
+@PutMapping("/{id}/comment/edit")
+public ResponseEntity<?> editCoumment(Comment comment, HttpServletRequest request) {
+  return null;
+}
+@GetMapping("/{id}/user")
+public ResponseEntity<?> getUserPost(Comment comment, HttpServletRequest request) {
+  return null;
+}
+
+@GetMapping("/reels")
+public ResponseEntity<?> getReals(Comment comment, HttpServletRequest request) {
+  return null;
+}
+@GetMapping("/reels/{id}/friend")
+public ResponseEntity<?> getRealsFriend(Comment comment, HttpServletRequest request) {
+  return null;
+}
+@PutMapping("/{id}/editShare")
+public ResponseEntity<?> editShare(Comment comment, HttpServletRequest request) {
+  return null;
+}
+
+@PutMapping("/{id}/editPost")
+public ResponseEntity<?> editPost(Comment comment, HttpServletRequest request) {
+  return null;
+}
+
+@PutMapping("/share/{id}/createLike")
+public ResponseEntity<?> createrShareLike(Comment comment, HttpServletRequest request) {
+  return null;
+}
+@PutMapping("/share/{id}/createComment")
+public ResponseEntity<?> createShareComment(Comment comment, HttpServletRequest request) {
+  return null;
+}
+@PostMapping("/reals/create")
+public ResponseEntity<?> createReal(Comment comment, HttpServletRequest request) {
+  return null;
+}
+// @DeleteMapping
+// public ResponseEntity<?> deleteRels(Comment comment, HttpServletRequest request) {
+//   return null;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public User userFromToken(HttpServletRequest request){
+  String jwt = parseJwt(request);
+  if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+      String username = jwtUtils.getUserNameFromJwtToken(jwt);
+      User user = userRepo.findByUsername(username)
+              .orElseThrow(() -> new RuntimeException("User not found"));
+            return user;}
+  return null;
+}
 }

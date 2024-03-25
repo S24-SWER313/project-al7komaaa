@@ -5,6 +5,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.LinkBuilder;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -47,7 +48,7 @@ public class PostModelAss implements RepresentationModelAssembler<Post, EntityMo
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
              user=userRepo.findByUsername(username).get();
            }
-           if ( userHasPermissionToDeletePost(post.user.getId(),user.getId())){
+           if ( userHasPermissionToDeletePost(post.getPostId(),user.getId())){
            return EntityModel.of(post,
            linkTo(methodOn(PostController.class).postUser(post.getPostId())).withRel("the post owner"),
           linkTo(methodOn(PostController.class).getAllPostLikes(post.getPostId())).withRel("the post's like"),
@@ -121,7 +122,9 @@ private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
              user=userRepo.findByUsername(username).get();
            }
-           if (share.user.getId().equals(user.getId())){
+        if (user!=null){
+      
+        if (share.user.getId().equals(user.getId())){
            return EntityModel.of(share,
            linkTo(methodOn(PostController.class).findById(share.getPost().getPostId())).withRel("the post you shared"),
           // linkTo(methodOn(PostController.class).getAllPostLikes(share.getPostId())).withRel("the post's like"),
@@ -132,6 +135,15 @@ private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
                   //  linkTo(methodOn(PostController.class).getAllPostLikes(share.getPostId())).withRel("the post's like"),
                   //  linkTo(methodOn(PostController.class).getAllPostComments(share.getPostId(),request)).withRel("the post's comment"));
     
-       }}
+       } } return EntityModel.of(share,
+       linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to the all post"));}
+
+
+
+
+
+
+
+
 
 }
