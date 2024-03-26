@@ -81,25 +81,17 @@ public class PostController {
   List<EntityModel<Post>> l = new ArrayList<>();
 
   @PostMapping("/create")
-  public ResponseEntity<?> createPost(HttpServletRequest request, @RequestBody Post post) {
-    // @RequestHeader("Authorization") String jwt,
-    // String username = jwtUtils.extractUsername(jwt);
-    String jwt = parseJwt(request);
-    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-      String username = jwtUtils.getUserNameFromJwtToken(jwt);
-
-      User user = userRepo.findByUsername(username)
-          .orElseThrow(() -> new RuntimeException("User not found"));
-
+  public ResponseEntity<?> createPost( @RequestBody Post post) {
+     User user = userFromToken(request);
+        if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       post.setUser(user);
-
       postRepo.save(post);
-    }
-    return ResponseEntity.ok(new MessageResponse("Post Created successfully!"));
+      return ResponseEntity.ok(new MessageResponse("Post Created successfully!"));
   }
 
   @GetMapping("/{postId}/comment")
-  public ResponseEntity<?> getAllPostComments(@PathVariable Long postId, HttpServletRequest request) {
+  public ResponseEntity<?> getAllPostComments(@PathVariable Long postId) {
 
     Optional<Post> postOptional = postRepo.findById(postId);
     if (!postOptional.isPresent()) {
@@ -169,49 +161,36 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     User user = userFromToken(request);
         if (user==null)
 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-if(!post.getUser().getAccountIsPrivate())
-    return ResponseEntity.ok(postmodelAss.toModelpostId(post));
-    return ResponseEntity.badRequest().body("this post is private");
-
+if(post.getUser().getAccountIsPrivate()||!user.friends.contains(post.getUser())||!post.getUser().equals(user))
+ return ResponseEntity.badRequest().body("this post is private");
+   return ResponseEntity.ok(postmodelAss.toModelpostId(post));
   }
 
   //
   @DeleteMapping("/{postId}")
-    public ResponseEntity<?> deleteById(@PathVariable Long postId, HttpServletRequest request) {
-        String jwt = parseJwt(request);
-        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-          String username = jwtUtils.getUserNameFromJwtToken(jwt);
-        User user = userRepo.findByUsername(username)
-                            .orElseThrow(() -> new RuntimeException("User not found"));
+    public ResponseEntity<?> deleteById(@PathVariable Long postId) {
+      User user = userFromToken(request);
+          if (user==null)
+  return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
                        Optional<Post> post= postRepo.findById(postId);
                        if(!post.isPresent()){
                         return ResponseEntity.badRequest().body("post not found");}
-
         else{
           if (userHasPermissionToDeletePost(postId,user.getId())) {
           postRepo.deleteById(postId);
     return ResponseEntity.ok().body("the post is deleted successfully");
-         
-       
-        }else {
+       }else {
            return  ResponseEntity.badRequest().body("you are not owned the post");
-        }}}
-
-        return  ResponseEntity.badRequest().body("you are not auth");
-        
-    
+        }}
   }
 
   /////////////////////////////////////////////////////////////////////
   @PostMapping("/comment/{postId}/post")
-  public ResponseEntity<?> createComment(HttpServletRequest request, @RequestBody Comment comment,
+  public ResponseEntity<?> createComment( @RequestBody Comment comment,
       @PathVariable Long postId) {
-
-    String jwt = parseJwt(request);
-    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-      String username = jwtUtils.getUserNameFromJwtToken(jwt);
-      User user = userRepo.findByUsername(username)
-          .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userFromToken(request);
+        if (user==null)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       Post post = postRepo.findById(postId).orElse(null);
       if (post == null) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Post not found"));
@@ -222,20 +201,15 @@ if(!post.getUser().getAccountIsPrivate())
       // user.comments.add(comment);
       userRepo.save(user);
       postRepo.save(post);
-      
       commentRepo.save(comment);
-    }
-    return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment,request));
-
-  }
+      return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment,request));
+}
 
   @DeleteMapping("/comment/{commentId}")
-  public ResponseEntity deleteComment(@PathVariable Long commentId, HttpServletRequest request) {
-    String jwt = parseJwt(request);
-    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-      String username = jwtUtils.getUserNameFromJwtToken(jwt);
-      User user = userRepo.findByUsername(username)
-          .orElseThrow(() -> new RuntimeException("User not found"));
+  public ResponseEntity deleteComment(@PathVariable Long commentId) {
+    User user = userFromToken(request);
+        if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       // List<Comment>postComments=postRepo.postComments(postId);
       Comment comment = commentRepo.findById(commentId).get();
       User userComment = comment.getUser();
@@ -246,8 +220,7 @@ if(!post.getUser().getAccountIsPrivate())
         return ResponseEntity.ok(new MessageResponse("you are not authorized!"));
       }
       return ResponseEntity.ok(new MessageResponse("Delete successfully!"));
-    }
-    return ResponseEntity.ok(new MessageResponse("you are not authenticated!"));
+  
   }
 
   private boolean userHasPermissionToDeleteComment(Long commentId, Long userId) {
@@ -259,18 +232,11 @@ if(!post.getUser().getAccountIsPrivate())
 
   ////////////////////////////////////////////////////////////////////
   @GetMapping("/user/like")
-  public ResponseEntity<CollectionModel<EntityModel<Post>>> findByLikesContainsUser(HttpServletRequest request) {// البوستات
-                                                                                                                 // الي
-                                                                                                                 // اليوزر
-                                                                                                                 // حاط
-                                                                                                                 // لايك
-                                                                                                                 // عليهم
-    User user = null;
-    String jwt = parseJwt(request);
-    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-      String username = jwtUtils.getUserNameFromJwtToken(jwt);
-      user = userRepo.findByUsername(username)
-          .orElseThrow(() -> new RuntimeException("User not found"));
+  public ResponseEntity<CollectionModel<EntityModel<Post>>> findByLikesContainsUser() {
+                                                                                                             
+    User user = userFromToken(request);
+    if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       List<Like> likeList = likeRepo.findByUser(user);
       List<Post> likePost = likeList.stream().map(e -> e.post).collect(Collectors.toList());
       ///////////////////
@@ -284,10 +250,7 @@ if(!post.getUser().getAccountIsPrivate())
       return ResponseEntity.ok(CollectionModel.of(users,
           linkTo(methodOn(Controller.class).getUserById(user.getId())).withRel("User Profile")));
 
-    }
-
-    return ResponseEntity.ok(
-        CollectionModel.of(l, linkTo(methodOn(Controller.class).getUserById(user.getId())).withRel("User Profile")));
+     
   }
 
   // @PostMapping("/{postId}/like")
@@ -311,17 +274,10 @@ if(!post.getUser().getAccountIsPrivate())
   // }
 
   @PostMapping("/{postId}/like")
-  public ResponseEntity<?> createLikePost(@RequestBody Like like, @PathVariable Long postId,
-      HttpServletRequest request) {
-    String jwt = parseJwt(request);
-    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-      String username = jwtUtils.getUserNameFromJwtToken(jwt);
-
-      User user = userRepo.findByUsername(username).orElse(null);
-      if (user == null) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-      }
-
+  public ResponseEntity<?> createLikePost(@RequestBody Like like, @PathVariable Long postId) {
+    User user = userFromToken(request);
+    if (user==null)
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       Post post = postRepo.findById(postId).orElse(null);
       if (post == null) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
@@ -343,9 +299,7 @@ if(!post.getUser().getAccountIsPrivate())
       postRepo.save(post);
 
       return ResponseEntity.status(HttpStatus.CREATED).body(savedLike);
-    } else {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token");
-    }
+   
   }
 
   @GetMapping("/{postId}/likes")
@@ -400,45 +354,41 @@ if(!post.getUser().getAccountIsPrivate())
 
   // }
   @DeleteMapping(("/share/{shareId}"))
-  public ResponseEntity<MessageResponse> deleteShearById(@PathVariable Long shareId, HttpServletRequest request)  {
-
-    String jwt = parseJwt(request);
-    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-      String username = jwtUtils.getUserNameFromJwtToken(jwt);
-      User user = userRepo.findByUsername(username)
-          .orElseThrow(() -> new RuntimeException("User not found"));
+  public ResponseEntity<MessageResponse> deleteShearById(@PathVariable Long shareId)  {
+    User user = userFromToken(request);
+    if (user==null)
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       Share share = shareRepo.findById(shareId).get();
-      if (userHasPermissionToDeletePost(share.user.getId(), user.getId())) {
+      if (share.user.getId()==user.getId()) {
         shareRepo.deleteById(shareId);
         return ResponseEntity.ok(new MessageResponse("delete share successfully"));
       } else {
         return ResponseEntity.ok(new MessageResponse("User is not authorized to delete this post"));
       }
-    }
-    return ResponseEntity.ok(new MessageResponse("you are not authorized!"));
-
+   
   }
 
   @GetMapping("/userPosts")
-  public ResponseEntity<CollectionModel<EntityModel<Post>>> findUserPosts(HttpServletRequest request) {
-    User user = null;
-    String jwt = parseJwt(request);
-    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-      String username = jwtUtils.getUserNameFromJwtToken(jwt);
-      user = userRepo.findByUsername(username).get();
+  public ResponseEntity<?> findUserPosts() {
+    User user = userFromToken(request);
+    if (user==null)
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+  // if( !user.getAccountIsPrivate()||user.friends.contains(user)){l
       List<EntityModel<Post>> users = userRepo.findPostsByUserId(user.getId()).stream()
           .map(e -> postmodelAss.toModelpostId(e))
           .collect(Collectors.toList());
-
-      if (users.isEmpty()) {
+         if (users.isEmpty()) {
         throw new NFException(User.class);
       }
       return ResponseEntity.ok(CollectionModel.of(users,
-          linkTo(methodOn(PostController.class).findById(user.getId())).withRel("Go to Post")));
-    }
+          linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Post")));
+        // }
+          // return ResponseEntity.ok(new MessageResponse("this account is private"));
 
-    return ResponseEntity.ok(
-        CollectionModel.of(l, linkTo(methodOn(Controller.class).getUserById(user.getId())).withRel("User Profile")));
+    // }
+    // 
+    // return ResponseEntity.ok(
+    //     CollectionModel.of(l, linkTo(methodOn(Controller.class).getUserById(user.getId())).withRel("User Profile")));
   }
 
   private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
@@ -459,14 +409,12 @@ if(!post.getUser().getAccountIsPrivate())
   }
 
   @GetMapping("/FriendPosts/{friendId}")
-  public ResponseEntity<?> findFriendPosts(HttpServletRequest request, @PathVariable Long friendId) {
-    String jwt = parseJwt(request);
-    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-      String username = jwtUtils.getUserNameFromJwtToken(jwt);
-      Optional<User> optionalUser = userRepo.findByUsername(username);
+  public ResponseEntity<?> findFriendPosts( @PathVariable Long friendId) {
+           User user = userFromToken(request);
+           if (user==null)
+   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       Optional<User> optionalFriend = userRepo.findById(friendId);
-      if (optionalUser.isPresent() && optionalFriend.isPresent()) {
-        User user = optionalUser.get();
+      if (optionalFriend.isPresent()) {
         User friend = optionalFriend.get();
         boolean isFriend = user.friends.contains(friend);
 
@@ -489,16 +437,16 @@ if(!post.getUser().getAccountIsPrivate())
               .body("This acount is private to see posts added friend.");
         }
       } else {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or friend not found.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("friend not found.");
       }
-    } else {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access. sign in");
-    }
+    // } else {
+    //   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access. sign in");
+    // }
   }
   
 
   @GetMapping("/postUser/{postid}")
-  public ResponseEntity<EntityModel<User>> postUser(@PathVariable Long postid) {
+  public ResponseEntity<EntityModel<User>> postUser(@PathVariable Long postid) {//owner
     Post post = postRepo.findById(postid).get();
 
     return ResponseEntity.ok(usermodelAss.toModeluserprofile(post.user));

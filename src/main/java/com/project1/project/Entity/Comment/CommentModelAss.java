@@ -42,7 +42,7 @@ public class CommentModelAss implements RepresentationModelAssembler<Comment, En
         }
         if (comment.user.getId() == user.getId()) {
             return EntityModel.of(comment,
-                    linkTo(methodOn(PostController.class).deleteComment(comment.getCommentId(), request))
+                    linkTo(methodOn(PostController.class).deleteComment(comment.getCommentId()))
                             .withRel("delete comment"),
 
                     linkTo(methodOn(PostController.class).editCoumment(comment, request))
