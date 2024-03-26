@@ -77,10 +77,12 @@ HttpServletRequest request;
     
 
     @GetMapping("/user/{id}")
-public ResponseEntity<EntityModel<User>> getUserById(@PathVariable Long id) {
+public ResponseEntity<?> getUserById(@PathVariable Long id) {
     User user = userRepo.findById(id)
             .orElseThrow(() -> new NFException(User.class));
     EntityModel<User> entityModel = userModelAss.toModeluserprofile(user);
+    if (user.getAccountIsPrivate())
+    return ResponseEntity.ok("this account is private to see user post addFriend");
     return ResponseEntity.ok(entityModel);
 }
 
@@ -97,6 +99,7 @@ public ResponseEntity<EntityModel<User>> getUserById(@PathVariable Long id) {
         if (userList.isEmpty()) {
             throw new NFException(User.class);
         }
+        
         return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
       
     }
@@ -131,18 +134,20 @@ public ResponseEntity<CollectionModel<EntityModel<User>>>getFullName(@PathVariab
 }
        
 @GetMapping("/UserName/{name}")
-public ResponseEntity<EntityModel<User>> getUserName(@PathVariable String name ) {
+public ResponseEntity<?> getUserName(@PathVariable String name ) {
     Optional<User> user = userRepo.findByUsername(name);
     if (user.isPresent()) {
         EntityModel<User> entityModel = userModelAss.toModeluserprofile(user.get());
-    return ResponseEntity.ok(entityModel);
+        if (user.get().getAccountIsPrivate())
+        return ResponseEntity.ok("this account is private to see user post addFriend");
+       return ResponseEntity.ok(entityModel);
     
     } else {
         throw new EntityNotFoundException("User not found with username: " + name);
     }
 }
 
-
+xz
 
 @GetMapping("/UserFriend/{userid}")
 public ResponseEntity<CollectionModel<EntityModel<User>>> getUserFriend(@PathVariable Long userid ){
