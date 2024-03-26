@@ -66,18 +66,22 @@ public class User {
     private boolean accountIsPrivate=false; 
 
     private String backgroudimage;
-    private boolean isfriend;
+    // private boolean isfriend;
+    @JsonIgnore
     private String password;
     public ArrayList<Role> role;
     // role=new ArrayList<>;
     
-
+@JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<Post> posts;
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments;
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<Like> likes;
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Share> shares;
     @ManyToMany(cascade = CascadeType.ALL) @JsonIgnore
@@ -209,13 +213,13 @@ if(lastName!=null){
         this.backgroudimage = backgroudImage;
     }
 
-    public boolean isFriend() {
-        return isfriend;
-    }
+    // public boolean isFriend() {
+    //     return isfriend;
+    // }
 
-    public void setFriend(boolean isFriend) {
-        this.isfriend = isFriend;
-    }
+    // public void setFriend(boolean isFriend) {
+    //     this.isfriend = isFriend;
+    // }
 
     public String getPassword() {
         return password;

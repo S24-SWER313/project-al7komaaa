@@ -145,11 +145,11 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
           if (post == null) {
               return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
           }
-          if(!post.getUser().getAccountIsPrivate()){
+          if(!post.getUser().getAccountIsPrivate()||post.getUser().equals(user)){
           Share share = new Share(content, user, post);
           shareRepo.save(share);
          // EntityModel<Share> entityModel = EntityModel.of();
-          return ResponseEntity.ok(postmodelAss.toModelsharepostId(share, request));}else{
+          return ResponseEntity.ok(postmodelAss.toModelsharepostId(share));}else{
             return ResponseEntity.badRequest().body("this post is private");
           }
   
@@ -161,9 +161,9 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     User user = userFromToken(request);
         if (user==null)
 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-if(post.getUser().getAccountIsPrivate()||!user.friends.contains(post.getUser())||!post.getUser().equals(user))
- return ResponseEntity.badRequest().body("this post is private");
-   return ResponseEntity.ok(postmodelAss.toModelpostId(post));
+if(!post.getUser().getAccountIsPrivate()||user.friends.contains(post.getUser())||post.getUser().equals(user))
+return ResponseEntity.ok(postmodelAss.toModelpostId(post)); 
+return ResponseEntity.badRequest().body("this post is private");
   }
 
   //
@@ -372,7 +372,7 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
   public ResponseEntity<?> findUserPosts() {
     User user = userFromToken(request);
     if (user==null)
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    return ResponseEntity.ok("x");
   // if( !user.getAccountIsPrivate()||user.friends.contains(user)){l
       List<EntityModel<Post>> users = userRepo.findPostsByUserId(user.getId()).stream()
           .map(e -> postmodelAss.toModelpostId(e))
