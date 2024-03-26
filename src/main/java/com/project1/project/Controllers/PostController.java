@@ -484,15 +484,32 @@ return ResponseEntity.ok(CollectionModel.of(users,
 
 
 
-
-
-
-
-
 @GetMapping("/reels")
-public ResponseEntity<?> getReals(Comment comment, HttpServletRequest request) {
-  return null;
+public ResponseEntity<?> getReals() {
+  
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+List <Post> posts = postRepo.findAll().stream().filter(e->(e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser())))
+  // .map(postmodelAss::toModel)
+  .collect(Collectors.toList());
+  List<EntityModel<Post>> reels = posts.stream().filter(e->e.getVideo() != null).map(postmodelAss::toModel).collect(Collectors.toList());
+
+if (reels.isEmpty()) {
+MessageResponse errorMessage = new MessageResponse("No posts found.");
+return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
 }
+return ResponseEntity
+  .ok(CollectionModel.of(reels, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
+
+ 
+}
+
+
+
+
+
+
 @GetMapping("/reels/{id}/friend")
 public ResponseEntity<?> getRealsFriend(Comment comment, HttpServletRequest request) {
   return null;
