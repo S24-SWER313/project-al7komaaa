@@ -187,8 +187,7 @@ return ResponseEntity.badRequest().body("this post is private");
 
   /////////////////////////////////////////////////////////////////////
   @PostMapping("/comment/{postId}/post")
-  public ResponseEntity<?> createComment( @RequestBody Comment comment,
-      @PathVariable Long postId) {
+  public ResponseEntity<?> createComment( @RequestBody Comment comment, @PathVariable Long postId) {
         User user = userFromToken(request);
         if (user==null)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -591,16 +590,25 @@ public ResponseEntity<?> createrShareLike(@RequestBody Like like, @PathVariable 
 
 
 
-// @PutMapping("/share/{id}/createComment")
-// public ResponseEntity<?> createShareComment( @RequestBody String video) {
-//   User user = userFromToken(request);
-//   if (user==null)
-// return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-// post.setUser(user);
-// postRepo.save(post);
-// return ResponseEntity.ok(new MessageResponse("Post Created successfully!"));
-// }
-
+@PostMapping("/share/{id}/createComment")
+public ResponseEntity<?> createShareComment( @RequestBody Comment comment, @PathVariable Long id) {
+  User user = userFromToken(request);
+        if (user==null)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+      Share share = shareRepo.findById(id).orElse(null);
+      if (share == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("share not found"));
+      }
+      share.sharComments.add(comment);
+      
+      comment.setUser(user);
+      comment.setShare(share);
+      // user.comments.add(comment);
+      userRepo.save(user);
+      shareRepo.save(share);
+      commentRepo.save(comment);
+      return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment));
+}
 
 
 
