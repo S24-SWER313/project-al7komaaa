@@ -507,17 +507,31 @@ return ResponseEntity
 
 
 
+// @GetMapping("/reels/{id}/friend")
+// public ResponseEntity<?> getRealsFriend(Comment comment, HttpServletRequest request) {
+//   return null;
+// }
 
 
 
-@GetMapping("/reels/{id}/friend")
-public ResponseEntity<?> getRealsFriend(Comment comment, HttpServletRequest request) {
-  return null;
+@PutMapping("/{shareId}/editShare")
+public ResponseEntity<?> editShare(@PathVariable Long shareId, @RequestBody String editShare ) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+  Share share = shareRepo.findById(shareId).orElseThrow(() -> new RuntimeException("share not found"));
+  if(share.user==user){       
+  share.setContent(editShare);
+  shareRepo.save(share);
+
+  return ResponseEntity.ok(postmodelAss.toModelsharepostId(share));
 }
-@PutMapping("/{id}/editShare")
-public ResponseEntity<?> editShare(Comment comment, HttpServletRequest request) {
-  return null;
+return ResponseEntity.ok("you aren't the owner of this post ");
 }
+
+
+
 
 @PutMapping("/{id}/editPost")
 public ResponseEntity<?> editPost(Comment comment, HttpServletRequest request) {
