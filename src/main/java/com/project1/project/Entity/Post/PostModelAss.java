@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.LinkBuilder;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -48,7 +50,7 @@ public class PostModelAss implements RepresentationModelAssembler<Post, EntityMo
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
              user=userRepo.findByUsername(username).get();
            }
-           if ( userHasPermissionToDeletePost(post.getPostId(),user.getId())){
+           if (userHasPermissionToDeletePost(post.getPostId(),user.getId())){
            return EntityModel.of(post,
            linkTo(methodOn(PostController.class).postUser(post.getPostId())).withRel("the post owner"),
           linkTo(methodOn(PostController.class).getAllPostLikes(post.getPostId())).withRel("the post's like"),
@@ -58,8 +60,7 @@ public class PostModelAss implements RepresentationModelAssembler<Post, EntityMo
                     linkTo(methodOn(PostController.class).postUser(post.getPostId())).withRel("the post owner"),
                    linkTo(methodOn(PostController.class).getAllPostLikes(post.getPostId())).withRel("the post's like"),
                    linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId())).withRel("the post's comment"));
-    
-       }
+           }
     
           
 
@@ -115,15 +116,9 @@ private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
 
   
 
-        public EntityModel<Share> toModelsharepostId(Share share, HttpServletRequest request)  {
-             User user=null;
-          String jwt = parseJwt(request);
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String username = jwtUtils.getUserNameFromJwtToken(jwt);
-             user=userRepo.findByUsername(username).get();
-           }
-        if (user!=null){
-      
+        public EntityModel<Share> toModelsharepostId(Share share)  {
+             User user = userFromToken(request);
+    if (user!=null){   
         if (share.user.getId().equals(user.getId())){
            return EntityModel.of(share,
            linkTo(methodOn(PostController.class).findById(share.getPost().getPostId())).withRel("the post you shared"),
@@ -139,11 +134,19 @@ private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
        linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to the all post"));}
 
 
-
-
+public User userFromToken(HttpServletRequest request){
+  String jwt = parseJwt(request);
+  if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+      String username = jwtUtils.getUserNameFromJwtToken(jwt);
+      User user = userRepo.findByUsername(username)
+              .orElseThrow(() -> new RuntimeException("User not found"));
+            return user;}
+  return null;
+}
 
 
 
 
 
 }
+

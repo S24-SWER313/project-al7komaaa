@@ -81,8 +81,8 @@ public ResponseEntity<?> getUserById(@PathVariable Long id) {
     User user = userRepo.findById(id)
             .orElseThrow(() -> new NFException(User.class));
     EntityModel<User> entityModel = userModelAss.toModeluserprofile(user);
-    if (user.getAccountIsPrivate())
-    return ResponseEntity.ok("this account is private to see user post addFriend");
+    // if (user.getAccountIsPrivate())
+    // return ResponseEntity.ok("this account is private to see user post addFriend");
     return ResponseEntity.ok(entityModel);
 }
 
@@ -138,8 +138,8 @@ public ResponseEntity<?> getUserName(@PathVariable String name ) {
     Optional<User> user = userRepo.findByUsername(name);
     if (user.isPresent()) {
         EntityModel<User> entityModel = userModelAss.toModeluserprofile(user.get());
-        if (user.get().getAccountIsPrivate())
-        return ResponseEntity.ok("this account is private to see user post addFriend");
+        // if (user.get().getAccountIsPrivate())
+        // return ResponseEntity.ok("this account is private to see user post addFriend");
        return ResponseEntity.ok(entityModel);
     
     } else {
@@ -180,8 +180,8 @@ public ResponseEntity<String> addFriend(HttpServletRequest request, @PathVariabl
         boolean alreadyExistss = friend.friends.contains(user);
         // If the friend doesn't already exist, add them to the user's friends list
         if (!alreadyExists && !alreadyExistss ) {
-            friend.setFriend(true);
-            user.setFriend(true);
+            // friend.setFriend(true);
+            // user.setFriend(true);
             user.friends.add(friend);
             friend.friends.add(user);
             userRepo.save(friend);
@@ -212,8 +212,8 @@ public ResponseEntity<String> deleteUserFriend(@PathVariable Long userid, HttpSe
         boolean alreadyExistss = friend.friends.contains(user);
 
         if (alreadyExists && alreadyExistss) {
-            friend.setFriend(false);
-            user.setFriend(false);
+            // friend.setFriend(false);
+            // user.setFriend(false);
             user.friends.remove(friend);
             friend.friends.remove(user);
             userRepo.save(friend);
