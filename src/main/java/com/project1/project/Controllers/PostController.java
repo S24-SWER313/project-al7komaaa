@@ -16,6 +16,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -102,7 +103,7 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     List<Comment> comments = postOptional.get().postComments;
 
     List<EntityModel<Comment>> commentModels = comments.stream()
-        .map(com -> commentmodelAss.commentDelEdit(com, request))
+        .map(com -> commentmodelAss.commentDelEdit(com))
         .collect(Collectors.toList());
 
     if (comments.isEmpty()) {
@@ -186,8 +187,7 @@ return ResponseEntity.badRequest().body("this post is private");
 
   /////////////////////////////////////////////////////////////////////
   @PostMapping("/comment/{postId}/post")
-  public ResponseEntity<?> createComment( @RequestBody Comment comment,
-      @PathVariable Long postId) {
+  public ResponseEntity<?> createComment( @RequestBody Comment comment, @PathVariable Long postId) {
         User user = userFromToken(request);
         if (user==null)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -202,7 +202,7 @@ return ResponseEntity.badRequest().body("this post is private");
       userRepo.save(user);
       postRepo.save(post);
       commentRepo.save(comment);
-      return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment,request));
+      return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment));
 }
 
   @DeleteMapping("/comment/{commentId}")
@@ -368,11 +368,11 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
    
   }
 
-  @GetMapping("/userPosts")
-  public ResponseEntity<?> findUserPosts() {
+  @GetMapping("/myPosts")
+  public ResponseEntity<?> findyPosts() {
     User user = userFromToken(request);
     if (user==null)
-    return ResponseEntity.ok("x");
+    return ResponseEntity.ok("Post not found");
   // if( !user.getAccountIsPrivate()||user.friends.contains(user)){l
       List<EntityModel<Post>> users = userRepo.findPostsByUserId(user.getId()).stream()
           .map(e -> postmodelAss.toModelpostId(e))
@@ -455,44 +455,177 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
 
   
-@PutMapping("/{id}/comment/edit")
-public ResponseEntity<?> editCoumment(Comment comment, HttpServletRequest request) {
-  return null;
+@PutMapping("/{commentId}/comment/edit")
+public ResponseEntity<?> editCoumment(@PathVariable Long commentId, @RequestBody String newContent) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+Comment comment =commentRepo.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
+if(user==comment.getUser()){
+comment.setContent(newContent);
+commentRepo.save(comment);
+
+  return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment));
 }
+return ResponseEntity.ok("you aren't the owner of this comment ");
+}
+
+
 @GetMapping("/{id}/user")
-public ResponseEntity<?> getUserPost(Comment comment, HttpServletRequest request) {
-  return null;
+public ResponseEntity<?> getUserPost(@PathVariable Long id) {
+  User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("user not found"));
+  List<Post> userPost =user.posts;
+
+  List<EntityModel<Post>> users = userPost.stream()
+  .map(e -> postmodelAss.toModelpostId(e))
+  .collect(Collectors.toList());
+ if (users.isEmpty()) {
+throw new NFException(User.class);
 }
+return ResponseEntity.ok(CollectionModel.of(users,
+  linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Post")));}
+
+
 
 @GetMapping("/reels")
-public ResponseEntity<?> getReals(Comment comment, HttpServletRequest request) {
-  return null;
+public ResponseEntity<?> getReals() {
+  
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+List <Post> posts = postRepo.findAll().stream().filter(e->(e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser())))
+  // .map(postmodelAss::toModel)
+  .collect(Collectors.toList());
+  List<EntityModel<Post>> reels = posts.stream().filter(e->e.getVideo() != null).map(postmodelAss::toModel).collect(Collectors.toList());
+
+if (reels.isEmpty()) {
+MessageResponse errorMessage = new MessageResponse("No posts found.");
+return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
 }
-@GetMapping("/reels/{id}/friend")
-public ResponseEntity<?> getRealsFriend(Comment comment, HttpServletRequest request) {
-  return null;
+return ResponseEntity
+  .ok(CollectionModel.of(reels, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
+
+ 
 }
-@PutMapping("/{id}/editShare")
-public ResponseEntity<?> editShare(Comment comment, HttpServletRequest request) {
-  return null;
+
+
+
+// @GetMapping("/reels/{id}/friend")
+// public ResponseEntity<?> getRealsFriend(Comment comment, HttpServletRequest request) {
+//   return null;
+// }
+
+
+
+@PutMapping("/{shareId}/editShare")
+public ResponseEntity<?> editShare(@PathVariable Long shareId, @RequestBody String editShare ) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+  Share share = shareRepo.findById(shareId).orElseThrow(() -> new RuntimeException("share not found"));
+  if(share.user==user){       
+  share.setContent(editShare);
+  shareRepo.save(share);
+
+  return ResponseEntity.ok(postmodelAss.toModelsharepostId(share));
 }
+return ResponseEntity.ok("you aren't the owner of this post ");
+}
+
+
+
 
 @PutMapping("/{id}/editPost")
-public ResponseEntity<?> editPost(Comment comment, HttpServletRequest request) {
-  return null;
+public ResponseEntity<?> editPost(@RequestBody Post newpost ,@PathVariable Long id) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+  Post oldpost = postRepo.findById(id).orElseThrow(() -> new RuntimeException("post not found"));
+
+  if(oldpost.user==user){       
+  oldpost.setContent(newpost.getContent());
+oldpost.setImage(newpost.getImage());
+oldpost.setVideo(newpost.getVideo());
+  postRepo.save(oldpost);
+
+  return ResponseEntity.ok(postmodelAss.toModelpostId(oldpost));
+}
+return ResponseEntity.ok("you aren't the owner of this post ");
 }
 
-@PutMapping("/share/{id}/createLike")
-public ResponseEntity<?> createrShareLike(Comment comment, HttpServletRequest request) {
-  return null;
+
+@PostMapping("/share/{shareId}/createLike")
+public ResponseEntity<?> createrShareLike(@RequestBody Like like, @PathVariable Long shareId) {
+  User user = userFromToken(request);
+    if (user==null)
+       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+       Share share = shareRepo.findById(shareId).orElse(null);
+      if (share == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PostShare not found");
+      }
+
+      like.setUser(user);
+      like.setShare(share);
+
+      if (share.like.stream().anyMatch(l -> l.user.getId().equals(user.getId()))) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User has already liked the postShare");
+      }
+
+      Like savedLike = likeRepo.save(like);
+      userRepo.save(user);
+      shareRepo.save(share);
+      likeRepo.save(like);
+       user.likes.add(like);
+       share.like.add(like);
+
+      
+
+      return ResponseEntity.status(HttpStatus.CREATED).body(like);
 }
-@PutMapping("/share/{id}/createComment")
-public ResponseEntity<?> createShareComment(Comment comment, HttpServletRequest request) {
-  return null;
+
+
+
+
+
+
+@PostMapping("/share/{id}/createComment")
+public ResponseEntity<?> createShareComment( @RequestBody Comment comment, @PathVariable Long id) {
+  User user = userFromToken(request);
+        if (user==null)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+      Share share = shareRepo.findById(id).orElse(null);
+      if (share == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("share not found"));
+      }
+      share.sharComments.add(comment);
+      
+      comment.setUser(user);
+      comment.setShare(share);
+      // user.comments.add(comment);
+      userRepo.save(user);
+      shareRepo.save(share);
+      commentRepo.save(comment);
+      return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment));
 }
+
+
+
+
 @PostMapping("/reals/create")
-public ResponseEntity<?> createReal(Comment comment, HttpServletRequest request) {
-  return null;
+public ResponseEntity<?> createReal(@RequestBody Post post) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+//Post post = new Post(video);
+if(post.getVideo()!= null){
+post.setUser(user);
+postRepo.save(post);
+return ResponseEntity.ok(new MessageResponse("Reel Created successfully!"));
+}
+return ResponseEntity.ok(new MessageResponse("must be video and content"));
 }
 // @DeleteMapping
 // public ResponseEntity<?> deleteRels(Comment comment, HttpServletRequest request) {

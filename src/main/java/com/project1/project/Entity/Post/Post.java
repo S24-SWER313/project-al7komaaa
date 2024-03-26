@@ -25,8 +25,10 @@ private String content;
   @ManyToOne 
     @JoinColumn(name = "user_id")
     public User user;
+    
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     public List<Comment> postComments;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL) //t8ayarat
     public List<Like> like;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
@@ -52,7 +54,10 @@ private String content;
      
 
     }
-
+    public Post(String content, String video) {
+        this.content = content;
+        this.video = video;
+    }
 
     public Long getPostId() {
         return postId;

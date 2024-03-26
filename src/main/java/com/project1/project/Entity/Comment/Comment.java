@@ -4,6 +4,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project1.project.Entity.Like.Like;
 import com.project1.project.Entity.Post.Post;
+import com.project1.project.Entity.Share.Share;
 import com.project1.project.Entity.User.User;
 
 import jakarta.persistence.*;
@@ -28,7 +29,9 @@ public class Comment {
     @ManyToOne 
     @JoinColumn(name = "post_id")
     private Post post;
-    
+    @JsonIgnore
+    @ManyToOne 
+    @JoinColumn(name = "share_id") Share share;
     
     public Comment() {
         
@@ -82,5 +85,13 @@ public class Comment {
     }
     public void setVideo(String video) {
         this.video = video;
+    }
+
+    public Share getShare() {
+        return share;
+    }
+
+    public void setShare(Share share) {
+        this.share = share;
     }
 }
