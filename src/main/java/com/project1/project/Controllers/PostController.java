@@ -102,7 +102,7 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     List<Comment> comments = postOptional.get().postComments;
 
     List<EntityModel<Comment>> commentModels = comments.stream()
-        .map(com -> commentmodelAss.commentDelEdit(com, request))
+        .map(com -> commentmodelAss.commentDelEdit(com))
         .collect(Collectors.toList());
 
     if (comments.isEmpty()) {
@@ -202,7 +202,7 @@ return ResponseEntity.badRequest().body("this post is private");
       userRepo.save(user);
       postRepo.save(post);
       commentRepo.save(comment);
-      return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment,request));
+      return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment));
 }
 
   @DeleteMapping("/comment/{commentId}")
@@ -455,10 +455,24 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
 
   
-@PutMapping("/{id}/comment/edit")
-public ResponseEntity<?> editCoumment(Comment comment, HttpServletRequest request) {
-  return null;
+@PutMapping("/{commentId}/comment/edit")
+public ResponseEntity<?> editCoumment(@PathVariable Long commentId, @RequestBody String newContent) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+Comment comment =commentRepo.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
+comment.setContent(newContent);
+commentRepo.save(comment);
+
+  return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment));
 }
+
+
+
+
+
+
+
 @GetMapping("/{id}/user")
 public ResponseEntity<?> getUserPost(Comment comment, HttpServletRequest request) {
   return null;
