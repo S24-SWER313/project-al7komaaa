@@ -368,11 +368,11 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
    
   }
 
-  @GetMapping("/userPosts")
-  public ResponseEntity<?> findUserPosts() {
+  @GetMapping("/myPosts")
+  public ResponseEntity<?> findyPosts() {
     User user = userFromToken(request);
     if (user==null)
-    return ResponseEntity.ok("x");
+    return ResponseEntity.ok("Post not found");
   // if( !user.getAccountIsPrivate()||user.friends.contains(user)){l
       List<EntityModel<Post>> users = userRepo.findPostsByUserId(user.getId()).stream()
           .map(e -> postmodelAss.toModelpostId(e))
@@ -468,15 +468,26 @@ commentRepo.save(comment);
 }
 
 
-
-
-
-
-
 @GetMapping("/{id}/user")
-public ResponseEntity<?> getUserPost(Comment comment, HttpServletRequest request) {
-  return null;
+public ResponseEntity<?> getUserPost(@PathVariable Long id) {
+  User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("user not found"));
+  List<Post> userPost =user.posts;
+
+  List<EntityModel<Post>> users = userPost.stream()
+  .map(e -> postmodelAss.toModelpostId(e))
+  .collect(Collectors.toList());
+ if (users.isEmpty()) {
+throw new NFException(User.class);
 }
+return ResponseEntity.ok(CollectionModel.of(users,
+  linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Post")));}
+
+
+
+
+
+
+
 
 @GetMapping("/reels")
 public ResponseEntity<?> getReals(Comment comment, HttpServletRequest request) {
