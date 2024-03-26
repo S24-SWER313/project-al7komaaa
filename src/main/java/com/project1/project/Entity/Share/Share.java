@@ -1,5 +1,8 @@
 package com.project1.project.Entity.Share;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project1.project.Entity.Like.Like;
 import com.project1.project.Entity.Post.Post;
 import com.project1.project.Entity.User.User;
 import jakarta.persistence.*;
@@ -21,6 +24,10 @@ public class Share {
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
+    
+    @OneToMany(mappedBy = "share", cascade = CascadeType.ALL) //t8ayarat
+    public List<Like> like;
+    
     public Share() {
     }
 

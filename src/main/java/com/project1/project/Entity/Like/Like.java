@@ -2,6 +2,7 @@ package com.project1.project.Entity.Like;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project1.project.Entity.Comment.Comment;
 import com.project1.project.Entity.Post.Post;
+import com.project1.project.Entity.Share.Share;
 import com.project1.project.Entity.User.User;
 
 import jakarta.persistence.*;
@@ -24,7 +25,17 @@ public class Like {
     @ManyToOne
     @JoinColumn(name = "user_id")
     public User user;
+    @ManyToOne 
+    @JoinColumn(name = "share_id")
+    public Share share;
 
+
+    public Share getShare() {
+      return share;
+    }
+    public void setShare(Share share) {
+      this.share = share;
+    }
     public Like( likeType type) {
       
       this.type = type;
@@ -33,7 +44,7 @@ public class Like {
     public Like() {
     }
 
-    public Like( likeType type, Post post, Comment comment, User user) {
+    public Like( likeType type, Post post, Comment comment, User user ) {
      
       this.type = type;
       this.post = post;

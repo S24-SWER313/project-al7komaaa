@@ -557,10 +557,38 @@ return ResponseEntity.ok("you aren't the owner of this post ");
 }
 
 
-@PutMapping("/share/{id}/createLike")
-public ResponseEntity<?> createrShareLike(Comment comment, HttpServletRequest request) {
-  return null;
+@PostMapping("/share/{shareId}/createLike")
+public ResponseEntity<?> createrShareLike(@RequestBody Like like, @PathVariable Long shareId) {
+  User user = userFromToken(request);
+    if (user==null)
+       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+       Share share = shareRepo.findById(shareId).orElse(null);
+      if (share == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PostShare not found");
+      }
+
+      like.setUser(user);
+      like.setShare(share);
+
+      if (share.like.stream().anyMatch(l -> l.user.getId().equals(user.getId()))) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User has already liked the postShare");
+      }
+
+      Like savedLike = likeRepo.save(like);
+      userRepo.save(user);
+      shareRepo.save(share);
+      likeRepo.save(like);
+       user.likes.add(like);
+       share.like.add(like);
+
+      
+
+      return ResponseEntity.status(HttpStatus.CREATED).body(like);
 }
+
+
+
+
 
 
 @PutMapping("/share/{id}/createComment")
