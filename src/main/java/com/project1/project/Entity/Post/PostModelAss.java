@@ -35,7 +35,7 @@ public class PostModelAss implements RepresentationModelAssembler<Post, EntityMo
        return EntityModel.of(post,
                 linkTo(methodOn(PostController.class).postUser(post.getPostId())).withRel("the post owner"),
                linkTo(methodOn(PostController.class).getAllPostLikes(post.getPostId())).withRel("the post's like"),
-               linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId(),request)).withRel("the post's comment"));
+               linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId())).withRel("the post's comment"));
 
 
     }
@@ -52,12 +52,12 @@ public class PostModelAss implements RepresentationModelAssembler<Post, EntityMo
            return EntityModel.of(post,
            linkTo(methodOn(PostController.class).postUser(post.getPostId())).withRel("the post owner"),
           linkTo(methodOn(PostController.class).getAllPostLikes(post.getPostId())).withRel("the post's like"),
-          linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId(),request)).withRel("the post's comment"),
-          linkTo(methodOn(PostController.class).deleteById(post.getPostId(),request)).withRel("delete your post"));
+          linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId())).withRel("the post's comment"),
+          linkTo(methodOn(PostController.class).deleteById(post.getPostId())).withRel("delete your post"));
         }else{    return EntityModel.of(post,
                     linkTo(methodOn(PostController.class).postUser(post.getPostId())).withRel("the post owner"),
                    linkTo(methodOn(PostController.class).getAllPostLikes(post.getPostId())).withRel("the post's like"),
-                   linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId(),request)).withRel("the post's comment"));
+                   linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId())).withRel("the post's comment"));
     
        }
     
@@ -79,11 +79,11 @@ public class PostModelAss implements RepresentationModelAssembler<Post, EntityMo
              return EntityModel.of(like,
              linkTo(methodOn(PostController.class).findById(post.getPostId())).withRel("the post "),
            // linkTo(methodOn(PostController.class).getAllPostLikes(like.getPostId())).withRel("the post's like"),
-            linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId(),request)).withRel("the post's comment"),
+            linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId())).withRel("the post's comment"),
             linkTo(methodOn(PostController.class).UnCreatelikePost(like.getLikeId())).withRel("delete your like"));
           }else{    return EntityModel.of(like,
             linkTo(methodOn(PostController.class).findById(post.getPostId())).withRel("the post "),
-            linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId(),request)).withRel("the post's comment"));   
+            linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId())).withRel("the post's comment"));   
          }
       
                } return null;   
@@ -129,7 +129,7 @@ private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
            linkTo(methodOn(PostController.class).findById(share.getPost().getPostId())).withRel("the post you shared"),
           // linkTo(methodOn(PostController.class).getAllPostLikes(share.getPostId())).withRel("the post's like"),
           // linkTo(methodOn(PostController.class).getAllPostComments(share.getPostId(),request)).withRel("the post's comment"),
-          linkTo(methodOn(PostController.class).deleteShearById(share.getShareId(),request)).withRel("delete your share post"));
+          linkTo(methodOn(PostController.class).deleteShearById(share.getShareId())).withRel("delete your share post"));
         }else{    return EntityModel.of(share,
                     linkTo(methodOn(PostController.class).findById(share.getPost().getPostId())).withRel("the post you shared"));
                   //  linkTo(methodOn(PostController.class).getAllPostLikes(share.getPostId())).withRel("the post's like"),

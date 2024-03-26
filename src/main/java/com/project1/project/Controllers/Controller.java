@@ -147,7 +147,7 @@ public ResponseEntity<?> getUserName(@PathVariable String name ) {
     }
 }
 
-xz
+
 
 @GetMapping("/UserFriend/{userid}")
 public ResponseEntity<CollectionModel<EntityModel<User>>> getUserFriend(@PathVariable Long userid ){
@@ -160,7 +160,6 @@ public ResponseEntity<CollectionModel<EntityModel<User>>> getUserFriend(@PathVar
 return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(Controller.class).getUserById(userid)).withRel("Go to all Posts")));
 
 }
-
 
 
 

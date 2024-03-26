@@ -161,10 +161,9 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     User user = userFromToken(request);
         if (user==null)
 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-if(!post.getUser().getAccountIsPrivate())
-    return ResponseEntity.ok(postmodelAss.toModelpostId(post));
-    return ResponseEntity.badRequest().body("this post is private");
-
+if(post.getUser().getAccountIsPrivate()||!user.friends.contains(post.getUser())||!post.getUser().equals(user))
+ return ResponseEntity.badRequest().body("this post is private");
+   return ResponseEntity.ok(postmodelAss.toModelpostId(post));
   }
 
   //
@@ -374,7 +373,7 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     User user = userFromToken(request);
     if (user==null)
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-  if( !user.getAccountIsPrivate()){
+  // if( !user.getAccountIsPrivate()||user.friends.contains(user)){l
       List<EntityModel<Post>> users = userRepo.findPostsByUserId(user.getId()).stream()
           .map(e -> postmodelAss.toModelpostId(e))
           .collect(Collectors.toList());
@@ -382,8 +381,9 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         throw new NFException(User.class);
       }
       return ResponseEntity.ok(CollectionModel.of(users,
-          linkTo(methodOn(PostController.class).findById(user.getId())).withRel("Go to Post")));}
-          return ResponseEntity.ok(new MessageResponse("this account is private"));
+          linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Post")));
+        // }
+          // return ResponseEntity.ok(new MessageResponse("this account is private"));
 
     // }
     // 
