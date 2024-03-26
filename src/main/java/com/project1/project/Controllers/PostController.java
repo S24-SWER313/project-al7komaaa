@@ -16,6 +16,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -461,10 +462,13 @@ public ResponseEntity<?> editCoumment(@PathVariable Long commentId, @RequestBody
   if (user==null)
 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 Comment comment =commentRepo.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
+if(user==comment.getUser()){
 comment.setContent(newContent);
 commentRepo.save(comment);
 
   return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment));
+}
+return ResponseEntity.ok("you aren't the owner of this comment ");
 }
 
 
@@ -534,18 +538,37 @@ return ResponseEntity.ok("you aren't the owner of this post ");
 
 
 @PutMapping("/{id}/editPost")
-public ResponseEntity<?> editPost(Comment comment, HttpServletRequest request) {
-  return null;
+public ResponseEntity<?> editPost(@RequestBody Post newpost ,@PathVariable Long id) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+  Post oldpost = postRepo.findById(id).orElseThrow(() -> new RuntimeException("post not found"));
+
+  if(oldpost.user==user){       
+  oldpost.setContent(newpost.getContent());
+oldpost.setImage(newpost.getImage());
+oldpost.setVideo(newpost.getVideo());
+  postRepo.save(oldpost);
+
+  return ResponseEntity.ok(postmodelAss.toModelpostId(oldpost));
 }
+return ResponseEntity.ok("you aren't the owner of this post ");
+}
+
 
 @PutMapping("/share/{id}/createLike")
 public ResponseEntity<?> createrShareLike(Comment comment, HttpServletRequest request) {
   return null;
 }
+
+
 @PutMapping("/share/{id}/createComment")
 public ResponseEntity<?> createShareComment(Comment comment, HttpServletRequest request) {
   return null;
 }
+
+
 @PostMapping("/reals/create")
 public ResponseEntity<?> createReal(Comment comment, HttpServletRequest request) {
   return null;
