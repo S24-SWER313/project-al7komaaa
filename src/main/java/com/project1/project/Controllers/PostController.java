@@ -591,15 +591,33 @@ public ResponseEntity<?> createrShareLike(@RequestBody Like like, @PathVariable 
 
 
 
-@PutMapping("/share/{id}/createComment")
-public ResponseEntity<?> createShareComment(Comment comment, HttpServletRequest request) {
-  return null;
-}
+// @PutMapping("/share/{id}/createComment")
+// public ResponseEntity<?> createShareComment( @RequestBody String video) {
+//   User user = userFromToken(request);
+//   if (user==null)
+// return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+// post.setUser(user);
+// postRepo.save(post);
+// return ResponseEntity.ok(new MessageResponse("Post Created successfully!"));
+// }
+
+
+
 
 
 @PostMapping("/reals/create")
-public ResponseEntity<?> createReal(Comment comment, HttpServletRequest request) {
-  return null;
+public ResponseEntity<?> createReal(@RequestBody Post post) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+//Post post = new Post(video);
+if(post.getVideo()!= null){
+post.setUser(user);
+postRepo.save(post);
+return ResponseEntity.ok(new MessageResponse("Reel Created successfully!"));
+}
+return ResponseEntity.ok(new MessageResponse("must be video and content"));
 }
 // @DeleteMapping
 // public ResponseEntity<?> deleteRels(Comment comment, HttpServletRequest request) {

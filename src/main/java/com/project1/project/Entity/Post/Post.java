@@ -52,7 +52,10 @@ private String content;
      
 
     }
-
+    public Post(String content, String video) {
+        this.content = content;
+        this.video = video;
+    }
 
     public Long getPostId() {
         return postId;
