@@ -25,7 +25,8 @@ public class Like {
     @ManyToOne
     @JoinColumn(name = "user_id")
     public User user;
-    @ManyToOne 
+    @JsonIgnore
+    @ManyToOne  
     @JoinColumn(name = "share_id")
     public Share share;
 

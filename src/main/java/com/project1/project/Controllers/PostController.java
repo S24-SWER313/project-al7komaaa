@@ -84,7 +84,7 @@ public class PostController {
   @PostMapping("/create")
   public ResponseEntity<?> createPost( @RequestBody Post post) {
      User user = userFromToken(request);
-        if (user==null)
+        if (user==null||post==null)
 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       post.setUser(user);
       postRepo.save(post);
@@ -144,7 +144,7 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
                                   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
           Post post = postRepo.findById(postId).orElse(null);
           if (post == null) {
-              return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+              return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
           }
           if(!post.getUser().getAccountIsPrivate()||post.getUser().equals(user)){
           Share share = new Share(content, user, post);
