@@ -1,6 +1,7 @@
 package com.project1.project.Controllers;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +33,7 @@ import com.project1.project.Entity.Post.Post;
 import com.project1.project.Entity.Post.PostRepo;
 import com.project1.project.Entity.Share.Share;
 import com.project1.project.Entity.Share.ShareRepo;
+import com.project1.project.Entity.User.Gender;
 import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserModelAss;
 import com.project1.project.Entity.User.UserRepo;
@@ -261,4 +263,144 @@ userRepo.save(user);
     return null;
 }
 
+
+  
+@PutMapping("/editFirstName")
+public ResponseEntity<?> editFirstName(@RequestBody String newfirstName) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+user.setFirstname(newfirstName);
+userRepo.save(user);
+  return ResponseEntity.ok("firstName changed to" +user.getFirstname());
 }
+@PutMapping("/editLastName")
+public ResponseEntity<?> editLastName(@RequestBody String newlastName) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+user.setLastname(newlastName);
+userRepo.save(user);
+  return ResponseEntity.ok("lastName changed to" +user.getLastname());
+}
+
+@PutMapping("/editMobile")
+public ResponseEntity<?> editMobile(@RequestBody String mobile) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+user.setMobile(mobile);
+userRepo.save(user);
+  return ResponseEntity.ok("Mobile changed to" +user.getMobile());
+}
+
+@PutMapping("/editEmail")
+public ResponseEntity<?> editEmail(@RequestBody String email) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+user.setEmail(email);
+userRepo.save(user);
+  return ResponseEntity.ok("Email changed to" +user.getEmail());
+}
+
+
+@PutMapping("/editUsername")
+public ResponseEntity<?> editUsername(@RequestBody String username) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+user.setUsername(username);
+userRepo.save(user);
+  return ResponseEntity.ok("Username changed to" +user.getUsername());
+}
+
+
+@PutMapping("/editGender")
+public ResponseEntity<?> editGender(@RequestBody Gender gender) { //
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+user.setGender(gender);
+userRepo.save(user);
+  return ResponseEntity.ok("Gender changed to" +user.getGender());
+}
+
+
+@PutMapping("/editBio")
+public ResponseEntity<?> editBio(@RequestBody String bio) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+user.setBio(bio);
+userRepo.save(user);
+  return ResponseEntity.ok("Bio changed to" +user.getBio());
+}
+
+
+
+@PutMapping("/editLocation")
+public ResponseEntity<?> editLocation(@RequestBody String location) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+user.setLocation(location);
+userRepo.save(user);
+  return ResponseEntity.ok("Location changed to" +user.getLocation());
+}
+
+
+@PutMapping("/editImage")
+public ResponseEntity<?> editImage(@RequestBody String image) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+user.setImage(image);
+userRepo.save(user);
+  return ResponseEntity.ok("Image changed to" +user.getImage());
+}
+
+
+@PutMapping("/editDof")
+public ResponseEntity<?> editDof(@RequestBody LocalDate dateofbirth) {//
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+user.setDateofbirth(dateofbirth);
+userRepo.save(user);
+  return ResponseEntity.ok("Date of birth changed to" +user.getDateofbirth());
+}
+
+
+@PutMapping("/editBackgroundImage")
+public ResponseEntity<?> editBackgroundImage(@RequestBody String backgroudimage) {
+  User user = userFromToken(request);
+  if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+user.setBackgroudimage(backgroudimage);
+userRepo.save(user);
+  return ResponseEntity.ok("Date of birth changed to" +user.getBackgroudimage());
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
