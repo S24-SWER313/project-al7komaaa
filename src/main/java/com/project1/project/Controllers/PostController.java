@@ -566,23 +566,24 @@ public ResponseEntity<?> createrShareLike(@RequestBody Like like, @PathVariable 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PostShare not found");
       }
 
-      like.setUser(user);
-      like.setShare(share);
 
       if (share.like.stream().anyMatch(l -> l.user.getId().equals(user.getId()))) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User has already liked the postShare");
       }
-
-      Like savedLike = likeRepo.save(like);
-      userRepo.save(user);
-      shareRepo.save(share);
-      likeRepo.save(like);
+else{
+   
+ 
+      like.setUser(user);
+      like.setShare(share);
        user.likes.add(like);
-       share.like.add(like);
-
+       share.like.add(like);  }
+      // userRepo.save(user);
+      // shareRepo.save(share);
+    
+       likeRepo.save(like);
       
 
-      return ResponseEntity.status(HttpStatus.CREATED).body(like);
+      return ResponseEntity.ok(like);
 }
 
 
