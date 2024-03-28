@@ -195,6 +195,16 @@ void testeditFirstName() throws Exception{
 
 
 
+@Test
+void testeditLastName() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editLastName")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("NASSIF")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("lastName changed toNASSIF"));
+}
 
 
 
