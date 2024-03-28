@@ -233,20 +233,27 @@ void testeditEmail() throws Exception{
     .andExpect(content().string("Email changed toM.M@gmail.com"));
 }
 
-
 @Test
-void testeditGender() throws Exception{
-    // assertEquals(testAuthenticateUser(), "");
+void testEditGender() throws Exception {
     mockMvc.perform(put("/editGender")
-    .header("Authorization", "Bearer " + testAuthenticateUser())
-    .contentType(MediaType.APPLICATION_JSON)
-    .content("FEMALE")) 
-    .andExpect(status().isOk())
-    .andExpect(content().string("Gender changed toFEMALE"));
+            .header("Authorization", "Bearer " + testAuthenticateUser())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("\"FEMALE\""))
+            .andExpect(status().isOk())
+            .andExpect(content().string("Gender changed toFEMALE"));
 }
 
 
-
+@Test
+void testeditBio() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editBio")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("bbbbb")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Bio changed tobbbbb"));
+}
 
 
 
