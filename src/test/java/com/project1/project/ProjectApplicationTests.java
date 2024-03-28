@@ -269,4 +269,16 @@ void testeditLocation() throws Exception{
 
 
 
+@Test
+void testeditImage() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editImage")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("www.p.com")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Image changed towww.p.com"));
+}
+
+
 }
