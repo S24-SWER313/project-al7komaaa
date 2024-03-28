@@ -7,7 +7,7 @@ public class NFException extends RuntimeException {
    public NFException(Class<?> clazz) {
         super("Resource of type " + clazz.getSimpleName() + " not found");
     }
-    // public NFException(String message){
-    //     super(message);
-    // }
+    public NFException(String message){
+        super(message);
+    }
 }
