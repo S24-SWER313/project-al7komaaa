@@ -281,4 +281,18 @@ void testeditImage() throws Exception{
 }
 
 
+@Test
+void testeditDof() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editDof")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("\"2003-05-31\"")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Date of birth changed to2003-05-31"));
+}
+
+
+
+
 }
