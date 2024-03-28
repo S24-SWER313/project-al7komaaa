@@ -294,5 +294,17 @@ void testeditDof() throws Exception{
 
 
 
+@Test
+void testeditBackgroundImage() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editBackgroundImage")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("www.e.com")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Background Image changed towww.e.com"));
+}
+
+
 
 }

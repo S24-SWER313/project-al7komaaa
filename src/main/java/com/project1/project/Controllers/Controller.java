@@ -379,7 +379,7 @@ public ResponseEntity<?> editBackgroundImage(@RequestBody String backgroudimage)
 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 user.setBackgroudimage(backgroudimage);
 userRepo.save(user);
-  return ResponseEntity.ok("Date of birth changed to" +user.getBackgroudimage());
+  return ResponseEntity.ok("Background Image changed to" +user.getBackgroudimage());
 }
 
 
