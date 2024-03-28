@@ -157,8 +157,11 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
   }
   
   @GetMapping("/posts/{postId}")
-  public ResponseEntity<?> findById(@PathVariable Long postId) {
-    Post post = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+  public ResponseEntity<?> findById(@PathVariable Long postId)  {
+Post post = postRepo.findById(postId).get()               ;
+if(post==null)
+throw new NFException("Post not found with id: " + postId);
+
     User user = userFromToken(request);
         if (user==null)
 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -583,7 +586,7 @@ else{
        likeRepo.save(like);
       
 
-      return ResponseEntity.ok(like);
+      return ResponseEntity.ok("created like successfully");
 }
 
 
