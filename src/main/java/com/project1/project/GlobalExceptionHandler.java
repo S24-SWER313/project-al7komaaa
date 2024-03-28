@@ -42,6 +42,9 @@ public class GlobalExceptionHandler {
         response.put("error", errorMessage);
 
         return ResponseEntity.badRequest().body(response);}
-      
-    
+         @ExceptionHandler(NFException.class)
+        public ResponseEntity<String> handleNotFoundException(NFException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+     
 }
