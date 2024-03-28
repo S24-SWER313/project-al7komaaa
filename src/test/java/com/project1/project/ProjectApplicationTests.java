@@ -321,6 +321,20 @@ void testprivacy() throws Exception{
 }
 
 
+@Test
+void testAddUserFriend() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/AddUserFriend/3")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("true")
+    ) 
+    .andExpect(status().isBadRequest())
+    .andExpect(content().string("Friend already exists"));
+}
+
+
+
 
 @Test
 void testdeleteUserFriend() throws Exception{
