@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -161,7 +162,7 @@ void testgetUserFriend() throws Exception{
 
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$._embedded.users[0].username").value("celina9"));
+        .andExpect(jsonPath("$._embedded.users[0].username").value("mai7"));
 }
 
 
@@ -321,6 +322,17 @@ void testprivacy() throws Exception{
 
 
 
+@Test
+void testdeleteUserFriend() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(delete("/deleteUserFriend/1")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("true")
+    ) 
+    .andExpect(status().isBadRequest())
+    .andExpect(content().string("Friend not found in user's friend list"));
+}
 
 
 
