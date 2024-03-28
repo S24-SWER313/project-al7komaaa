@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -153,10 +153,30 @@ void testgetUserName() throws Exception{
 
 
 
+@Test
+void testgetUserFriend() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+        mockMvc.perform(get("/UserFriend/2")
+        .header("Authorization", "Bearer " + testAuthenticateUser()) 
+
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$._embedded.users[0].username").value("celina9"));
+}
 
 
 
 
+@Test
+void testaddFriend() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+        mockMvc.perform(post("/AddUserFriend/3")
+        .header("Authorization", "Bearer " + testAuthenticateUser()) 
+
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+            .andExpect(content().string("Friend already exists"));
+}
 
 
 
