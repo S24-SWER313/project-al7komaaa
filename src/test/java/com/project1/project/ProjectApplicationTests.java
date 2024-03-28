@@ -256,6 +256,17 @@ void testeditBio() throws Exception{
 }
 
 
+@Test
+void testeditLocation() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editLocation")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("SomeWhere on Earth")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Location changed toSomeWhere on Earth"));
+}
+
 
 
 }
