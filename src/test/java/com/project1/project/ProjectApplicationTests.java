@@ -73,11 +73,10 @@ class ProjectApplicationTests {
     }
 
 	@Test
-	void tesrGetAllUsers() throws Exception{
+	void testGetAllUsers() throws Exception{
 		// assertEquals(testAuthenticateUser(), "");
 			mockMvc.perform(get("/users")
-			.header("Authorization", "Bearer " + testAuthenticateUser()) // إضافة التوكن إلى الطلب
-
+			.header("Authorization", "Bearer " + testAuthenticateUser()) 
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
             .andExpect(jsonPath("$._embedded.users[0].firstname").value("unKnown")); 
@@ -91,7 +90,7 @@ class ProjectApplicationTests {
 // }
 
 @Test
-void tesrgetUserById() throws Exception{
+void testgetUserById() throws Exception{
     // assertEquals(testAuthenticateUser(), "");
         mockMvc.perform(get("/user/1")
         .header("Authorization", "Bearer " + testAuthenticateUser()) 
@@ -100,6 +99,68 @@ void tesrgetUserById() throws Exception{
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.username").value("celina9")); 
 }
+
+@Test
+void testgetUserByFirstName() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+        mockMvc.perform(get("/userByFirstName/FATMA")
+        .header("Authorization", "Bearer " + testAuthenticateUser()) 
+
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$._embedded.users[0].firstname").value("FATMA")); 
+}
+
+
+@Test
+void testgetUserByLastName() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+        mockMvc.perform(get("/userByLastName/NASSIF")
+        .header("Authorization", "Bearer " + testAuthenticateUser()) 
+
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$._embedded.users[0].lastname").value("NASSIF")); 
+}
+
+
+
+
+@Test
+void testgetFulltName() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+        mockMvc.perform(get("/fullName/FATMA NASSIF")
+        .header("Authorization", "Bearer " + testAuthenticateUser()) 
+
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$._embedded.users[0].fullname").value("FATMA NASSIF")); 
+}
+
+
+
+@Test
+void testgetUserName() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+        mockMvc.perform(get("/UserName/fatma2")
+        .header("Authorization", "Bearer " + testAuthenticateUser()) 
+
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.username").value("fatma2")); 
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

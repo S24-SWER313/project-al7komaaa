@@ -95,10 +95,10 @@ public ResponseEntity<?> getUserById(@PathVariable Long id) {
     public ResponseEntity<CollectionModel<EntityModel<User>>> getUserByFirstName(@PathVariable String name) {
         List<User> userList = userRepo.findByFirstname(name);
       //  EntityModel<User> entityModel = userModelAss.toModeluserprofile(name, request);
-      List<EntityModel<User>> users = userRepo.findAll().stream()
+      List<EntityModel<User>> users = userList.stream()
       .map(user -> userModelAss.toModelfriendself(user))
       .collect(Collectors.toList());
-        if (userList.isEmpty()) {
+        if (users.isEmpty()) {
             throw new NFException(User.class);
         }
         
@@ -109,10 +109,10 @@ public ResponseEntity<?> getUserById(@PathVariable Long id) {
     @GetMapping("/userByLastName/{name}")// netzakar eno ne3malha non-CaseSensitive
     public ResponseEntity<CollectionModel<EntityModel<User>>> getUserByLastName(@PathVariable String name) {
         List<User> userList = userRepo.findByLastname(name);
-        List<EntityModel<User>> users = userRepo.findAll().stream()
+        List<EntityModel<User>> users = userList.stream()
       .map(user -> userModelAss.toModelfriendself(user))
       .collect(Collectors.toList());
-        if (userList.isEmpty()) {
+        if (users.isEmpty()) {
             throw new NFException(User.class);
         }
         return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
@@ -125,10 +125,10 @@ public ResponseEntity<CollectionModel<EntityModel<User>>>getFullName(@PathVariab
     userList.addAll(userRepo.findByFirstname(name));
     userList.addAll(userRepo.findByLastname(name));
     userList.addAll(userRepo.findByFullname(name));
-    List<EntityModel<User>> users = userRepo.findAll().stream()
+    List<EntityModel<User>> users = userList.stream()
     .map(user -> userModelAss.toModelfriendself(user))
     .collect(Collectors.toList());
-      if (userList.isEmpty()) {
+      if (users.isEmpty()) {
           throw new NFException(User.class);
       }
       return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
@@ -145,7 +145,7 @@ public ResponseEntity<?> getUserName(@PathVariable String name ) {
        return ResponseEntity.ok(entityModel);
     
     } else {
-        throw new EntityNotFoundException("User not found with username: " + name);
+      return ResponseEntity.ok("User not found with username: " + name);
     }
 }
 
