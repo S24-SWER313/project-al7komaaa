@@ -230,14 +230,14 @@ public ResponseEntity<String> deleteUserFriend(@PathVariable Long userid, HttpSe
 }
 
 
-@PutMapping("/privesity")
-public ResponseEntity<?> setPrivesity(@RequestBody boolean isprivete) {
+@PutMapping("/privacy")
+public ResponseEntity<?> setPrivacy(@RequestBody boolean isprivate) {
     User user = userFromToken(request);
         if (user==null)
 return ResponseEntity.ok("make sure you signed up");
-user.setAccountIsPrivate(isprivete);
+user.setAccountIsPrivate(isprivate);
 userRepo.save(user);
-  return ResponseEntity.ok("the privisity of account is "+ isprivete);
+  return ResponseEntity.ok("the privacy of account is "+ isprivate);
 }
 
 
@@ -305,15 +305,15 @@ userRepo.save(user);
 }
 
 
-@PutMapping("/editUsername")
-public ResponseEntity<?> editUsername(@RequestBody String username) {
-  User user = userFromToken(request);
-  if (user==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-user.setUsername(username);
-userRepo.save(user);
-  return ResponseEntity.ok("Username changed to" +user.getUsername());
-}
+// @PutMapping("/editUsername")
+// public ResponseEntity<?> editUsername(@RequestBody String username) {
+//   User user = userFromToken(request);
+//   if (user==null)
+// return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+// user.setUsername(username);
+// userRepo.save(user);
+//   return ResponseEntity.ok("Username changed to" +user.getUsername());
+// }
 
 
 @PutMapping("/editGender")
@@ -379,7 +379,7 @@ public ResponseEntity<?> editBackgroundImage(@RequestBody String backgroudimage)
 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 user.setBackgroudimage(backgroudimage);
 userRepo.save(user);
-  return ResponseEntity.ok("Date of birth changed to" +user.getBackgroudimage());
+  return ResponseEntity.ok("Background Image changed to" +user.getBackgroudimage());
 }
 
 

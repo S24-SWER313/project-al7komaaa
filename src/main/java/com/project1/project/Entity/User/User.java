@@ -130,7 +130,7 @@ public class User {
 
     public void setLastname(String lastName) {
 if(lastName!=null){
-        this.fullname = this.firstname = this.firstname + " " + this.lastname;
+        this.fullname = this.firstname + " " + this.lastname;
         this.lastname = lastName;}
     }
 

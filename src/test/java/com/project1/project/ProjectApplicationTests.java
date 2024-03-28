@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -161,7 +162,7 @@ void testgetUserFriend() throws Exception{
 
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$._embedded.users[0].username").value("celina9"));
+        .andExpect(jsonPath("$._embedded.users[0].username").value("mai7"));
 }
 
 
@@ -205,6 +206,148 @@ void testeditLastName() throws Exception{
     .andExpect(status().isOk())
     .andExpect(content().string("lastName changed toNASSIF"));
 }
+
+
+
+
+@Test
+void testeditMobile() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editMobile")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("059")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Mobile changed to059"));
+}
+
+
+
+@Test
+void testeditEmail() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editEmail")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("M.M@gmail.com")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Email changed toM.M@gmail.com"));
+}
+
+@Test
+void testEditGender() throws Exception {
+    mockMvc.perform(put("/editGender")
+            .header("Authorization", "Bearer " + testAuthenticateUser())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("\"FEMALE\""))
+            .andExpect(status().isOk())
+            .andExpect(content().string("Gender changed toFEMALE"));
+}
+
+
+@Test
+void testeditBio() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editBio")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("bbbbb")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Bio changed tobbbbb"));
+}
+
+
+@Test
+void testeditLocation() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editLocation")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("SomeWhere on Earth")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Location changed toSomeWhere on Earth"));
+}
+
+
+
+@Test
+void testeditImage() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editImage")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("www.p.com")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Image changed towww.p.com"));
+}
+
+
+@Test
+void testeditDof() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editDof")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("\"2003-05-31\"")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Date of birth changed to2003-05-31"));
+}
+
+
+
+@Test
+void testeditBackgroundImage() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editBackgroundImage")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("www.e.com")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Background Image changed towww.e.com"));
+}
+
+
+
+
+@Test
+void testprivacy() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/privacy")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("true")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("the privacy of account is true"));
+}
+
+
+@Test
+void testAddUserFriend() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/AddUserFriend/3")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("true")
+    ) 
+    .andExpect(status().isBadRequest())
+    .andExpect(content().string("Friend already exists"));
+}
+
+
+
+
+@Test
+void testdeleteUserFriend() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(delete("/deleteUserFriend/1")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("true")
+    ) 
+    .andExpect(status().isBadRequest())
+    .andExpect(content().string("Friend not found in user's friend list"));
+}
+
 
 
 
