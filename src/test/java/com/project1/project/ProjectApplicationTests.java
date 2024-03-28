@@ -209,5 +209,23 @@ void testeditLastName() throws Exception{
 
 
 
+@Test
+void testeditMobile() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editMobile")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("059")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Mobile changed to059"));
+}
+
+
+
+
+
+
+
+
 
 }
