@@ -307,4 +307,24 @@ void testeditBackgroundImage() throws Exception{
 
 
 
+
+@Test
+void testprivesity() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/privesity")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("true")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("the privisity of account is true"));
+}
+
+
+
+
+
+
+
+
+
 }
