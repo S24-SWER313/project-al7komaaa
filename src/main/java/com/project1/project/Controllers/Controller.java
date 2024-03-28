@@ -230,14 +230,14 @@ public ResponseEntity<String> deleteUserFriend(@PathVariable Long userid, HttpSe
 }
 
 
-@PutMapping("/privesity")
-public ResponseEntity<?> setPrivesity(@RequestBody boolean isprivete) {
+@PutMapping("/privacy")
+public ResponseEntity<?> setPrivacy(@RequestBody boolean isprivate) {
     User user = userFromToken(request);
         if (user==null)
 return ResponseEntity.ok("make sure you signed up");
-user.setAccountIsPrivate(isprivete);
+user.setAccountIsPrivate(isprivate);
 userRepo.save(user);
-  return ResponseEntity.ok("the privisity of account is "+ isprivete);
+  return ResponseEntity.ok("the privacy of account is "+ isprivate);
 }
 
 
