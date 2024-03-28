@@ -305,15 +305,15 @@ userRepo.save(user);
 }
 
 
-@PutMapping("/editUsername")
-public ResponseEntity<?> editUsername(@RequestBody String username) {
-  User user = userFromToken(request);
-  if (user==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-user.setUsername(username);
-userRepo.save(user);
-  return ResponseEntity.ok("Username changed to" +user.getUsername());
-}
+// @PutMapping("/editUsername")
+// public ResponseEntity<?> editUsername(@RequestBody String username) {
+//   User user = userFromToken(request);
+//   if (user==null)
+// return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+// user.setUsername(username);
+// userRepo.save(user);
+//   return ResponseEntity.ok("Username changed to" +user.getUsername());
+// }
 
 
 @PutMapping("/editGender")

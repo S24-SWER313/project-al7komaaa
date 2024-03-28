@@ -222,6 +222,29 @@ void testeditMobile() throws Exception{
 
 
 
+@Test
+void testeditEmail() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editEmail")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("M.M@gmail.com")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Email changed toM.M@gmail.com"));
+}
+
+
+@Test
+void testeditGender() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/editGender")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("FEMALE")) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("Gender changed toFEMALE"));
+}
+
 
 
 
