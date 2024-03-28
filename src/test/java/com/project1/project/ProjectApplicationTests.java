@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.project1.project.Controllers.Controller;
 import com.project1.project.Entity.User.UserRepo;
-
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
@@ -54,7 +53,7 @@ class UserControllerTest {
 
     private ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-    private final static String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmYXRtYTIiLCJpYXQiOjE3MTE1NDQxODQsImV4cCI6MTcxMTYzMDU4NH0.k2ZSlKVMHunJphCUHfrhD8c6R8MsKYENMz8Wf2FBmvU";
+    private final static String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjZWxpbmE5IiwiaWF0IjoxNzExNTQ2MDk0LCJleHAiOjE3MTE2MzI0OTR9.Zk5BVMqYWvoUIR_SDktpST1s0aHqpOoKOa7KrhcfClI";
 
     @Test
     void testGetAllUsers() throws Exception {
