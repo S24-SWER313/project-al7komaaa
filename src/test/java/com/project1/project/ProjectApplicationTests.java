@@ -624,4 +624,29 @@ void testeditCoumment2() throws Exception{// you are not the owner the comment
     .andExpect(content().string("you aren't the owner of this comment ")); 
 }
 
+
+@Test
+void testgetUserPost() throws Exception{// you are not the owner the comment
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/1/user")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("fatma2comment")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$._embedded.posts[0].content").value("postcelina7")); 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
