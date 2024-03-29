@@ -780,17 +780,17 @@ void testcreateReal1() throws Exception{//  create real for content only without
 }
 
 
-// @Test
-// void testfindsharebyId() throws Exception{// 1 is not a friend and public
-//     // assertEquals(testAuthenticateUser(), "");
-//     mockMvc.perform(get("/post/share/1")
-//     .header("Authorization", "Bearer " + testAuthenticateUser())
-//     .contentType(MediaType.APPLICATION_JSON)
-//     // .content("fatma2comment")   
-//      ) 
-//     .andExpect(status().isOk())
-//     .andExpect(jsonPath("$.content").value("hi")); 
-// }
+@Test
+void testfindsharebyId() throws Exception{// 1 is not a friend and public
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/share/1")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("fatma2comment")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.content").value("hi")); 
+}
 
 
 @Test
