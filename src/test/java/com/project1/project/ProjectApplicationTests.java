@@ -716,7 +716,17 @@ void testeditPost() throws Exception{//   owner of the post
     .andExpect(jsonPath("$.content").value("FatMai"));
 }
 
-
+@Test
+void testeditPost1() throws Exception{//   not the owner of the post
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/post/4/editPost")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{\"content\":\"FatMai\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("you aren't the owner of this post ")); 
+}
 
 
 
