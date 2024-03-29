@@ -755,4 +755,19 @@ void testcreateShareComment() throws Exception{//  create comment for a shared p
 }
 
 
+@Test
+void testcreateReal() throws Exception{//  create real 
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/post/reals/create")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{ \"video\":\"video\",\"content\":\"reel1\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("{\"message\":\"Reel Created successfully!\"}")); 
+}
+
+
+
+
 }
