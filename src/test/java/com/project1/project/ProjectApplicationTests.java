@@ -832,7 +832,6 @@ void testsignin() throws Exception{
     .andExpect(jsonPath("$.username").value("fatma2"));
 }
 
-
 @Test
 void testsignIn() throws Exception{//wrong password
     mockMvc.perform(post("/api/auth/signin")
