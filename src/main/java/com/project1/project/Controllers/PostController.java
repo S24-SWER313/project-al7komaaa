@@ -481,7 +481,8 @@ return ResponseEntity.ok("you aren't the owner of this comment ");
 @GetMapping("/{id}/user")
 public ResponseEntity<?> getUserPost(@PathVariable Long id) {
   User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("user not found"));
- if(user.getAccountIsPrivate()){
+  User signInUser = userFromToken(request);
+ if(user.getAccountIsPrivate() && !user.friends.contains(signInUser)){
   return ResponseEntity.ok("the account is private you cant view");
  }
  else{

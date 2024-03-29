@@ -626,7 +626,7 @@ void testeditCoumment2() throws Exception{// you are not the owner the comment
 
 
 @Test
-void testgetUserPost() throws Exception{// you are not the owner the comment
+void testgetUserPost() throws Exception{// 1 is not a friend and public
     // assertEquals(testAuthenticateUser(), "");
     mockMvc.perform(get("/post/1/user")
     .header("Authorization", "Bearer " + testAuthenticateUser())
@@ -638,7 +638,17 @@ void testgetUserPost() throws Exception{// you are not the owner the comment
 }
 
 
-
+@Test
+void testgetUserPost1() throws Exception{// 3 is a friend and private
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/3/user")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("fatma2comment")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$._embedded.posts[0].content").value("postmai7")); 
+}
 
 
 
