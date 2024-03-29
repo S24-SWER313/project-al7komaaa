@@ -742,4 +742,17 @@ void testcreaterShareLike() throws Exception{//   scenario when the user already
 }
 
 
+@Test
+void testcreateShareComment() throws Exception{//  create comment for a shared post
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/post/share/2/createComment")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{\"content\":\"who are you\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.content").value("who are you"));
+}
+
+
 }
