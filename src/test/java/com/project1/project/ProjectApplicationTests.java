@@ -844,7 +844,6 @@ void testsignIn() throws Exception{//wrong password
 }
 
 
-
 @Test
 void testsignUp() throws Exception{
     mockMvc.perform(post("/api/auth/signup")
