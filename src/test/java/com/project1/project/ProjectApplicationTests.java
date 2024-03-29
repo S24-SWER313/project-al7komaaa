@@ -349,8 +349,160 @@ void testdeleteUserFriend() throws Exception{
 }
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+// post controler test 
 
 
 
+@Test
+void testCreatePost() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/post/create")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{\"image\":\"image\",\"video\":\"video\", \"content\":\"post1\"}")
+    ) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("{\"message\":\"Post Created successfully!\"}"));
+}
 
+@Test
+void testcreateComment() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/1/comment")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("{\"content\":\"comment1\"}")
+    ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$._embedded.comments[0].content").value("comment1")); 
+}
+
+@Test
+void testfindAllPost() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/posts")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("{\"content\":\"comment1\"}")
+    ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$._embedded.posts[0].content").value("postcelina7")); 
+}
+
+
+@Test
+void testsharePost() throws Exception{//if post private 
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/post/share/4")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("Enter your share content here")
+    ) 
+    .andExpect(status().isBadRequest())
+    .andExpect(content().string("this post is private"));
+
+}
+
+
+@Test
+void testsharePost2() throws Exception{//if post public 
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/post/share/3")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("Enter your share content here")
+    ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.content").value("Enter your share content here")); 
+
+}
+@Test
+void testfindById() throws Exception{//if post private and not friend
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/posts/5")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("Enter your share content here")
+    ) 
+    .andExpect(status().isBadRequest())
+    .andExpect(content().string("this post is private"));
+
+}
+@Test
+void testfindById2() throws Exception{//if post private and friend
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/posts/4")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("Enter your share content here")
+    ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.content").value("postmai7")); 
+
+}
+@Test
+void testdeleteComment() throws Exception{//if delete comment you are not the owner
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(delete("/post/comment/1")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("Enter your share content here")
+    ) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("{\"message\":\"you are not authorized!\"}"));
+
+}
+@Test
+void testdeleteComment2() throws Exception{//if delete the post and you are the owner
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(delete("/post/comment/4")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("Enter your share content here")
+    ) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("{\"message\":\"Delete successfully!\"}"));
+
+}
+@Test
+void testfindByLikesContainsUser() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/user/like")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("Enter your share content here")
+    ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$._embedded.posts[0].content").value("postcelina7")); 
+
+}
+@Test
+void testcreateLikePost() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/post/4/like")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{\"type\": \"LIKE\"}")
+    ) 
+    .andExpect(status().isBadRequest())
+    .andExpect(content().string("User has already liked the post"));
+
+}
+
+
+@Test
+void testgetAllPostLikes() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/1/likes")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("{\"type\": \"LIKE\"}")
+    ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$[0].likeId").value(2)); 
+
+}
 }
