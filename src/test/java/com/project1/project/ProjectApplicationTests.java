@@ -664,6 +664,17 @@ void testgetUserPost2() throws Exception{//  is not a friend and private
 }
 
 
+@Test
+void testgetReals() throws Exception{//  is not a friend and private
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/reels")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{ \"video\":\"video\",\"content\":\"reel1\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$._embedded.posts[0].video").value("video"));
+}
 
 
 
