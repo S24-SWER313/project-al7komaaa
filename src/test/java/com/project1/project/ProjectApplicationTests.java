@@ -868,7 +868,6 @@ void testsignup() throws Exception{//if the user already signup
 }
 
 
-
 @Test
 void testsignUp3() throws Exception{//if the user enter short password
     mockMvc.perform(post("/api/auth/signup")
