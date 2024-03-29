@@ -856,7 +856,6 @@ void testsignUp() throws Exception{
 }
 
 
-
 @Test
 void testsignup() throws Exception{//if the user already signup
     mockMvc.perform(post("/api/auth/signup")
