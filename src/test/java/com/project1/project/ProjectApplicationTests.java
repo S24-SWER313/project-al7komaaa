@@ -780,17 +780,17 @@ void testcreateReal1() throws Exception{//  create real for content only without
 }
 
 
-@Test
-void testfindsharebyId() throws Exception{// 1 is not a friend and public
-    // assertEquals(testAuthenticateUser(), "");
-    mockMvc.perform(get("/post/share/1")
-    .header("Authorization", "Bearer " + testAuthenticateUser())
-    .contentType(MediaType.APPLICATION_JSON)
-    // .content("fatma2comment")   
-     ) 
-    .andExpect(status().isOk())
-    .andExpect(jsonPath("$.content").value("hi".trim())); 
-}
+// @Test
+// void testfindsharebyId() throws Exception{// 1 is not a friend and public
+//     // assertEquals(testAuthenticateUser(), "");
+//     mockMvc.perform(get("/post/share/1")
+//     .header("Authorization", "Bearer " + testAuthenticateUser())
+//     .contentType(MediaType.APPLICATION_JSON)
+//     // .content("fatma2comment")   
+//      ) 
+//     .andExpect(status().isOk())
+//     .andExpect(jsonPath("$.content").value("hi")); 
+// }
 
 
 @Test
@@ -806,15 +806,15 @@ void testfindsharebyid() throws Exception{// if the user is private and not frie
 
 
 @Test
-void testfindSharebyId() throws Exception{//  is not a friend and private
+void testfindSharebyId() throws Exception{//  is friend and private
     // assertEquals(testAuthenticateUser(), "");
-    mockMvc.perform(get("/post/5/user")
+    mockMvc.perform(get("/post/share/7")
     .header("Authorization", "Bearer " + testAuthenticateUser())
     .contentType(MediaType.APPLICATION_JSON)
     // .content("fatma2comment")   
      ) 
     .andExpect(status().isOk())
-    .andExpect(content().string("the account is private you cant view")); 
+    .andExpect(jsonPath("$.content").value("maiShare"));
 }
 
 

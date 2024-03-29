@@ -147,7 +147,7 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
               return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
           }
           if(!post.getUser().getAccountIsPrivate()||post.getUser().equals(user)){
-          Share share = new Share(content, user, post);
+          Share share = new Share(content.trim(), user, post);
           shareRepo.save(share);
          // EntityModel<Share> entityModel = EntityModel.of();
           return ResponseEntity.ok(postmodelAss.toModelsharepostId(share));}else{
