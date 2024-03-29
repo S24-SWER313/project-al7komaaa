@@ -624,4 +624,160 @@ void testeditCoumment2() throws Exception{// you are not the owner the comment
     .andExpect(content().string("you aren't the owner of this comment ")); 
 }
 
+
+@Test
+void testgetUserPost() throws Exception{// 1 is not a friend and public
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/1/user")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("fatma2comment")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$._embedded.posts[0].content").value("postcelina7")); 
+}
+
+
+@Test
+void testgetUserPost1() throws Exception{// 3 is a friend and private
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/3/user")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("fatma2comment")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$._embedded.posts[0].content").value("postmai7")); 
+}
+
+
+@Test
+void testgetUserPost2() throws Exception{//  is not a friend and private
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/5/user")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("fatma2comment")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("the account is private you cant view")); 
+}
+
+
+@Test
+void testgetReals() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/reels")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{ \"video\":\"video\",\"content\":\"reel1\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$._embedded.posts[0].video").value("video"));
+}
+
+
+@Test
+void testeditShare() throws Exception{//  the owner of the share
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/post/2/editShare")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("mai fatmeh")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.content").value("mai fatmeh"));
+}
+
+
+
+@Test
+void testeditShare1() throws Exception{//  not owner of the share
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/post/1/editShare")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("mai fatmeh")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("you aren't the owner of this post ")); 
+}
+
+
+@Test
+void testeditPost() throws Exception{//   owner of the post
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/post/2/editPost")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{\"content\":\"FatMai\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.content").value("FatMai"));
+}
+
+@Test
+void testeditPost1() throws Exception{//   not the owner of the post
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/post/4/editPost")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{\"content\":\"FatMai\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("you aren't the owner of this post ")); 
+}
+
+
+@Test
+void testcreaterShareLike() throws Exception{//   scenario when the user already liked the post
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/post/share/2/createLike")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{\"type\": \"LIKE\"}")   
+     ) 
+    .andExpect(status().isBadRequest())
+    .andExpect(content().string("User has already liked the postShare")); 
+}
+
+
+@Test
+void testcreateShareComment() throws Exception{//  create comment for a shared post
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/post/share/2/createComment")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{\"content\":\"who are you\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.content").value("who are you"));
+}
+
+
+@Test
+void testcreateReal() throws Exception{//  create real 
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/post/reals/create")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{ \"video\":\"video\",\"content\":\"reel1\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("{\"message\":\"Reel Created successfully!\"}")); 
+}
+
+@Test
+void testcreateReal1() throws Exception{//  create real for content only without a video
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/post/reals/create")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{ \"content\":\"reel1\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("{\"message\":\"must be video and content\"}")); 
+}
+
+
 }
