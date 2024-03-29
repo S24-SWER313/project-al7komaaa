@@ -816,6 +816,73 @@ void testfindSharebyId() throws Exception{//  is friend and private
     .andExpect(status().isOk())
     .andExpect(jsonPath("$.content").value("maiShare"));
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//authController
+
+
+@Test
+void testsignin() throws Exception{
+    mockMvc.perform(post("/api/auth/signin")
+   // .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+     .content("{\"username\":\"fatma2\" , \"password\":\"123mai321\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.username").value("fatma2"));
+}
+
+
+@Test
+void testsignIn() throws Exception{//wrong password
+    mockMvc.perform(post("/api/auth/signin")
+   // .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+     .content("{\"username\":\"fatma2\" , \"password\":\"celinannassif\"}")   
+     ) 
+    .andExpect(status().isUnauthorized())
+    .andExpect(jsonPath("$.message").value("Bad credentials"));
+}
+
+
+
+@Test
+void testsignUp() throws Exception{
+    mockMvc.perform(post("/api/auth/signup")
+   // .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+     .content("{\"email\":\"sara@gmail.com\" , \"username\":\"sara\" , \"password\":\"123mai321\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.message").value("User registered successfully!"));
+}
+
+
+
+@Test
+void testsignup() throws Exception{//if the user already signup
+    mockMvc.perform(post("/api/auth/signup")
+   // .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+     .content("{\"email\":\"mai@gmail.com\" , \"username\":\"mai7\" , \"password\":\"123mai321\"}")   
+     ) 
+    .andExpect(status().isBadRequest())
+    .andExpect(jsonPath("$.message").value("Error: Username is already taken!"));
+}
+
+
+
+@Test
+void testsignUp3() throws Exception{//if the user enter short password
+    mockMvc.perform(post("/api/auth/signup")
+   // .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+     .content("{\"email\":\"sara@gmail.com\" , \"username\":\"sara\" , \"password\":\"123\"}")   
+     ) 
+    .andExpect(status().isBadRequest())
+    .andExpect(jsonPath("$.error").value(" the password size must be between 6 and 40"));
+}
+
 
 
 
