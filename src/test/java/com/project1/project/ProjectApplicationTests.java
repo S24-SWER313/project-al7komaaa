@@ -651,6 +651,17 @@ void testgetUserPost1() throws Exception{// 3 is a friend and private
 }
 
 
+@Test
+void testgetUserPost2() throws Exception{//  is not a friend and private
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/5/user")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("fatma2comment")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("the account is private you cant view")); 
+}
 
 
 
