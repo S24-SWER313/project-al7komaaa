@@ -323,8 +323,12 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
   @DeleteMapping("/{likeId}/like")
   public ResponseEntity<MessageResponse> UnCreatelikePost(@PathVariable Long likeId) {
+    Like like=likeRepo.findById(likeId).get();
+    User user=userFromToken(request);
+    if (like.user==user){
     likeRepo.deleteById(likeId);
-    return ResponseEntity.ok(new MessageResponse("Delete successfully!"));
+    return ResponseEntity.ok(new MessageResponse("Delete successfully!"));}
+    return ResponseEntity.ok(new MessageResponse("you are not the owner of like"));
   }
 
   // @PostMapping("/{commentId}/comment")
