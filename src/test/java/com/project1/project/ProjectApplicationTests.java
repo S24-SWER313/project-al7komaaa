@@ -729,5 +729,17 @@ void testeditPost1() throws Exception{//   not the owner of the post
 }
 
 
+@Test
+void testcreaterShareLike() throws Exception{//   scenario when the user already liked the post
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/post/share/2/createLike")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{\"type\": \"LIKE\"}")   
+     ) 
+    .andExpect(status().isBadRequest())
+    .andExpect(content().string("User has already liked the postShare")); 
+}
+
 
 }
