@@ -691,6 +691,17 @@ void testeditShare() throws Exception{//  the owner of the share
 
 
 
+@Test
+void testeditShare1() throws Exception{//  not owner of the share
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/post/1/editShare")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("mai fatmeh")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("you aren't the owner of this post ")); 
+}
 
 
 
