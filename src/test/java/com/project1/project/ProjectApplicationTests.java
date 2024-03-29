@@ -569,7 +569,7 @@ void testfindyPosts() throws Exception{//MY POST
 
 }
 @Test
-void testfindFriendPosts() throws Exception{
+void testfindFriendPosts() throws Exception{//if you are a friend
     // assertEquals(testAuthenticateUser(), "");
     mockMvc.perform(get("/post/FriendPosts/3")
     .header("Authorization", "Bearer " + testAuthenticateUser())
@@ -581,15 +581,47 @@ void testfindFriendPosts() throws Exception{
 
 }
 @Test
-void testfindFriendPosts2() throws Exception{
+void testfindFriendPosts2() throws Exception{//if you are not a friend
     // assertEquals(testAuthenticateUser(), "");
-    mockMvc.perform(get("/post/FriendPosts/3")
+    mockMvc.perform(get("/post/FriendPosts/4")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("Enter your share content here")
+    ) 
+    .andExpect(status().isUnauthorized())
+    .andExpect(content().string("This acount is private to see posts added friend.")); 
+
+}
+@Test
+void testpostUser() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/postUser/1")
     .header("Authorization", "Bearer " + testAuthenticateUser())
     .contentType(MediaType.APPLICATION_JSON)
     // .content("Enter your share content here")
     ) 
     .andExpect(status().isOk())
-    .andExpect(jsonPath("$._embedded.posts[0].content").value("postcelina7")); 
-
+    .andExpect(jsonPath("$.username").value("celina9")); 
 }
+@Test
+void testeditCoumment() throws Exception{//you are owner the comment 
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/post/3/comment/edit")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("fatma2comment")    ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.content").value("fatma2comment")); 
+}
+@Test
+void testeditCoumment2() throws Exception{// you are not the owner the comment
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(put("/post/1/comment/edit")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("fatma2comment")    ) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("you aren't the owner of this comment ")); 
+}
+
 }
