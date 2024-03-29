@@ -1,8 +1,13 @@
 package com.project1.project;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import org.h2.util.json.JSONArray;
+import org.h2.util.json.JSONObject;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -18,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -677,6 +683,8 @@ void testgetReals() throws Exception{
 }
 
 
+
+
 @Test
 void testeditShare() throws Exception{//  the owner of the share
     // assertEquals(testAuthenticateUser(), "");
@@ -778,6 +786,121 @@ void testcreateReal1() throws Exception{//  create real for content only without
     .andExpect(status().isOk())
     .andExpect(content().string("{\"message\":\"must be video and content\"}")); 
 }
+
+
+@Test
+void testfindsharebyId() throws Exception{// 1 is not a friend and public
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/share/1")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("fatma2comment")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.content").value("hi")); 
+}
+
+
+@Test
+void testfindsharebyid() throws Exception{// if the user is private and not friend
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/share/6")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("fatma2comment")   
+     ) 
+    .andExpect(status().isBadRequest())
+    .andExpect(content().string("this post is private")); }
+
+
+@Test
+void testfindSharebyId() throws Exception{//  is friend and private
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/post/share/7")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    // .content("fatma2comment")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.content").value("maiShare"));
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//authController
+
+
+@Test
+void testsignin() throws Exception{
+    mockMvc.perform(post("/api/auth/signin")
+   // .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+     .content("{\"username\":\"fatma2\" , \"password\":\"123mai321\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.username").value("fatma2"));
+}
+
+@Test
+void testsignIn() throws Exception{//wrong password
+    mockMvc.perform(post("/api/auth/signin")
+   // .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+     .content("{\"username\":\"fatma2\" , \"password\":\"celinannassif\"}")   
+     ) 
+    .andExpect(status().isUnauthorized())
+    .andExpect(jsonPath("$.message").value("Bad credentials"));
+}
+
+
+@Test
+void testsignUp() throws Exception{
+    mockMvc.perform(post("/api/auth/signup")
+   // .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+     .content("{\"email\":\"sara@gmail.com\" , \"username\":\"sara\" , \"password\":\"123mai321\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$.message").value("User registered successfully!"));
+}
+
+
+@Test
+void testsignup() throws Exception{//if the user already signup
+    mockMvc.perform(post("/api/auth/signup")
+   // .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+     .content("{\"email\":\"mai@gmail.com\" , \"username\":\"mai7\" , \"password\":\"123mai321\"}")   
+     ) 
+    .andExpect(status().isBadRequest())
+    .andExpect(jsonPath("$.message").value("Error: Username is already taken!"));
+}
+
+
+@Test
+void testsignUp3() throws Exception{//if the user enter short password
+    mockMvc.perform(post("/api/auth/signup")
+   // .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+     .content("{\"email\":\"sara@gmail.com\" , \"username\":\"sara\" , \"password\":\"123\"}")   
+     ) 
+    .andExpect(status().isBadRequest())
+    .andExpect(jsonPath("$.error").value(" the password size must be between 6 and 40"));
+}
+
+
+//if we turn in first method change and must change the password in it
+
+// @Test
+// void testchangepassword() throws Exception{
+//     mockMvc.perform(put("/api/auth/ChangePassword")
+//     .header("Authorization", "Bearer " + testAuthenticateUser())
+//     .contentType(MediaType.APPLICATION_JSON)
+//      .content("{\"newPassword\":\"123mai321\", \"oldPassword\":\"789celina\" }")   
+//      ) 
+//     .andExpect(status().isOk())
+//     .andExpect(jsonPath("$.message").value("Password changed successfully for user: fatma2"));
+// }
+
 
 
 }

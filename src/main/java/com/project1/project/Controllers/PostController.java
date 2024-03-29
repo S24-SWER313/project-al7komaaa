@@ -147,13 +147,28 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
               return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
           }
           if(!post.getUser().getAccountIsPrivate()||post.getUser().equals(user)){
-          Share share = new Share(content, user, post);
+          Share share = new Share(content.trim(), user, post);
           shareRepo.save(share);
          // EntityModel<Share> entityModel = EntityModel.of();
           return ResponseEntity.ok(postmodelAss.toModelsharepostId(share));}else{
             return ResponseEntity.badRequest().body("this post is private");
           }
   
+  }
+
+
+  @GetMapping("/share/{shareId}")
+  public ResponseEntity<?> findshareById(@PathVariable Long shareId)  {
+Share share = shareRepo.findById(shareId).get()               ;
+if(share==null)
+throw new NFException("Post not found with id: " + shareId);
+
+    User user = userFromToken(request);
+        if (user==null)
+return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+if(!share.getUser().getAccountIsPrivate()||user.friends.contains(share.getUser())||share.getUser().equals(user))
+return ResponseEntity.ok(postmodelAss.toModelsharepostId(share)); 
+return ResponseEntity.badRequest().body("this post is private");
   }
   
   @GetMapping("/posts/{postId}")
