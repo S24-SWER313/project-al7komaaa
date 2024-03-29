@@ -880,7 +880,18 @@ void testsignUp3() throws Exception{//if the user enter short password
 }
 
 
+//if we turn in first method change and must change the password in it
 
+// @Test
+// void testchangepassword() throws Exception{
+//     mockMvc.perform(put("/api/auth/ChangePassword")
+//     .header("Authorization", "Bearer " + testAuthenticateUser())
+//     .contentType(MediaType.APPLICATION_JSON)
+//      .content("{\"newPassword\":\"123mai321\", \"oldPassword\":\"789celina\" }")   
+//      ) 
+//     .andExpect(status().isOk())
+//     .andExpect(jsonPath("$.message").value("Password changed successfully for user: fatma2"));
+// }
 
 
 
