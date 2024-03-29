@@ -767,7 +767,17 @@ void testcreateReal() throws Exception{//  create real
     .andExpect(content().string("{\"message\":\"Reel Created successfully!\"}")); 
 }
 
-
+@Test
+void testcreateReal1() throws Exception{//  create real for content only without a video
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/post/reals/create")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{ \"content\":\"reel1\"}")   
+     ) 
+    .andExpect(status().isOk())
+    .andExpect(content().string("{\"message\":\"must be video and content\"}")); 
+}
 
 
 }
