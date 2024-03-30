@@ -592,9 +592,7 @@ else{
       like.setShare(share);
        user.likes.add(like);
        share.like.add(like);  }
-      // userRepo.save(user);
-      // shareRepo.save(share);
-    
+   
        likeRepo.save(like);
       
 
@@ -617,14 +615,11 @@ public ResponseEntity<?> createShareComment( @RequestBody Comment comment, @Path
       
       comment.setUser(user);
       comment.setShare(share);
-      // user.comments.add(comment);
       userRepo.save(user);
       shareRepo.save(share);
       commentRepo.save(comment);
       return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment));
 }
-
-
 
 
 @PostMapping("/reals/create")
@@ -645,6 +640,7 @@ return ResponseEntity.ok(new MessageResponse("must be video and content"));
 // public ResponseEntity<?> deleteRels(Comment comment, HttpServletRequest request) {
 //   return null;
 // }
+
 
 
 
