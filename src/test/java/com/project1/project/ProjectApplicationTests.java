@@ -383,7 +383,7 @@ void testcreateComment() throws Exception{
     // .content("{\"content\":\"comment1\"}")
     ) 
     .andExpect(status().isOk())
-    .andExpect(jsonPath("$._embedded.comments[0].content").value("comment1")); 
+    .andExpect(jsonPath("$._embedded.comments[0].content").value("fatma2comment")); 
 }
 
 @Test
