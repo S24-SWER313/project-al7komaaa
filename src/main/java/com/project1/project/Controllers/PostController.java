@@ -204,7 +204,7 @@ return ResponseEntity.badRequest().body("this post is private");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
 
       Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
-     
+      if (post.getUser().friends.contains(user)||!post.getUser().getAccountIsPrivate()){
       post.postComments.add(comment);
       comment.setUser(user);
       comment.setPost(post);
@@ -212,7 +212,8 @@ return ResponseEntity.badRequest().body("this post is private");
       userRepo.save(user);
       postRepo.save(post);
       commentRepo.save(comment);
-      return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment));
+      return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment));}
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("this user's profile is private add him to write a comment of this post ");
 }
 
   @DeleteMapping("/comment/{commentId}")
@@ -255,7 +256,7 @@ return ResponseEntity.badRequest().body("this post is private");
           .collect(Collectors.toList());
 
       if (users.isEmpty()) {
-        throw new NFException(User.class);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("the user hasn't made any likes yet"));
       }
       return ResponseEntity.ok(CollectionModel.of(users,
           linkTo(methodOn(Controller.class).getUserById(user.getId())).withRel("User Profile")));
@@ -389,7 +390,7 @@ return ResponseEntity.badRequest().body("this post is private");
           .map(e -> postmodelAss.toModelpostId(e))
           .collect(Collectors.toList());
          if (users.isEmpty()) {
-        throw new NFException(User.class);
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("there are no posts for this user"));
       }
       return ResponseEntity.ok(CollectionModel.of(users,
           linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Post")));
@@ -494,7 +495,7 @@ public ResponseEntity<?> getUserPost(@PathVariable Long id) {
   .map(e -> postmodelAss.toModelpostId(e))
   .collect(Collectors.toList());
  if (users.isEmpty()) {
-throw new NFException(User.class);
+  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("there are no posts for this user"));
 }
 return ResponseEntity.ok(CollectionModel.of(users,
   linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Post")));}

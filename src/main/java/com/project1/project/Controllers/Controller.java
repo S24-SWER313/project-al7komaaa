@@ -37,6 +37,7 @@ import com.project1.project.Entity.User.Gender;
 import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserModelAss;
 import com.project1.project.Entity.User.UserRepo;
+import com.project1.project.Payload.Response.MessageResponse;
 import com.project1.project.Security.Jwt.JwtUtils;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -81,7 +82,7 @@ HttpServletRequest request;
     @GetMapping("/user/{id}")
 public ResponseEntity<?> getUserById(@PathVariable Long id) {
     User user = userRepo.findById(id)
-            .orElseThrow(() -> new NFException(User.class));
+    .orElseThrow(() -> new NFException("user with ID " + id + " not found."));
     EntityModel<User> entityModel = userModelAss.toModeluserprofile(user);
     // if (user.getAccountIsPrivate())
     // return ResponseEntity.ok("this account is private to see user post addFriend");
@@ -92,14 +93,14 @@ public ResponseEntity<?> getUserById(@PathVariable Long id) {
 
   
     @GetMapping("/userByFirstName/{name}")
-    public ResponseEntity<CollectionModel<EntityModel<User>>> getUserByFirstName(@PathVariable String name) {
+    public ResponseEntity<?> getUserByFirstName(@PathVariable String name) {
         List<User> userList = userRepo.findByFirstname(name);
       //  EntityModel<User> entityModel = userModelAss.toModeluserprofile(name, request);
       List<EntityModel<User>> users = userList.stream()
       .map(user -> userModelAss.toModelfriendself(user))
       .collect(Collectors.toList());
         if (users.isEmpty()) {
-            throw new NFException(User.class);
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("there are no user with firstname "+ name));
         }
         
         return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
@@ -107,20 +108,20 @@ public ResponseEntity<?> getUserById(@PathVariable Long id) {
     }
 
     @GetMapping("/userByLastName/{name}")// netzakar eno ne3malha non-CaseSensitive
-    public ResponseEntity<CollectionModel<EntityModel<User>>> getUserByLastName(@PathVariable String name) {
+    public ResponseEntity<?> getUserByLastName(@PathVariable String name) {
         List<User> userList = userRepo.findByLastname(name);
         List<EntityModel<User>> users = userList.stream()
       .map(user -> userModelAss.toModelfriendself(user))
       .collect(Collectors.toList());
         if (users.isEmpty()) {
-            throw new NFException(User.class);
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("there are no user with Lastname "+ name));
         }
         return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
       
     }
 
   @GetMapping("/fullName/{name}")
-public ResponseEntity<CollectionModel<EntityModel<User>>>getFullName(@PathVariable String name) {
+public ResponseEntity<?>getFullName(@PathVariable String name) {
     List<User> userList = new ArrayList<>();
     userList.addAll(userRepo.findByFirstname(name));
     userList.addAll(userRepo.findByLastname(name));
@@ -129,7 +130,7 @@ public ResponseEntity<CollectionModel<EntityModel<User>>>getFullName(@PathVariab
     .map(user -> userModelAss.toModelfriendself(user))
     .collect(Collectors.toList());
       if (users.isEmpty()) {
-          throw new NFException(User.class);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("there are no user with fullname "+ name));
       }
       return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
     
@@ -137,16 +138,14 @@ public ResponseEntity<CollectionModel<EntityModel<User>>>getFullName(@PathVariab
        
 @GetMapping("/UserName/{name}")
 public ResponseEntity<?> getUserName(@PathVariable String name ) {
-    Optional<User> user = userRepo.findByUsername(name);
-    if (user.isPresent()) {
-        EntityModel<User> entityModel = userModelAss.toModeluserprofile(user.get());
+    User user = userRepo.findByUsername(name) .orElseThrow(() -> new NFException("user not found."));;
+   
+        EntityModel<User> entityModel = userModelAss.toModeluserprofile(user);
         // if (user.get().getAccountIsPrivate())
         // return ResponseEntity.ok("this account is private to see user post addFriend");
        return ResponseEntity.ok(entityModel);
     
-    } else {
-      return ResponseEntity.ok("User not found with username: " + name);
-    }
+    
 }
 
 
@@ -154,7 +153,7 @@ public ResponseEntity<?> getUserName(@PathVariable String name ) {
 @GetMapping("/UserFriend/{userid}")
 public ResponseEntity<CollectionModel<EntityModel<User>>> getUserFriend(@PathVariable Long userid ){
 
-    User user = userRepo.findById(userid).get();
+    User user = userRepo.findById(userid) .orElseThrow(() -> new NFException("user not found."));
     List<EntityModel<User>> users =userRepo.getFriends(userid).stream()
     .map(us -> userModelAss.toModelfriendself(us))
     .collect(Collectors.toList());
@@ -173,9 +172,9 @@ public ResponseEntity<String> addFriend(HttpServletRequest request, @PathVariabl
     if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
         User user = userRepo.findByUsername(username)
-                            .orElseThrow(() -> new RuntimeException("User not found"));
+        .orElseThrow(() -> new NFException("user not found."));
         User friend = userRepo.findById(userfriendid)
-                              .orElseThrow(() -> new RuntimeException("Friend not found"));
+        .orElseThrow(() -> new NFException("Friend not found."));
 
         // Check if the friend already exists in the user's friends list
         boolean alreadyExists = user.friends.contains(friend);
@@ -206,9 +205,9 @@ public ResponseEntity<String> deleteUserFriend(@PathVariable Long userid, HttpSe
     if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
         User user = userRepo.findByUsername(username)
-                            .orElseThrow(() -> new RuntimeException("User not found"));
+        .orElseThrow(() -> new NFException("user not found."));
         User friend = userRepo.findById(userid)
-                              .orElseThrow(() -> new RuntimeException("Friend not found"));
+        .orElseThrow(() -> new NFException("Friend not found."));
 
         boolean alreadyExists = user.friends.contains(friend);
         boolean alreadyExistss = friend.friends.contains(user);
@@ -258,7 +257,7 @@ userRepo.save(user);
     if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
         return userRepo.findByUsername(username)
-                .orElse(null); 
+        .orElseThrow(() -> new NFException("user not found."));
     }
     return null;
 }
