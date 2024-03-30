@@ -688,7 +688,7 @@ void testgetReals() throws Exception{
 @Test
 void testeditShare() throws Exception{//  the owner of the share
     // assertEquals(testAuthenticateUser(), "");
-    mockMvc.perform(put("/post/2/editShare")
+    mockMvc.perform(put("/post/5/editShare")
     .header("Authorization", "Bearer " + testAuthenticateUser())
     .contentType(MediaType.APPLICATION_JSON)
     .content("mai fatmeh")   
@@ -740,7 +740,7 @@ void testeditPost1() throws Exception{//   not the owner of the post
 @Test
 void testcreaterShareLike() throws Exception{//   scenario when the user already liked the post
     // assertEquals(testAuthenticateUser(), "");
-    mockMvc.perform(post("/post/share/2/createLike")
+    mockMvc.perform(post("/post/share/6/createLike")
     .header("Authorization", "Bearer " + testAuthenticateUser())
     .contentType(MediaType.APPLICATION_JSON)
     .content("{\"type\": \"LIKE\"}")   
@@ -753,7 +753,7 @@ void testcreaterShareLike() throws Exception{//   scenario when the user already
 @Test
 void testcreateShareComment() throws Exception{//  create comment for a shared post
     // assertEquals(testAuthenticateUser(), "");
-    mockMvc.perform(post("/post/share/2/createComment")
+    mockMvc.perform(post("/post/share/6/createComment")
     .header("Authorization", "Bearer " + testAuthenticateUser())
     .contentType(MediaType.APPLICATION_JSON)
     .content("{\"content\":\"who are you\"}")   
