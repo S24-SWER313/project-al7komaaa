@@ -85,7 +85,8 @@ public class PostController {
   public ResponseEntity<?> createPost( @RequestBody Post post) {
      User user = userFromToken(request);
         if (user==null||post==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Post or user not found"));
+
       post.setUser(user);
       postRepo.save(post);
       return ResponseEntity.ok(new MessageResponse("Post Created successfully!"));
@@ -120,7 +121,8 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         User user = userFromToken(request);
         if (user==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+
     List<EntityModel<Post>> users = postRepo.findAll().stream().filter(e->e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser()))
         .map(postmodelAss::toModel)
         .collect(Collectors.toList());
@@ -141,8 +143,8 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
   
                                           User user = userFromToken(request);
                                           if (user==null)
-                                  return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-          Post post = postRepo.findById(postId).orElse(null);
+                                          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+                                          Post post = postRepo.findById(postId).orElse(null);
           if (post == null) {
               return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
           }
@@ -159,13 +161,11 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
   @GetMapping("/share/{shareId}")
   public ResponseEntity<?> findshareById(@PathVariable Long shareId)  {
-Share share = shareRepo.findById(shareId).get()               ;
-if(share==null)
-throw new NFException("Post not found with id: " + shareId);
+Share share = shareRepo.findById(shareId).orElseThrow(() -> new NFException("share with ID " + shareId + " not found."));               ;
 
     User user = userFromToken(request);
         if (user==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
 if(!share.getUser().getAccountIsPrivate()||user.friends.contains(share.getUser())||share.getUser().equals(user))
 return ResponseEntity.ok(postmodelAss.toModelsharepostId(share)); 
 return ResponseEntity.badRequest().body("this post is private");
@@ -173,13 +173,11 @@ return ResponseEntity.badRequest().body("this post is private");
   
   @GetMapping("/posts/{postId}")
   public ResponseEntity<?> findById(@PathVariable Long postId)  {
-Post post = postRepo.findById(postId).get()               ;
-if(post==null)
-throw new NFException("Post not found with id: " + postId);
+Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
 
     User user = userFromToken(request);
         if (user==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
 if(!post.getUser().getAccountIsPrivate()||user.friends.contains(post.getUser())||post.getUser().equals(user))
 return ResponseEntity.ok(postmodelAss.toModelpostId(post)); 
 return ResponseEntity.badRequest().body("this post is private");
@@ -190,29 +188,26 @@ return ResponseEntity.badRequest().body("this post is private");
     public ResponseEntity<?> deleteById(@PathVariable Long postId) {
       User user = userFromToken(request);
           if (user==null)
-  return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-                       Optional<Post> post= postRepo.findById(postId);
-                       if(!post.isPresent()){
-                        return ResponseEntity.badRequest().body("post not found");}
-        else{
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+       Post post= postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
+                      
           if (userHasPermissionToDeletePost(postId,user.getId())) {
           postRepo.deleteById(postId);
     return ResponseEntity.ok().body("the post is deleted successfully");
        }else {
            return  ResponseEntity.badRequest().body("you are not owned the post");
         }}
-  }
+  
 
   /////////////////////////////////////////////////////////////////////
   @PostMapping("/comment/{postId}/post")
   public ResponseEntity<?> createComment( @RequestBody Comment comment, @PathVariable Long postId) {
         User user = userFromToken(request);
         if (user==null)
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-      Post post = postRepo.findById(postId).orElse(null);
-      if (post == null) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Post not found"));
-      }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+
+      Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
+     
       post.postComments.add(comment);
       comment.setUser(user);
       comment.setPost(post);
@@ -227,9 +222,9 @@ return ResponseEntity.badRequest().body("this post is private");
   public ResponseEntity deleteComment(@PathVariable Long commentId) {
     User user = userFromToken(request);
         if (user==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
       // List<Comment>postComments=postRepo.postComments(postId);
-      Comment comment = commentRepo.findById(commentId).get();
+      Comment comment = commentRepo.findById(commentId).orElseThrow(() -> new NFException("comment with ID " + commentId + " not found."));
       User userComment = comment.getUser();
 
       if (userHasPermissionToDeleteComment(commentId, user.getId())) {
@@ -243,20 +238,20 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
   private boolean userHasPermissionToDeleteComment(Long commentId, Long userId) {
 
-    Comment comment = commentRepo.findById(commentId).orElse(null);
+    Comment comment = commentRepo.findById(commentId).orElseThrow(() -> new NFException("comment with ID " + commentId + " not found."));
 
-    return comment != null && comment.getUser().getId().equals(userId);
+    return comment.getUser().getId().equals(userId);
   }
 
   ////////////////////////////////////////////////////////////////////
   @GetMapping("/user/like")
-  public ResponseEntity<CollectionModel<EntityModel<Post>>> findByLikesContainsUser() {
+  public ResponseEntity<?> findByLikesContainsUser() {
                                                                                                              
     User user = userFromToken(request);
     if (user==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-      List<Like> likeList = likeRepo.findByUser(user);
-      List<Post> likePost = likeList.stream().map(e -> e.post).collect(Collectors.toList());
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+    List<Like> likeList = likeRepo.findByUser(user);
+      List<Post> likePost = likeList.stream().map(e -> e.post).filter(e->e!=null).collect(Collectors.toList());
       ///////////////////
       List<EntityModel<Post>> users = likePost.stream()
           .map(e -> postmodelAss.toModelpostId(e))
@@ -295,12 +290,9 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
   public ResponseEntity<?> createLikePost(@RequestBody Like like, @PathVariable Long postId) {
     User user = userFromToken(request);
     if (user==null)
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-      Post post = postRepo.findById(postId).orElse(null);
-      if (post == null) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
-      }
-
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+    Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
+   
       like.setUser(user);
       like.setPost(post);
 
@@ -322,11 +314,9 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
   @GetMapping("/{postId}/likes")
   public ResponseEntity<List<EntityModel<Like>>> getAllPostLikes(@PathVariable Long postId) {
-    Optional<Post> postOptional = postRepo.findById(postId);
+   Post post= postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
 
-    if (!postOptional.isPresent()) {
-      return ResponseEntity.notFound().build();
-    }
+   
     List<Like> likes = postRepo.findLikes(postId);
 
     List<EntityModel<Like>> entityModels = likes.stream()
@@ -338,7 +328,7 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
   @DeleteMapping("/{likeId}/like")
   public ResponseEntity<MessageResponse> UnCreatelikePost(@PathVariable Long likeId) {
-    Like like=likeRepo.findById(likeId).get();
+    Like like=likeRepo.findById(likeId).orElseThrow(() -> new NFException("like with ID " + likeId + " not found."));
     User user=userFromToken(request);
     if (like.user==user){
     likeRepo.deleteById(likeId);
@@ -379,8 +369,9 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
   public ResponseEntity<MessageResponse> deleteShearById(@PathVariable Long shareId)  {
     User user = userFromToken(request);
     if (user==null)
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-      Share share = shareRepo.findById(shareId).get();
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+
+      Share share = shareRepo.findById(shareId).orElseThrow(() -> new NFException("share with ID " + shareId + " not found."));
       if (share.user.getId()==user.getId()) {
         shareRepo.deleteById(shareId);
         return ResponseEntity.ok(new MessageResponse("delete share successfully"));
@@ -394,7 +385,8 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
   public ResponseEntity<?> findyPosts() {
     User user = userFromToken(request);
     if (user==null)
-    return ResponseEntity.ok("Post not found");
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+
   // if( !user.getAccountIsPrivate()||user.friends.contains(user)){l
       List<EntityModel<Post>> users = userRepo.findPostsByUserId(user.getId()).stream()
           .map(e -> postmodelAss.toModelpostId(e))
@@ -415,7 +407,7 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
   private boolean userHasPermissionToDeletePost(Long postId, Long userId) {
 
-    Post post = postRepo.findById(postId).orElse(null);
+    Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
 
     return post != null && post.user.getId().equals(userId);
   }
@@ -434,10 +426,9 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
   public ResponseEntity<?> findFriendPosts( @PathVariable Long friendId) {
            User user = userFromToken(request);
            if (user==null)
-   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-      Optional<User> optionalFriend = userRepo.findById(friendId);
-      if (optionalFriend.isPresent()) {
-        User friend = optionalFriend.get();
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+        User friend = userRepo.findById(friendId).orElseThrow(() -> new NFException("friend with ID " + friendId + " not found."));
+     
         boolean isFriend = user.friends.contains(friend);
 
         if (isFriend) {
@@ -458,9 +449,7 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
           return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
               .body("This acount is private to see posts added friend.");
         }
-      } else {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("friend not found.");
-      }
+    
     // } else {
     //   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access. sign in");
     // }
@@ -468,8 +457,8 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
   
 
   @GetMapping("/postUser/{postid}")
-  public ResponseEntity<EntityModel<User>> postUser(@PathVariable Long postid) {//owner
-    Post post = postRepo.findById(postid).get();
+  public ResponseEntity<EntityModel<User>> postUser(@PathVariable Long postid) {//owner ,user who owner the post
+    Post post = postRepo.findById(postid).orElseThrow(() -> new NFException("post with ID " + postid + " not found."));
 
     return ResponseEntity.ok(usermodelAss.toModeluserprofile(post.user));
 
@@ -481,8 +470,9 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 public ResponseEntity<?> editCoumment(@PathVariable Long commentId, @RequestBody String newContent) {
   User user = userFromToken(request);
   if (user==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-Comment comment =commentRepo.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
+  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+
+Comment comment =commentRepo.findById(commentId).orElseThrow(() -> new NFException("comment with ID " + commentId + " not found."));
 if(user==comment.getUser()){
 comment.setContent(newContent);
 commentRepo.save(comment);
@@ -495,7 +485,7 @@ return ResponseEntity.ok("you aren't the owner of this comment ");
 
 @GetMapping("/{id}/user")
 public ResponseEntity<?> getUserPost(@PathVariable Long id) {
-  User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("user not found"));
+  User user = userRepo.findById(id).orElseThrow(() -> new NFException("user with ID " + id + " not found."));
   User signInUser = userFromToken(request);
  if(user.getAccountIsPrivate() && !user.friends.contains(signInUser)){
   return ResponseEntity.ok("the account is private you cant view");
@@ -519,8 +509,8 @@ public ResponseEntity<?> getReals() {
   
   User user = userFromToken(request);
   if (user==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-List <Post> posts = postRepo.findAll().stream().filter(e->(e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser())))
+  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+  List <Post> posts = postRepo.findAll().stream().filter(e->(e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser())))
   // .map(postmodelAss::toModel)
   .collect(Collectors.toList());
   List<EntityModel<Post>> reels = posts.stream().filter(e->e.getVideo() != null).map(postmodelAss::toModel).collect(Collectors.toList());
@@ -548,9 +538,9 @@ return ResponseEntity
 public ResponseEntity<?> editShare(@PathVariable Long shareId, @RequestBody String editShare ) {
   User user = userFromToken(request);
   if (user==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
 
-  Share share = shareRepo.findById(shareId).orElseThrow(() -> new RuntimeException("share not found"));
+  Share share = shareRepo.findById(shareId).orElseThrow(() -> new NFException("share with ID " + shareId + " not found."));
   if(share.user==user){       
   share.setContent(editShare);
   shareRepo.save(share);
@@ -567,9 +557,9 @@ return ResponseEntity.ok("you aren't the owner of this post ");
 public ResponseEntity<?> editPost(@RequestBody Post newpost ,@PathVariable Long id) {
   User user = userFromToken(request);
   if (user==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
 
-  Post oldpost = postRepo.findById(id).orElseThrow(() -> new RuntimeException("post not found"));
+  Post oldpost = postRepo.findById(id).orElseThrow(() -> new NFException("Post with ID " + id + " not found."));
 
   if(oldpost.user==user){       
   oldpost.setContent(newpost.getContent());
@@ -587,12 +577,9 @@ return ResponseEntity.ok("you aren't the owner of this post ");
 public ResponseEntity<?> createrShareLike(@RequestBody Like like, @PathVariable Long shareId) {
   User user = userFromToken(request);
     if (user==null)
-       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-       Share share = shareRepo.findById(shareId).orElse(null);
-      if (share == null) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PostShare not found");
-      }
-
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+    Share share = shareRepo.findById(shareId).orElseThrow(() -> new NFException("share with ID " + shareId + " not found."));
+    
 
       if (share.like.stream().anyMatch(l -> l.user.getId().equals(user.getId()))) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User has already liked the postShare");
@@ -622,11 +609,9 @@ else{
 public ResponseEntity<?> createShareComment( @RequestBody Comment comment, @PathVariable Long id) {
   User user = userFromToken(request);
         if (user==null)
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-      Share share = shareRepo.findById(id).orElse(null);
-      if (share == null) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("share not found"));
-      }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+      Share share = shareRepo.findById(id).orElseThrow(() -> new NFException("share with ID " + id + " not found."));
+    
       share.sharComments.add(comment);
       
       comment.setUser(user);
@@ -645,7 +630,7 @@ public ResponseEntity<?> createShareComment( @RequestBody Comment comment, @Path
 public ResponseEntity<?> createReal(@RequestBody Post post) {
   User user = userFromToken(request);
   if (user==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
 
 //Post post = new Post(video);
 if(post.getVideo()!= null){
@@ -681,8 +666,7 @@ public User userFromToken(HttpServletRequest request){
   String jwt = parseJwt(request);
   if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
       String username = jwtUtils.getUserNameFromJwtToken(jwt);
-      User user = userRepo.findByUsername(username)
-              .orElseThrow(() -> new RuntimeException("User not found"));
+      User user = userRepo.findByUsername(username).orElseThrow(() -> new NFException("user not found."));
             return user;}
   return null;
 }
