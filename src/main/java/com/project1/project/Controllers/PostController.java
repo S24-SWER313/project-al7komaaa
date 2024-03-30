@@ -256,7 +256,7 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     if (user==null)
 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       List<Like> likeList = likeRepo.findByUser(user);
-      List<Post> likePost = likeList.stream().map(e -> e.post).collect(Collectors.toList());
+      List<Post> likePost = likeList.stream().map(e -> e.post).filter(e->e!=null).collect(Collectors.toList());
       ///////////////////
       List<EntityModel<Post>> users = likePost.stream()
           .map(e -> postmodelAss.toModelpostId(e))
