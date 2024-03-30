@@ -482,7 +482,7 @@ public ResponseEntity<?> editCoumment(@PathVariable Long commentId, @RequestBody
   User user = userFromToken(request);
   if (user==null)
 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-Comment comment =commentRepo.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
+Comment comment =commentRepo.findById(commentId).orElseThrow(() -> new NFException("comment with ID " + commentId + " not found."));
 if(user==comment.getUser()){
 comment.setContent(newContent);
 commentRepo.save(comment);
@@ -569,7 +569,7 @@ public ResponseEntity<?> editPost(@RequestBody Post newpost ,@PathVariable Long 
   if (user==null)
 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-  Post oldpost = postRepo.findById(id).orElseThrow(() -> new RuntimeException("post not found"));
+  Post oldpost = postRepo.findById(id).orElseThrow(() -> new NFException("Post with ID " + id + " not found."));
 
   if(oldpost.user==user){       
   oldpost.setContent(newpost.getContent());
@@ -681,8 +681,7 @@ public User userFromToken(HttpServletRequest request){
   String jwt = parseJwt(request);
   if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
       String username = jwtUtils.getUserNameFromJwtToken(jwt);
-      User user = userRepo.findByUsername(username)
-              .orElseThrow(() -> new RuntimeException("User not found"));
+      User user = userRepo.findByUsername(username).orElseThrow(() -> new NFException("user not found."));
             return user;}
   return null;
 }
