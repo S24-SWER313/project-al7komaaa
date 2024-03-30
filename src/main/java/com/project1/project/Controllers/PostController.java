@@ -423,7 +423,7 @@ return ResponseEntity.badRequest().body("this post is private");
     return null;
   }
 
-  @GetMapping("/FriendPosts/{friendId}")
+  @GetMapping("/friendPosts/{friendId}")
   public ResponseEntity<?> findFriendPosts( @PathVariable Long friendId) {
            User user = userFromToken(request);
            if (user==null)

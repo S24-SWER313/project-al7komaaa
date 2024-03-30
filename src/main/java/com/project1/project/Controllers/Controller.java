@@ -150,7 +150,7 @@ public ResponseEntity<?> getUserName(@PathVariable String name ) {
 
 
 
-@GetMapping("/UserFriend/{userid}")
+@GetMapping("/userFriend/{userid}")
 public ResponseEntity<CollectionModel<EntityModel<User>>> getUserFriend(@PathVariable Long userid ){
 
     User user = userRepo.findById(userid) .orElseThrow(() -> new NFException("user not found."));
@@ -165,7 +165,7 @@ return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(Controller.cl
 
 
 
-@PostMapping("/AddUserFriend/{userfriendid}")
+@PostMapping("/addUserFriend/{userfriendid}")
 public ResponseEntity<String> addFriend(HttpServletRequest request, @PathVariable Long userfriendid) {
 
     String jwt = parseJwt(request);

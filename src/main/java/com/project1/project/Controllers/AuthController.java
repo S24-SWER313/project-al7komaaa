@@ -153,7 +153,7 @@ public class AuthController {
 
 
 
-@PutMapping("/ChangePassword")
+@PutMapping("/changePassword")
 public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwords, HttpServletRequest request) {
     String oldPassword = passwords.get("oldPassword");
     String newPassword = passwords.get("newPassword");
