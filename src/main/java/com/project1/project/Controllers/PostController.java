@@ -222,9 +222,9 @@ return ResponseEntity.badRequest().body("this post is private");
   public ResponseEntity deleteComment(@PathVariable Long commentId) {
     User user = userFromToken(request);
         if (user==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
       // List<Comment>postComments=postRepo.postComments(postId);
-      Comment comment = commentRepo.findById(commentId).get();
+      Comment comment = commentRepo.findById(commentId).orElseThrow(() -> new NFException("comment with ID " + commentId + " not found."));
       User userComment = comment.getUser();
 
       if (userHasPermissionToDeleteComment(commentId, user.getId())) {
@@ -238,19 +238,19 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
   private boolean userHasPermissionToDeleteComment(Long commentId, Long userId) {
 
-    Comment comment = commentRepo.findById(commentId).orElse(null);
+    Comment comment = commentRepo.findById(commentId).orElseThrow(() -> new NFException("comment with ID " + commentId + " not found."));
 
-    return comment != null && comment.getUser().getId().equals(userId);
+    return comment.getUser().getId().equals(userId);
   }
 
   ////////////////////////////////////////////////////////////////////
   @GetMapping("/user/like")
-  public ResponseEntity<CollectionModel<EntityModel<Post>>> findByLikesContainsUser() {
+  public ResponseEntity<?> findByLikesContainsUser() {
                                                                                                              
     User user = userFromToken(request);
     if (user==null)
-return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-      List<Like> likeList = likeRepo.findByUser(user);
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+    List<Like> likeList = likeRepo.findByUser(user);
       List<Post> likePost = likeList.stream().map(e -> e.post).filter(e->e!=null).collect(Collectors.toList());
       ///////////////////
       List<EntityModel<Post>> users = likePost.stream()
@@ -290,12 +290,9 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
   public ResponseEntity<?> createLikePost(@RequestBody Like like, @PathVariable Long postId) {
     User user = userFromToken(request);
     if (user==null)
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-      Post post = postRepo.findById(postId).orElse(null);
-      if (post == null) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
-      }
-
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+    Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
+   
       like.setUser(user);
       like.setPost(post);
 
@@ -317,11 +314,9 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
   @GetMapping("/{postId}/likes")
   public ResponseEntity<List<EntityModel<Like>>> getAllPostLikes(@PathVariable Long postId) {
-    Optional<Post> postOptional = postRepo.findById(postId);
+   Post post= postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
 
-    if (!postOptional.isPresent()) {
-      return ResponseEntity.notFound().build();
-    }
+   
     List<Like> likes = postRepo.findLikes(postId);
 
     List<EntityModel<Like>> entityModels = likes.stream()
@@ -333,7 +328,7 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
   @DeleteMapping("/{likeId}/like")
   public ResponseEntity<MessageResponse> UnCreatelikePost(@PathVariable Long likeId) {
-    Like like=likeRepo.findById(likeId).get();
+    Like like=likeRepo.findById(likeId).orElseThrow(() -> new NFException("like with ID " + likeId + " not found."));
     User user=userFromToken(request);
     if (like.user==user){
     likeRepo.deleteById(likeId);
