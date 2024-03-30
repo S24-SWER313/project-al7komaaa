@@ -94,14 +94,10 @@ public class PostController {
 
   @GetMapping("/{postId}/comment")
   public ResponseEntity<?> getAllPostComments(@PathVariable Long postId) {
-
-    Optional<Post> postOptional = postRepo.findById(postId);
-    if (!postOptional.isPresent()) {
-      MessageResponse errorMessage = new MessageResponse("Post with ID " + postId + " not found.");
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
-    }
-
-    List<Comment> comments = postOptional.get().postComments;
+User user =userFromToken(request);
+    Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
+if (post.getUser().friends.contains(user)||!post.getUser().getAccountIsPrivate()){
+    List<Comment> comments = post.postComments;
 
     List<EntityModel<Comment>> commentModels = comments.stream()
         .map(com -> commentmodelAss.commentDelEdit(com))
@@ -112,7 +108,8 @@ public class PostController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(noCommentsMessage);
     }
     return ResponseEntity.ok(CollectionModel.of(commentModels,
-        linkTo(methodOn(PostController.class).findById(postId)).withRel("Go to Post")));
+        linkTo(methodOn(PostController.class).findById(postId)).withRel("Go to Post")));}
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("this user's profile is private add him to see comment of this post ");
 
   }
 
