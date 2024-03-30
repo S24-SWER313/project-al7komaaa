@@ -7,17 +7,26 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.util.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties.Http;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.authentication.logout.DelegatingServerLogoutHandler;
+import org.springframework.security.web.server.authentication.logout.SecurityContextServerLogoutHandler;
+import org.springframework.security.web.server.authentication.logout.WebSessionServerLogoutHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,8 +44,6 @@ import com.project1.project.Payload.Response.MessageResponse;
 import com.project1.project.Security.Jwt.JwtUtils;
 import com.project1.project.Security.Services.UserDetailsImpl;
 
-
-
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -45,6 +52,7 @@ public class AuthController {
   @Autowired
   AuthenticationManager authenticationManager;
 
+  
   @Autowired
   UserRepo userRepository;
   @Autowired
@@ -57,6 +65,12 @@ public class AuthController {
 
   @Autowired
   JwtUtils jwtUtils;
+
+
+  // @Autowired
+  // private JwtTokenProvider jwtTokenProvider;
+
+
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -177,6 +191,64 @@ public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwor
   
       return null;
     }
-  
+
+
+
+//     @PostMapping("/logout")
+// public ResponseEntity<?> logoutUser(HttpServletRequest request, HttpServletResponse response) {
+//     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//     if (authentication != null) {
+//         new SecurityContextLogoutHandler().logout(request, response, authentication);
+//     }
+//     return ResponseEntity.ok("you Logout successfully");
+// }
+
+// @PostMapping("/logout")
+// public ResponseEntity<?> logoutUser(HttpServletRequest request, HttpServletResponse response) {
+//     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//     if (authentication != null) {
+//         new SecurityContextLogoutHandler().logout(request, response, authentication);
+//     }
+
+//     // إلغاء صلاحية التوكن هنا
+//     String token = extractTokenFromRequest(request);
+//     if (token != null) {
+//         tokenBlacklistService.addToBlacklist(token); // إضافة التوكن إلى قائمة التوكنات منتهية الصلاحية
+//     }
+
+//     return ResponseEntity.ok("you Logout successfully");
+// }
+
+// // استخراج التوكن من الطلب
+// private String extractTokenFromRequest(HttpServletRequest request) {
+//     // تقوم بتنفيذ هذه الوظيفة وفقًا لكيفية استخدامك للتوكنات، مثل استخراج التوكن من الهيدر أو الكوكيز أو الجسم
+//     return null;
+// }
+
+
+// @PostMapping("/logout")
+// public ResponseEntity<?> logoutUser(HttpServletRequest request) {
+//     // استخراج رمز JWT من رأس الطلب
+//     String jwt = parseJwt(request);
+    
+//     // إلغاء صلاحية JWT
+//     jwtUtils.setExpiration(0);
+    
+//     return ResponseEntity.ok("تم تسجيل الخروج بنجاح.");
+// }
+@PostMapping("/logout")
+    public SecurityWebFilterChain logout(ServerHttpSecurity http) {
+        // تكوين معالج تسجيل الخروج
+        DelegatingServerLogoutHandler logoutHandler = new DelegatingServerLogoutHandler(
+            new SecurityContextServerLogoutHandler(), new WebSessionServerLogoutHandler()
+        );
+
+        // تكوين مسار تسجيل الخروج
+        http.logout(logout -> logout.logoutHandler(logoutHandler))
+            .authorizeExchange(exchange -> exchange.anyExchange().authenticated());
+
+        // بناء سلسلة فلاتر الأمان
+        return http.build();
+    }
   
   }
