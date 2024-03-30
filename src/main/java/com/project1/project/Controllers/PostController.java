@@ -468,7 +468,7 @@ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
   
 
   @GetMapping("/postUser/{postid}")
-  public ResponseEntity<EntityModel<User>> postUser(@PathVariable Long postid) {//owner
+  public ResponseEntity<EntityModel<User>> postUser(@PathVariable Long postid) {//owner ,user who owner the post
     Post post = postRepo.findById(postid).get();
 
     return ResponseEntity.ok(usermodelAss.toModeluserprofile(post.user));
@@ -495,7 +495,7 @@ return ResponseEntity.ok("you aren't the owner of this comment ");
 
 @GetMapping("/{id}/user")
 public ResponseEntity<?> getUserPost(@PathVariable Long id) {
-  User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("user not found"));
+  User user = userRepo.findById(id).orElseThrow(() -> new NFException("user with ID " + id + " not found."));
   User signInUser = userFromToken(request);
  if(user.getAccountIsPrivate() && !user.friends.contains(signInUser)){
   return ResponseEntity.ok("the account is private you cant view");
@@ -550,7 +550,7 @@ public ResponseEntity<?> editShare(@PathVariable Long shareId, @RequestBody Stri
   if (user==null)
 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-  Share share = shareRepo.findById(shareId).orElseThrow(() -> new RuntimeException("share not found"));
+  Share share = shareRepo.findById(shareId).orElseThrow(() -> new NFException("share with ID " + shareId + " not found."));
   if(share.user==user){       
   share.setContent(editShare);
   shareRepo.save(share);
