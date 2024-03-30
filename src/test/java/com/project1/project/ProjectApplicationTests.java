@@ -515,7 +515,7 @@ void testgetAllPostLikes() throws Exception{
 @Test
 void testUnCreatelikePost() throws Exception{//if delete the like and you are  the owner
     // assertEquals(testAuthenticateUser(), "");
-    mockMvc.perform(delete("/post/3/like")
+    mockMvc.perform(delete("/post/5/like")
     .header("Authorization", "Bearer " + testAuthenticateUser())
     .contentType(MediaType.APPLICATION_JSON)
     // .content("Enter your share content here")
@@ -571,7 +571,7 @@ void testfindyPosts() throws Exception{//MY POST
     // .content("Enter your share content here")
     ) 
     .andExpect(status().isOk())
-    .andExpect(jsonPath("$._embedded.posts[0].content").value("postfatma2")); 
+    .andExpect(jsonPath("$._embedded.posts[0].content").value("FatMai")); 
 
 }
 @Test
