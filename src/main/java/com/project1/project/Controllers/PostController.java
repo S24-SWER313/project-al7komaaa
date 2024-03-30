@@ -97,8 +97,11 @@ public class PostController {
 User user =userFromToken(request);
     Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
 if (post.getUser().friends.contains(user)||!post.getUser().getAccountIsPrivate()){
-    List<Comment> comments = post.postComments;
-
+    //List<Comment> comments = post.postComments;
+List<Comment>comments=postRepo.postComments(postId);
+if (comments.isEmpty()) {
+  return ResponseEntity.ok(new MessageResponse("no comment in this post"));
+}
     List<EntityModel<Comment>> commentModels = comments.stream()
         .map(com -> commentmodelAss.commentDelEdit(com))
         .collect(Collectors.toList());
