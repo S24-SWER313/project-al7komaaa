@@ -194,61 +194,16 @@ public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwor
 
 
 
-//     @PostMapping("/logout")
-// public ResponseEntity<?> logoutUser(HttpServletRequest request, HttpServletResponse response) {
-//     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//     if (authentication != null) {
-//         new SecurityContextLogoutHandler().logout(request, response, authentication);
-//     }
-//     return ResponseEntity.ok("you Logout successfully");
-// }
-
-// @PostMapping("/logout")
-// public ResponseEntity<?> logoutUser(HttpServletRequest request, HttpServletResponse response) {
-//     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//     if (authentication != null) {
-//         new SecurityContextLogoutHandler().logout(request, response, authentication);
-//     }
-
-//     // إلغاء صلاحية التوكن هنا
-//     String token = extractTokenFromRequest(request);
-//     if (token != null) {
-//         tokenBlacklistService.addToBlacklist(token); // إضافة التوكن إلى قائمة التوكنات منتهية الصلاحية
-//     }
-
-//     return ResponseEntity.ok("you Logout successfully");
-// }
-
-// // استخراج التوكن من الطلب
-// private String extractTokenFromRequest(HttpServletRequest request) {
-//     // تقوم بتنفيذ هذه الوظيفة وفقًا لكيفية استخدامك للتوكنات، مثل استخراج التوكن من الهيدر أو الكوكيز أو الجسم
-//     return null;
-// }
 
 
-// @PostMapping("/logout")
-// public ResponseEntity<?> logoutUser(HttpServletRequest request) {
-//     // استخراج رمز JWT من رأس الطلب
-//     String jwt = parseJwt(request);
-    
-//     // إلغاء صلاحية JWT
-//     jwtUtils.setExpiration(0);
-    
-//     return ResponseEntity.ok("تم تسجيل الخروج بنجاح.");
-// }
 @PostMapping("/logout")
-    public SecurityWebFilterChain logout(ServerHttpSecurity http) {
-        // تكوين معالج تسجيل الخروج
-        DelegatingServerLogoutHandler logoutHandler = new DelegatingServerLogoutHandler(
-            new SecurityContextServerLogoutHandler(), new WebSessionServerLogoutHandler()
-        );
-
-        // تكوين مسار تسجيل الخروج
-        http.logout(logout -> logout.logoutHandler(logoutHandler))
-            .authorizeExchange(exchange -> exchange.anyExchange().authenticated());
-
-        // بناء سلسلة فلاتر الأمان
-        return http.build();
+    public ResponseEntity<?> logout(Authentication authentication) {
+        if (authentication != null) {
+            SecurityContextHolder.getContext().setAuthentication(null);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            return ResponseEntity.ok("you Logout successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Error logging out");
+}
     }
-  
   }

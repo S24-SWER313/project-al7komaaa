@@ -112,7 +112,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         .authorizeHttpRequests(auth -> 
           auth.requestMatchers("/api/auth/**").permitAll() // يجب أن تشمل جميع المسارات المتعلقة بالتسجيل والمصادقة
               .requestMatchers("/api/test/**").permitAll()
-              // .requestMatchers("/post/**").permitAll()
+              // .requestMatchers("/api/auth/logout").authenticated()
 
             //  .anyRequest().permitAll()); // إذا كانت هذه المسارات غير محمية
               .anyRequest().authenticated()        );
