@@ -5,6 +5,8 @@ import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 
+import javax.crypto.SecretKey;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +28,7 @@ public class JwtUtils {
 
   @Value("${bezkoder.app.jwtExpirationMs}")
   private int jwtExpirationMs;
+  
 
   public String generateJwtToken(Authentication authentication) {
 
@@ -64,6 +67,31 @@ public class JwtUtils {
 
     return false;
   }
+private SecretKey getSecretKey() {
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+}
+public void expireJwtToken(String token) {
+  try {
+      Claims claims = Jwts.parserBuilder()
+                           .setSigningKey(getSecretKey())
+                           .build()
+                           .parseClaimsJws(token)
+                           .getBody();
+      claims.put("exp", new Date()); // تعيين وقت انتهاء الصلاحية إلى الوقت الحالي
+  } catch (Exception e) {
+      // يمكنك إضافة معالجة لأي استثناء هنا
+      logger.error("Error while expiring JWT token: {}", e.getMessage());
+  }
+}
+
+
+
+
+
+
+
+
+
 
 
 }

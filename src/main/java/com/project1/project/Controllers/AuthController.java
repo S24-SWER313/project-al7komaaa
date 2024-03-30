@@ -7,17 +7,26 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.util.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties.Http;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.authentication.logout.DelegatingServerLogoutHandler;
+import org.springframework.security.web.server.authentication.logout.SecurityContextServerLogoutHandler;
+import org.springframework.security.web.server.authentication.logout.WebSessionServerLogoutHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,8 +44,6 @@ import com.project1.project.Payload.Response.MessageResponse;
 import com.project1.project.Security.Jwt.JwtUtils;
 import com.project1.project.Security.Services.UserDetailsImpl;
 
-
-
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -45,6 +52,7 @@ public class AuthController {
   @Autowired
   AuthenticationManager authenticationManager;
 
+  
   @Autowired
   UserRepo userRepository;
   @Autowired
@@ -57,6 +65,12 @@ public class AuthController {
 
   @Autowired
   JwtUtils jwtUtils;
+
+
+  // @Autowired
+  // private JwtTokenProvider jwtTokenProvider;
+
+
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -139,7 +153,7 @@ public class AuthController {
 
 
 
-@PutMapping("/ChangePassword")
+@PutMapping("/changePassword")
 public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwords, HttpServletRequest request) {
     String oldPassword = passwords.get("oldPassword");
     String newPassword = passwords.get("newPassword");
@@ -177,6 +191,19 @@ public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwor
   
       return null;
     }
-  
-  
+
+
+
+
+
+@PostMapping("/logout")
+    public ResponseEntity<?> logout(Authentication authentication) {
+        if (authentication != null) {
+            SecurityContextHolder.getContext().setAuthentication(null);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            return ResponseEntity.ok("you Logout successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Error logging out");
+}
+    }
   }

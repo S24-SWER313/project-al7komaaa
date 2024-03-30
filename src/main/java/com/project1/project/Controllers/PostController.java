@@ -97,8 +97,11 @@ public class PostController {
 User user =userFromToken(request);
     Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
 if (post.getUser().friends.contains(user)||!post.getUser().getAccountIsPrivate()){
-    List<Comment> comments = post.postComments;
-
+    //List<Comment> comments = post.postComments;
+List<Comment>comments=postRepo.postComments(postId);
+if (comments.isEmpty()) {
+  return ResponseEntity.ok(new MessageResponse("no comment in this post"));
+}
     List<EntityModel<Comment>> commentModels = comments.stream()
         .map(com -> commentmodelAss.commentDelEdit(com))
         .collect(Collectors.toList());
@@ -420,7 +423,7 @@ return ResponseEntity.badRequest().body("this post is private");
     return null;
   }
 
-  @GetMapping("/FriendPosts/{friendId}")
+  @GetMapping("/friendPosts/{friendId}")
   public ResponseEntity<?> findFriendPosts( @PathVariable Long friendId) {
            User user = userFromToken(request);
            if (user==null)
@@ -589,9 +592,7 @@ else{
       like.setShare(share);
        user.likes.add(like);
        share.like.add(like);  }
-      // userRepo.save(user);
-      // shareRepo.save(share);
-    
+   
        likeRepo.save(like);
       
 
@@ -614,14 +615,11 @@ public ResponseEntity<?> createShareComment( @RequestBody Comment comment, @Path
       
       comment.setUser(user);
       comment.setShare(share);
-      // user.comments.add(comment);
       userRepo.save(user);
       shareRepo.save(share);
       commentRepo.save(comment);
       return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment));
 }
-
-
 
 
 @PostMapping("/reals/create")
@@ -642,6 +640,7 @@ return ResponseEntity.ok(new MessageResponse("must be video and content"));
 // public ResponseEntity<?> deleteRels(Comment comment, HttpServletRequest request) {
 //   return null;
 // }
+
 
 
 
