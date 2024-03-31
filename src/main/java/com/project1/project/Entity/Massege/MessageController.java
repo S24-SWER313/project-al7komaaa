@@ -1,7 +1,10 @@
 package com.project1.project.Entity.Massege;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,25 +51,53 @@ public class MessageController {
         messageRepository.save(message);
         return ResponseEntity.ok().build();
     }
- @GetMapping("/user")
-    public ResponseEntity<?> getUserMessages() {
-    User me=userFromToken(request);
+//  @GetMapping("/user")
+//     public ResponseEntity<?> getUserMessages() {
+//     User me=userFromToken(request);
    
-        List<Message> userMessages = messageRepository.findBySenderId(me.getId());
-        if(userMessages.isEmpty())
-        return ResponseEntity.ok().body("userMessages");
-        return ResponseEntity.ok().body(userMessages);
-    }
+//         List<Message> userMessages = messageRepository.findBySenderId(me.getId());
+//         if(userMessages.isEmpty())
+//         return ResponseEntity.ok().body("userMessages");
+//         return ResponseEntity.ok().body(userMessages);
+//     }
     @GetMapping("/messaging/{userId}")
     public ResponseEntity<?> getMessagesBetweenUsers(@PathVariable Long userId) {
         User user1 = userRepo.findById(userId).orElseThrow(() -> new NFException("User with ID " + userId + " not found."));
         User user2 = userFromToken(request);
         
-        List<Message> messages = messageRepository.findMessagesBetweenUsers(user1, user2);
+        List<Message> messages = messageRepository.findMessagesBetweenUsers(user2, user1);
+         List<MessageResponse> messageResponses = new ArrayList<>();
+        for (Message message : messages) {
+            MessageResponse response = new MessageResponse();
+            response.setSenderName(message.getReceiver().getUsername()); 
+            response.setContent(message.getContent());
+            messageResponses.add(response);
+        }
         
-        return ResponseEntity.ok().body(messages);
+        return ResponseEntity.ok().body(messageResponses);
+    }@GetMapping("/between/{otherUserId}")
+    public ResponseEntity<List<MessageResponse>> getMessagesBetweenUserAndOtherUser(@PathVariable Long otherUserId) {
+        User currentUser = userFromToken(request);
+        User otherUser = userRepo.findById(otherUserId).orElseThrow(() -> new NFException("User with ID " + otherUserId + " not found."));
+    
+        List<Message> sentMessages = messageRepository.findBySenderAndReceiver(currentUser, otherUser);
+    
+        List<Message> receivedMessages = messageRepository.findBySenderAndReceiver(otherUser, currentUser);
+    
+        List<MessageResponse> messageResponses = new ArrayList<>();
+        for (Message message : sentMessages) {
+            messageResponses.add(new MessageResponse(currentUser.getUsername(), message.getContent(),message.getTimestamp()));
+        }
+        for (Message message : receivedMessages) {
+            messageResponses.add(new MessageResponse(message.getSender().getUsername(), message.getContent(),message.getTimestamp()));
+        }
+    
+        return ResponseEntity.ok().body(messageResponses.stream().sorted(Comparator.comparing(MessageResponse::getTimestamp))
+        .collect(Collectors.toList()));
     }
     
+    
+  
    
 public User userFromToken(HttpServletRequest request){
   String jwt = parseJwt(request);
