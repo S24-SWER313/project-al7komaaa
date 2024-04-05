@@ -10,14 +10,17 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @ManyToOne
-    private User recipient;
+    // Notification.java
+@ManyToOne
+@JoinColumn(name = "recipient_id")
+private User recipient;
+
     
     private String content;
     
     private LocalDateTime timestamp;
     
-    private boolean read;
+    private boolean isRead;
 
     public Long getId() {
         return id;
@@ -52,11 +55,11 @@ public class Notification {
     }
 
     public boolean isRead() {
-        return read;
+        return isRead;
     }
 
     public void setRead(boolean read) {
-        this.read = read;
+        this.isRead = read;
     }
 
     public Notification() {
