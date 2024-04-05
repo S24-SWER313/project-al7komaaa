@@ -7,6 +7,15 @@ import com.project1.project.Entity.Share.Share;
 import com.project1.project.Entity.User.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 @Entity
 @Table(name = "posts")
 public class Post {
@@ -79,9 +88,11 @@ private String content;
     public void setImage(String image) {
         this.image = image;
     }
+  
     public String getVideo() {
         return video;
     }
+
     public void setVideo(String video) {
         this.video = video;
     }
@@ -92,4 +103,15 @@ private String content;
         this.content = content;
     }
     
-}
+
+    // public byte[] getVideoReel() {
+    //     try {
+    //         Path videoFile = Paths.get(getVideo());
+    //         byte[] videoBytes = Files.readAllBytes(videoFile);
+    //         return videoBytes;
+    //     } catch (IOException e) {
+    //         e.printStackTrace();
+    //         return null; 
+    //     }
+    // }
+    }

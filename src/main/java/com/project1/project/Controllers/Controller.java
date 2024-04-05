@@ -1,6 +1,7 @@
 package com.project1.project.Controllers;
 
 import java.net.URI;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,12 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.http.MediaType;
+import java.io.IOException;
+import java.nio.file.Files;
 
+import java.nio.file.Paths;
+import java.util.UUID;
 
 @RestController
 public class Controller {
@@ -366,7 +372,21 @@ user.setImage(res);
 userRepo.save(user);
   return ResponseEntity.ok(user.getImage());
 }
-
+@GetMapping("/getImage/{userId}")
+public ResponseEntity<byte[]> getImage(@PathVariable Long userId) {
+    User user = userRepo.findById(userId).orElse(null);
+    if (user == null || user.getImage() == null || user.getImage().isEmpty()) {
+        return ResponseEntity.notFound().build();
+    }
+    try {
+        Path imagePath = Paths.get( user.getImage());
+        byte[] imageBytes = Files.readAllBytes(imagePath);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+    } catch (IOException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
 
 @PutMapping("/editDof")
 public ResponseEntity<?> editDof(@RequestBody LocalDate dateofbirth) {//
@@ -390,7 +410,21 @@ userRepo.save(user);
   return ResponseEntity.ok(user.getBackgroudimage());
 }
 
-
+@GetMapping("/backgroundImage/{userId}")
+public ResponseEntity<byte[]> getBackgroundImage(@PathVariable Long userId) {
+    User user = userRepo.findById(userId).orElse(null);
+    if (user == null || user.getImage() == null || user.getImage().isEmpty()) {
+        return ResponseEntity.notFound().build();
+    }
+    try {
+        Path imagePath = Paths.get( user.getBackgroudimage());
+        byte[] imageBytes = Files.readAllBytes(imagePath);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+    } catch (IOException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
 
 
 
