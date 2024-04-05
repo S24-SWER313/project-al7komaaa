@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.project1.project.NFException;
 import com.project1.project.Entity.Comment.Comment;
@@ -75,6 +77,8 @@ public class PostController {
 
   @Autowired
   private CommentModelAss commentmodelAss;
+  
+  private ImageUploadController imageUploadController=new ImageUploadController();
 
   @Autowired
   private LikeRepo likeRepo;
@@ -91,7 +95,14 @@ public class PostController {
       postRepo.save(post);
       return ResponseEntity.ok(new MessageResponse("Post Created successfully!"));
   }
-
+  @PostMapping("{id}/create/image")
+  public ResponseEntity<?> addImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+    Post post = postRepo.findById(id).orElseThrow(() -> new NFException("post with ID " + id + " not found."));
+ String im=   imageUploadController.uploadImage(file);
+    post.setImage(im);
+      postRepo.save(post);
+      return ResponseEntity.ok(new MessageResponse(im));
+  }
   @GetMapping("/{postId}/comment")
   public ResponseEntity<?> getAllPostComments(@PathVariable Long postId) {
 User user =userFromToken(request);
@@ -217,6 +228,14 @@ return ResponseEntity.badRequest().body("this post is private");
       commentRepo.save(comment);
       return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment));}
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("this user's profile is private add him to write a comment of this post ");
+}
+@PostMapping("comment/{id}/image")
+public ResponseEntity<?> addImageComment(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+  Comment comment = commentRepo.findById(id).orElseThrow(() -> new NFException("comment with ID " + id + " not found."));
+String im=   imageUploadController.uploadImage(file);
+  comment.setImage(im);
+  commentRepo.save(comment);
+    return ResponseEntity.ok(new MessageResponse("added image successfully"));
 }
 
   @DeleteMapping("/comment/{commentId}")
@@ -564,8 +583,8 @@ public ResponseEntity<?> editPost(@RequestBody Post newpost ,@PathVariable Long 
 
   if(oldpost.user==user){       
   oldpost.setContent(newpost.getContent());
-oldpost.setImage(newpost.getImage());
-oldpost.setVideo(newpost.getVideo());
+// oldpost.setImage(newpost.getImage());
+// oldpost.setVideo(newpost.getVideo());
   postRepo.save(oldpost);
 
   return ResponseEntity.ok(postmodelAss.toModelpostId(oldpost));
@@ -623,12 +642,16 @@ public ResponseEntity<?> createShareComment( @RequestBody Comment comment, @Path
 
 
 @PostMapping("/reals/create")
-public ResponseEntity<?> createReal(@RequestBody Post post) {
+public ResponseEntity<?> createReal( @RequestParam("file") MultipartFile video) {
   User user = userFromToken(request);
   if (user==null)
   return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
-
-//Post post = new Post(video);
+//   if (video.getSize() > 10000 * 1024 * 1024) { // 10000MB in bytes
+//     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File size should not exceed 10000MB");
+// }
+   Post post=new Post();
+   String im = imageUploadController.uploadImage(video);
+   post.setVideo(im);
 if(post.getVideo()!= null){
 post.setUser(user);
 postRepo.save(post);
@@ -636,6 +659,19 @@ return ResponseEntity.ok(new MessageResponse("Reel Created successfully!"));
 }
 return ResponseEntity.ok(new MessageResponse("must be video and content"));
 }
+//worked as edit content 
+@PostMapping("/{id}/reals/create/content")
+public ResponseEntity<?> createRealcontent(@RequestBody String content ,@PathVariable Long id) {
+  Post post = postRepo.findById(id).orElseThrow(() -> new NFException("Post with ID " + id + " not found."));
+  User user = userFromToken(request);
+  if (user==post.user){
+post.setContent(content);
+   postRepo.save(post);
+return ResponseEntity.ok(new MessageResponse("Reel content Created successfully!"));}
+return ResponseEntity.ok("you aren't the owner of this real ");
+
+}
+
 // @DeleteMapping
 // public ResponseEntity<?> deleteRels(Comment comment, HttpServletRequest request) {
 //   return null;
