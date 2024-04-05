@@ -954,5 +954,14 @@ void testMessagesBetweenUserAndOtherUser() throws Exception{
 
 
 
+@Test
+void testcontentReel() throws Exception {
+    mockMvc.perform(post("/post/10/reals/create/content")
+            .header("Authorization", "Bearer " + testAuthenticateUser())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("celina"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.message").value("Reel content Created successfully!"));
+}
 
 }
