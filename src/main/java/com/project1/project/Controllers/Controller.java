@@ -87,10 +87,11 @@ ImageUploadController imageUploadController=new ImageUploadController();
 
     @GetMapping("/user/{id}")
 public ResponseEntity<?> getUserById(@PathVariable Long id) {
+
     User user = userRepo.findById(id)
     .orElseThrow(() -> new NFException("user with ID " + id + " not found."));
     EntityModel<User> entityModel = userModelAss.toModeluserprofile(user);
-    // if (user.getAccountIsPrivate())
+    // if (user.getAccountIsPrivate()||user!=me||!me.friends.contains(user))
     // return ResponseEntity.ok("this account is private to see user post addFriend");
     return ResponseEntity.ok(entityModel);
 }
