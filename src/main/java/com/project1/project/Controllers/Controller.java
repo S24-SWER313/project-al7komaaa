@@ -19,13 +19,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.project1.project.NFException;
 import com.project1.project.Entity.Comment.Comment;
+import com.project1.project.Controllers.ImageUploadController;
+
 import com.project1.project.Entity.Comment.CommentRepo;
 import com.project1.project.Entity.Like.Like;
 import com.project1.project.Entity.Like.LikeRepo;
@@ -59,6 +63,8 @@ public class Controller {
 private UserModelAss userModelAss;
 @Autowired
 HttpServletRequest request;
+
+ImageUploadController imageUploadController=new ImageUploadController();
     public Controller(CommentRepo commentRepo, LikeRepo likeRepo, PostRepo postRepo, ShareRepo shareRepo,
             UserRepo userRepo) {
         this.commentRepo = commentRepo;
@@ -350,13 +356,14 @@ userRepo.save(user);
 
 
 @PutMapping("/editImage")
-public ResponseEntity<?> editImage(@RequestBody String image) {
+public ResponseEntity<?> editImage(@RequestParam("file")MultipartFile file) {
   User user = userFromToken(request);
   if (user==null)
 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-user.setImage(image);
+String res=imageUploadController.uploadImage(file);
+user.setImage(res);
 userRepo.save(user);
-  return ResponseEntity.ok("Image changed to" +user.getImage());
+  return ResponseEntity.ok(user.getImage());
 }
 
 
@@ -372,13 +379,14 @@ userRepo.save(user);
 
 
 @PutMapping("/editBackgroundImage")
-public ResponseEntity<?> editBackgroundImage(@RequestBody String backgroudimage) {
+public ResponseEntity<?> editBackgroundImage(@RequestParam("file")MultipartFile file) {
   User user = userFromToken(request);
   if (user==null)
 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-user.setBackgroudimage(backgroudimage);
+String res=imageUploadController.uploadImage(file);
+user.setBackgroudimage(res);
 userRepo.save(user);
-  return ResponseEntity.ok("Background Image changed to" +user.getBackgroudimage());
+  return ResponseEntity.ok(user.getBackgroudimage());
 }
 
 
