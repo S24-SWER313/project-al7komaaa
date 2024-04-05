@@ -922,4 +922,24 @@ void testsendMessage() throws Exception{
    // .andExpect(content().string("you send this message successfully")); 
 
 }
+
+
+@Test
+void testgetMessagesBetweenUsers() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/messages/messaging/1")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON))
+   // .content("message1")     
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$[0].content").value("message1"));
+   // .andExpect(content().string("you send this message successfully")); 
+
+}
+
+
+
+
+
+
 }

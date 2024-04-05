@@ -75,6 +75,7 @@ public class MessageController {
             MessageResponse response = new MessageResponse();
             response.setSenderName(message.getReceiver().getUsername()); 
             response.setContent(message.getContent());
+            response.setTimestamp(message.getTimestamp());
             messageResponses.add(response);
         }
         
