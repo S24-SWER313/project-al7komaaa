@@ -910,5 +910,16 @@ void testsignUp3() throws Exception{//if the user enter short password
 // }
 
 
+@Test
+void testsendMessage() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/messages/send/1")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("message1")    ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$").value("you send this message successfully"));
+   // .andExpect(content().string("you send this message successfully")); 
 
+}
 }
