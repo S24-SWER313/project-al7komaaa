@@ -44,17 +44,7 @@ private String content;
     private List<Share> shares;
     public Post() {
     }
-//
- 
-    public Post( String image, String video, String content) {
 
-      
-        this.image = image;
-        this.video = video;
-        this.content = content;
-        // this.user.setId(userId);
-      
-    }
 
 
     public Post( String content) {
@@ -63,10 +53,7 @@ private String content;
      
 
     }
-    public Post(String content, String video) {
-        this.content = content;
-        this.video = video;
-    }
+  
 
     public Long getPostId() {
         return postId;

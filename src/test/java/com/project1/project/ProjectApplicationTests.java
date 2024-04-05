@@ -685,7 +685,7 @@ void testgetReals() throws Exception{
     // .content("{ \"video\":\"video\",\"content\":\"reel1\"}")   
      ) 
     .andExpect(status().isOk())
-    .andExpect(jsonPath("$._embedded.posts[0].video").value("a580f717-7d7b-42ab-a9d2-333d89c109d0_WIN_20240405_17_48_32_Pro.mp4"));
+    .andExpect(jsonPath("$._embedded.posts[0].video").value("76432b60-7234-475c-8d40-775fe86b0d28_9c654321-fcdf-441c-8e2b-de565401ac97_a580f717-7d7b-42ab-a9d2-333d89c109d0_WIN_20240405_17_48_32_Pro.mp4"));
 }
 
 
@@ -909,6 +909,60 @@ void testsignUp3() throws Exception{//if the user enter short password
 //     .andExpect(jsonPath("$.message").value("Password changed successfully for user: fatma2"));
 // }
 
+
+@Test
+void testsendMessage() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(post("/messages/send/1")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("message1")    ) 
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$").value("you send this message successfully"));
+   // .andExpect(content().string("you send this message successfully")); 
+
+}
+
+
+@Test
+void testgetMessagesBetweenUsers() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/messages/messaging/1")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON))
+   // .content("message1")     
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$[0].content").value("message1"));
+   // .andExpect(content().string("you send this message successfully")); 
+
+}
+
+
+
+@Test
+void testMessagesBetweenUserAndOtherUser() throws Exception{
+    // assertEquals(testAuthenticateUser(), "");
+    mockMvc.perform(get("/messages/between/1")
+    .header("Authorization", "Bearer " + testAuthenticateUser())
+    .contentType(MediaType.APPLICATION_JSON))
+   // .content("message1")     
+    .andExpect(status().isOk())
+    .andExpect(jsonPath("$[0].content").value("message1"));
+   // .andExpect(content().string("you send this message successfully")); 
+
+}
+
+
+
+@Test
+void testcontentReel() throws Exception {
+    mockMvc.perform(post("/post/10/reals/create/content")
+            .header("Authorization", "Bearer " + testAuthenticateUser())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("celina"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.message").value("Reel content Created successfully!"));
+}
 
 
 }

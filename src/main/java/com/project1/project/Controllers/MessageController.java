@@ -1,4 +1,4 @@
-package com.project1.project.Entity.Massege;
+package com.project1.project.Controllers;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project1.project.NFException;
+import com.project1.project.Entity.Massege.Message;
+import com.project1.project.Entity.Massege.MessageRepository;
+import com.project1.project.Entity.Massege.MessageResponse;
 import com.project1.project.Entity.Post.PostRepo;
 import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserRepo;
@@ -49,8 +52,9 @@ public class MessageController {
         message.setContent(messageDTO);
         message.setTimestamp(LocalDateTime.now());
         messageRepository.save(message);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("you send this message successfully");
     }
+    
 //  @GetMapping("/user")
 //     public ResponseEntity<?> getUserMessages() {
 //     User me=userFromToken(request);
@@ -71,6 +75,7 @@ public class MessageController {
             MessageResponse response = new MessageResponse();
             response.setSenderName(message.getReceiver().getUsername()); 
             response.setContent(message.getContent());
+            response.setTimestamp(message.getTimestamp());
             messageResponses.add(response);
         }
         
