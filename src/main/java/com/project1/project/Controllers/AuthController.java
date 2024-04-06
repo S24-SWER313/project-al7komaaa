@@ -65,6 +65,10 @@ public class AuthController {
 
   @Autowired
   JwtUtils jwtUtils;
+  
+  @Autowired
+  private NotificationController notificationController;
+  
 
 
   // @Autowired
@@ -173,6 +177,7 @@ public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwor
         user.setPassword(encoder.encode(newPassword)); 
         
         userRepository.save(user); 
+        notificationController.send("Password changed successfully", user.getId());
         
         return ResponseEntity.ok(new MessageResponse("Password changed successfully for user: " + username));
     } else {
