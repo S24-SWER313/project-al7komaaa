@@ -34,21 +34,22 @@ public class NotificationController {
     @Autowired
     HttpServletRequest request;
 
-  @PostMapping("/notifications/send/{recipientId}")
-    public ResponseEntity<?> send(@RequestBody String message, @PathVariable Long recipientId) {
+ // @PostMapping("/notifications/send/{recipientId}")
+    public void send( String message,  Long recipientId) {
        
         User recipient = userRepo.findById(recipientId).orElseThrow(() -> new RuntimeException("Recipient not found"));
      //  User user = new User("s" , "ss","sss");
      sendNotification(message, recipient.getId());
-        return ResponseEntity.ok("A Notification sent Successfully to "+recipient.getId());
+       // return ResponseEntity.ok("A Notification sent Successfully to "+recipient.getId());
     }
 
     @PostMapping("/notifications/{notificationId}/mark-as-read")
-    public void markAsRead(@PathVariable Long notificationId) {
+    public ResponseEntity<?> markAsRead(@PathVariable Long notificationId) {
         Notification notification = notificationRepo.findById(notificationId)
                 .orElseThrow(() -> new RuntimeException("Notification not found"));
         notification.setRead(true);
         notificationRepo.save(notification);
+        return ResponseEntity.ok("the notification has been read ");
     }
     public void sendNotification(String message, Long recipientId) {
         User sender = userFromToken(request);
@@ -84,6 +85,9 @@ public class NotificationController {
     
         return null;
       }
+
+    public NotificationController() {
+    }
 
 
 
