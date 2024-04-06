@@ -12,4 +12,5 @@ public interface NotificationRepo extends JpaRepository<Notification, Long> {
     List<Notification> findByRecipientAndIsReadIsFalse(User recipient);
     List<Notification> findUnreadNotificationsByRecipientAndIsReadIsFalse(User recipientId);
     List<Notification> findByRecipientAndIsReadIsFalseOrderByTimestampDesc(User recipient);
+    List<Notification> findByRecipient(User recipient);
 }
