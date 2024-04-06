@@ -66,7 +66,11 @@ public class NotificationController {
         notificationRepo.save(notification);
 
     }
-
+    @GetMapping("/notifications")
+    public List<Notification> getAllNotifications() {
+        User user = userFromToken(request);
+        return notificationRepo.findByRecipient(user);
+    }
     @GetMapping("/notifications/unread")
     public List<Notification> getUnreadNotifications() {
        User user= userFromToken(request);
