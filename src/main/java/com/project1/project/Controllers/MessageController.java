@@ -41,6 +41,11 @@ public class MessageController {
     @Autowired
     private MessageRepository messageRepository;
 
+
+    @Autowired
+    private NotificationController notificationController;
+    
+
     @PostMapping("/send/{userId}")
     public ResponseEntity<?> sendMessage(@RequestBody String messageDTO,@PathVariable Long userId) {
 
@@ -52,6 +57,7 @@ public class MessageController {
         message.setContent(messageDTO);
         message.setTimestamp(LocalDateTime.now());
         messageRepository.save(message);
+        notificationController.send("this user "+userFromToken(request).getUsername()+" send message for you", rUser.getId());
         return ResponseEntity.ok().body("you send this message successfully");
     }
     

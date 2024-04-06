@@ -70,6 +70,10 @@ private UserModelAss userModelAss;
 @Autowired
 HttpServletRequest request;
 
+
+@Autowired
+private NotificationController notificationController;
+
 ImageUploadController imageUploadController=new ImageUploadController();
     public Controller(CommentRepo commentRepo, LikeRepo likeRepo, PostRepo postRepo, ShareRepo shareRepo,
             UserRepo userRepo) {
@@ -200,6 +204,7 @@ public ResponseEntity<String> addFriend(HttpServletRequest request, @PathVariabl
             friend.friends.add(user);
             userRepo.save(friend);
             userRepo.save(user);
+            notificationController.send("this user "+user.getUsername()+" Added you as a friend", friend.getId());
             return ResponseEntity.ok("Friend added successfully");
         } else {
             return ResponseEntity.badRequest().body("Friend already exists");
