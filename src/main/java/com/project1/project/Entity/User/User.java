@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project1.project.Entity.Comment.Comment;
 import com.project1.project.Entity.Like.Like;
+import com.project1.project.Entity.Notification.Notification;
 import com.project1.project.Entity.Post.Post;
 import com.project1.project.Entity.Share.Share;
 
@@ -79,7 +80,8 @@ public class User {
     @ManyToMany(cascade = CascadeType.ALL) @JsonIgnore
     @JoinTable(name = "user_friends", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
     public Set<User> friends;
-
+    @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL)
+    private List<Notification> notifications;
     public User() {
     }
 

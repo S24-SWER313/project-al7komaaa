@@ -90,6 +90,9 @@ public class PostController {
 
   @Autowired
   private CommentModelAss commentmodelAss;
+
+  @Autowired
+  private NotificationController notificationController;
   
   private ImageUploadController imageUploadController=new ImageUploadController();
 
@@ -176,6 +179,7 @@ if (comments.isEmpty()) {
           Share share = new Share(content.trim(), user, post);
           shareRepo.save(share);
          // EntityModel<Share> entityModel = EntityModel.of();
+         notificationController.send("this user "+user.getUsername()+" shared your post", post.getUser().getId());
           return ResponseEntity.ok(postmodelAss.toModelsharepostId(share));}else{
             return ResponseEntity.badRequest().body("this post is private");
           }
@@ -239,6 +243,8 @@ return ResponseEntity.badRequest().body("this post is private");
       userRepo.save(user);
       postRepo.save(post);
       commentRepo.save(comment);
+      notificationController.send("this user "+user.getUsername()+" commented on your post", post.getUser().getId());
+
       return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment));}
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("this user's profile is private add him to write a comment of this post ");
 }
@@ -340,6 +346,7 @@ String im=   imageUploadController.uploadImage(file);
 
       userRepo.save(user);
       postRepo.save(post);
+      notificationController.send("this user "+user.getUsername()+" liked your post", post.getUser().getId());
 
       return ResponseEntity.status(HttpStatus.CREATED).body(savedLike);
    
@@ -627,6 +634,7 @@ else{
    
        likeRepo.save(like);
       
+       notificationController.send("this user "+user.getUsername()+" liked your share ", share.getUser().getId());
 
       return ResponseEntity.ok("created like successfully");
 }
@@ -650,6 +658,8 @@ public ResponseEntity<?> createShareComment( @RequestBody Comment comment, @Path
       userRepo.save(user);
       shareRepo.save(share);
       commentRepo.save(comment);
+      notificationController.send("this user "+user.getUsername()+" commented on your share ", share.getUser().getId());
+
       return ResponseEntity.ok(commentmodelAss.commentDelEdit(comment));
 }
 
