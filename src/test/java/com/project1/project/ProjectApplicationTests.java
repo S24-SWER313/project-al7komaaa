@@ -981,6 +981,15 @@ void testnotification() throws Exception {
 
 
 
+@Test
+void testsendNotification() throws Exception {
+    mockMvc.perform(post("/notifications/1/mark-as-read")
+            .header("Authorization", "Bearer " + testAuthenticateUser())
+            .contentType(MediaType.APPLICATION_JSON))
+            // .content("celina"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").value("the notification has been read"));
+}
 
 
 }

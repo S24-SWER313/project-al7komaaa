@@ -1,5 +1,7 @@
 package com.project1.project.Entity.Notification;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project1.project.Entity.User.User;
 
 import jakarta.persistence.*;
@@ -11,6 +13,7 @@ public class Notification {
 
     private String message;
 
+    @JsonIgnore
     @ManyToOne
     private User recipient;
 
@@ -18,6 +21,7 @@ public class Notification {
     private boolean isRead;
 
     @ManyToOne
+    @JsonIgnore
     private User sender;
 
     private LocalDateTime timestamp;
@@ -30,8 +34,12 @@ public class Notification {
         this.message = message;
     }
 
-    public User getRecipient() {
-        return recipient;
+    // public User getRecipient() {
+    //     return recipient;
+    // }
+
+    public String getRecipientUserName() {
+        return recipient.getUsername();
     }
 
     public void setRecipient(User recipient) {
@@ -46,10 +54,13 @@ public class Notification {
         this.isRead = isRead;
     }
 
-    public User getSender() {
-        return sender;
-    }
+    // public User getSender() {
+    //     return sender;
+    // }
 
+    public String getSenderUserName() {
+        return sender.getUsername();
+    }
     public void setSender(User sender) {
         this.sender = sender;
     }

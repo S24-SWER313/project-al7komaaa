@@ -10,4 +10,6 @@ import com.project1.project.Entity.User.User;
 @Repository
 public interface NotificationRepo extends JpaRepository<Notification, Long> {
     List<Notification> findByRecipientAndIsReadIsFalse(User recipient);
+    List<Notification> findUnreadNotificationsByRecipientAndIsReadIsFalse(User recipientId);
+    List<Notification> findByRecipientAndIsReadIsFalseOrderByTimestampDesc(User recipient);
 }
