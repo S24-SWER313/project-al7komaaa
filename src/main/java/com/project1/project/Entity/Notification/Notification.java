@@ -1,33 +1,33 @@
 package com.project1.project.Entity.Notification;
-
 import java.time.LocalDateTime;
 import com.project1.project.Entity.User.User;
-import jakarta.persistence.*;
 
+import jakarta.persistence.*;
 @Entity
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    // Notification.java
-@ManyToOne
-@JoinColumn(name = "recipient_id")
-private User recipient;
 
-    
-    private String content;
-    
-    private LocalDateTime timestamp;
+    private String message;
+
+    @ManyToOne
+    private User recipient;
+
     
     private boolean isRead;
 
-    public Long getId() {
-        return id;
+    @ManyToOne
+    private User sender;
+
+    private LocalDateTime timestamp;
+
+    public String getMessage() {
+        return message;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public User getRecipient() {
@@ -38,12 +38,20 @@ private User recipient;
         this.recipient = recipient;
     }
 
-    public String getContent() {
-        return content;
+    public boolean isRead() {
+        return isRead;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setRead(boolean isRead) {
+        this.isRead = isRead;
+    }
+
+    public User getSender() {
+        return sender;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
     }
 
     public LocalDateTime getTimestamp() {
@@ -54,17 +62,8 @@ private User recipient;
         this.timestamp = timestamp;
     }
 
-    public boolean isRead() {
-        return isRead;
-    }
-
-    public void setRead(boolean read) {
-        this.isRead = read;
-    }
-
     public Notification() {
     }
 
- 
-    
+   
 }

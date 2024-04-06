@@ -69,11 +69,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<Post> posts;
     @JsonIgnore
-    // User.java
-@OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL)
-public List<Notification> notifications = new ArrayList<>();
-
-    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments;
     @JsonIgnore
@@ -85,7 +80,8 @@ public List<Notification> notifications = new ArrayList<>();
     @ManyToMany(cascade = CascadeType.ALL) @JsonIgnore
     @JoinTable(name = "user_friends", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
     public Set<User> friends;
-
+    @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL)
+    private List<Notification> notifications;
     public User() {
     }
 

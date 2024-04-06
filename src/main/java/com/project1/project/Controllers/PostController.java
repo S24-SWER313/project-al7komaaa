@@ -39,8 +39,6 @@ import com.project1.project.Entity.Comment.CommentRepo;
 import com.project1.project.Entity.Like.Like;
 import com.project1.project.Entity.Like.LikeRepo;
 import com.project1.project.Entity.Like.likeType;
-import com.project1.project.Entity.Notification.Notification;
-import com.project1.project.Entity.Notification.NotificationRepository;
 import com.project1.project.Entity.Post.Post;
 import com.project1.project.Entity.Post.PostModelAss;
 import com.project1.project.Entity.Post.PostRepo;
@@ -63,7 +61,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -98,9 +95,6 @@ public class PostController {
 
   @Autowired
   private LikeRepo likeRepo;
-
-  @Autowired
-  private NotificationRepository notificationRepository;
 
   List<EntityModel<Post>> l = new ArrayList<>();
 
@@ -178,19 +172,6 @@ if (comments.isEmpty()) {
           if (post == null) {
               return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
           }
-          // ResponseEntity<String> r = 
-          // notificationController.sendNotification(post.getUser().getId(), "This user "+user.getUsername()+" shared your post");
-          // 
-          Notification notification = new Notification();
-          notification.setRecipient(post.getUser());
-          notification.setContent(content);
-          notification.setTimestamp(LocalDateTime.now());
-          notification.setRead(false);
-          post.getUser().notifications.add(notification);
-          userRepo.save(post.getUser());
-          notificationRepository.save(notification);
-
-          // sendNotification(post.getUser().getId(), "content");
           if(!post.getUser().getAccountIsPrivate()||post.getUser().equals(user)){
           Share share = new Share(content.trim(), user, post);
           shareRepo.save(share);
@@ -200,6 +181,7 @@ if (comments.isEmpty()) {
           }
   
   }
+
 
   @GetMapping("/share/{shareId}")
   public ResponseEntity<?> findshareById(@PathVariable Long shareId)  {
@@ -414,6 +396,7 @@ String im=   imageUploadController.uploadImage(file);
   ////////////////////////////////////////////////////// ;الكونتينت بكون
   // // ب البادي
   // return null;
+
   // }
   @DeleteMapping(("/share/{shareId}"))
   public ResponseEntity<MessageResponse> deleteShearById(@PathVariable Long shareId)  {
@@ -427,12 +410,16 @@ String im=   imageUploadController.uploadImage(file);
         return ResponseEntity.ok(new MessageResponse("delete share successfully"));
       } else {
         return ResponseEntity.ok(new MessageResponse("User is not authorized to delete this post"));
-      }}
+      }
+   
+  }
+
   @GetMapping("/myPosts")
   public ResponseEntity<?> findyPosts() {
     User user = userFromToken(request);
     if (user==null)
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+
   // if( !user.getAccountIsPrivate()||user.friends.contains(user)){l
       List<EntityModel<Post>> users = userRepo.findPostsByUserId(user.getId()).stream()
           .map(e -> postmodelAss.toModelpostId(e))
@@ -702,32 +689,15 @@ return ResponseEntity.ok("you aren't the owner of this real ");
 
 
 
-///////////////////
-
-
-
-public void sendNotification( Long recipientId,  String content) {
-  User recipient = userRepo.findById(recipientId).orElse(null);
-  if (recipient == null) {
-     // return ResponseEntity.badRequest().body("Recipient not found");
-  }
-
-  Notification notification = new Notification();
-  notification.setRecipient(recipient);
-  notification.setContent(content);
-  notification.setTimestamp(LocalDateTime.now());
-  notification.setRead(false);
-  recipient.notifications.add(notification);
-  userRepo.save(recipient);
-  notificationRepository.save(notification);
-  
- // return ResponseEntity.ok("Notification sent successfully");
-}
 
 
 
 
-////////////////
+
+
+
+
+
 
 
 public User userFromToken(HttpServletRequest request){
