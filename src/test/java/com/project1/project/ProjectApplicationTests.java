@@ -992,4 +992,13 @@ void testsendNotification() throws Exception {
 }
 
 
+@Test
+void testunReadNotification() throws Exception {
+    mockMvc.perform(get("/notifications/unread")
+            .header("Authorization", "Bearer " + testAuthenticateUser())
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].read").value(false));
+}
+
 }
