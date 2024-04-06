@@ -682,6 +682,7 @@ return ResponseEntity.ok(new MessageResponse("Reel Created successfully!"));
 }
 return ResponseEntity.ok(new MessageResponse("must be video and content"));
 }
+
 //worked as edit content 
 @PostMapping("/{id}/reals/create/content")
 public ResponseEntity<?> createRealcontent(@RequestBody String content ,@PathVariable Long id) {
@@ -694,15 +695,6 @@ return ResponseEntity.ok(new MessageResponse("Reel content Created successfully!
 return ResponseEntity.ok("you aren't the owner of this real ");
 
 }
-
-
-
-
-
-
-
-
-
 
 
 
