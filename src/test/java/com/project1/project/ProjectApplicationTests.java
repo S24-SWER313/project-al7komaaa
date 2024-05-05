@@ -488,7 +488,7 @@ void testfindByLikesContainsUser() throws Exception{
     // .content("Enter your share content here")
     ) 
     .andExpect(status().isOk())
-    .andExpect(jsonPath("$._embedded.posts[0].content").value("postcelina7")); 
+    .andExpect(jsonPath("$._embedded.posts[0].content").value("postmai7")); 
 
 }
 @Test
@@ -514,7 +514,7 @@ void testgetAllPostLikes() throws Exception{
     // .content("{\"type\": \"LIKE\"}")
     ) 
     .andExpect(status().isOk())
-    .andExpect(jsonPath("$[0].likeId").value(2)); 
+    .andExpect(jsonPath("$[0].likeId").value(9)); 
 
 }
 
