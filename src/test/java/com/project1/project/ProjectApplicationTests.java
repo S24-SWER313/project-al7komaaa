@@ -488,7 +488,7 @@ void testfindByLikesContainsUser() throws Exception{
     // .content("Enter your share content here")
     ) 
     .andExpect(status().isOk())
-    .andExpect(jsonPath("$._embedded.posts[0].content").value("postmai7")); 
+    .andExpect(jsonPath("$._embedded.posts[0].content").value("FatMai"));
 
 }
 @Test
@@ -514,7 +514,7 @@ void testgetAllPostLikes() throws Exception{
     // .content("{\"type\": \"LIKE\"}")
     ) 
     .andExpect(status().isOk())
-    .andExpect(jsonPath("$[0].likeId").value(9)); 
+    .andExpect(jsonPath("$[0].post").value("postcelina7")); 
 
 }
 
@@ -1000,5 +1000,12 @@ void testunReadNotification() throws Exception {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].read").value(false));
 }
-
+@Test
+void testgetAllNotifications() throws Exception {
+    mockMvc.perform(get("/notifications")
+            .header("Authorization", "Bearer " + testAuthenticateUser())
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].recipientUserName").value("fatma2"));
+}
 }

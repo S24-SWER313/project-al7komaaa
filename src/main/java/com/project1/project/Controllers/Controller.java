@@ -179,6 +179,14 @@ return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(Controller.cl
 
 }
 
+@GetMapping("/myUserName")
+public String getmyUserName( ){
+
+    User user = userFromToken(request);
+return user.getUsername();
+//  ResponseEntity.ok("Fatma");
+
+}
 
 
 
@@ -376,6 +384,12 @@ String res=imageUploadController.uploadImage(file);
 user.setImage(res);
 userRepo.save(user);
   return ResponseEntity.ok(user.getImage());
+}
+@GetMapping("/getImage")
+public String getUserImage() {
+  User user = userFromToken(request);
+  return user.getImage();
+
 }
 @GetMapping("/getImage/{userId}")
 public ResponseEntity<byte[]> getImage(@PathVariable Long userId) {
