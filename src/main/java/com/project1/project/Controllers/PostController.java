@@ -352,12 +352,24 @@ String im=   imageUploadController.uploadImage(file);
    
   }
 
+  
+  // @GetMapping("/{postId}/isLike")
+  // public List<Like> hasLiked( Long postId) {
+  //   User user=userFromToken(request);
+    
+  //         List<Like> userLikes = postRepo.findByUser(postId);
+  //         List<Like> c=userLikes.stream().filter((like)->
+  //      like.getUser().equals( user )).collect(Collectors.toList());
+  //         return userLikes ;
+  // }
+
   @GetMapping("/{postId}/likes")
   public ResponseEntity<List<EntityModel<Like>>> getAllPostLikes(@PathVariable Long postId) {
    Post post= postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
 
    
-    List<Like> likes = postRepo.findLikes(postId);
+    // List<Like> likes = postRepo.findLikes(postId);
+    List<Like> likes = likeRepo.findByPost(post);
 
     List<EntityModel<Like>> entityModels = likes.stream()
         .map(us -> postmodelAss.toModelPostLike(us))
@@ -366,6 +378,15 @@ String im=   imageUploadController.uploadImage(file);
     return ResponseEntity.ok(entityModels);
   }
 
+  // @GetMapping("/{postId}/shares")
+  //   public List<Share> getSharesByPost(@PathVariable Long postId) {
+  //       Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("like with ID " + postId + " not found."));
+  //      if (post.shares.isEmpty())
+  //      return Collections.emptyList();
+  //                         else
+  //                  return post.shares;
+      
+  //   }
   @DeleteMapping("/{likeId}/like")
   public ResponseEntity<MessageResponse> UnCreatelikePost(@PathVariable Long likeId) {
     Like like=likeRepo.findById(likeId).orElseThrow(() -> new NFException("like with ID " + likeId + " not found."));
@@ -375,6 +396,7 @@ String im=   imageUploadController.uploadImage(file);
     return ResponseEntity.ok(new MessageResponse("Delete successfully!"));}
     return ResponseEntity.ok(new MessageResponse("you are not the owner of like"));
   }
+  
 
   // @PostMapping("/{commentId}/comment")
   // public Like commentLike(@PathVariable Long commentId,@RequestBody Like
