@@ -23,4 +23,6 @@ List<Comment>postComments(Long postId);
 
 @Query("SELECT l FROM Like l WHERE l.post.postId = ?1")
 List<Like> findLikes(Long postId);
+@Query(value = "SELECT * FROM posts ORDER BY RAND() LIMIT 10", nativeQuery = true)
+List<Post> findRandom5Posts();
 }

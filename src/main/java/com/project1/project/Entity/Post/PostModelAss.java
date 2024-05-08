@@ -42,7 +42,7 @@ public class PostModelAss implements RepresentationModelAssembler<Post, EntityMo
               linkTo(methodOn(PostController.class).findByLikesContainsUser()).withRel("is liked"),
               // linkTo(methodOn(PostController.class).UnCreatelikePost(like.getLikeId())).withRel("delete your like"));
 
-               linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId())).withRel("the post's comment"));
+               linkTo(methodOn(PostController.class).getRandomComments(post.getPostId())).withRel("the post's comment"));
 
 
     }

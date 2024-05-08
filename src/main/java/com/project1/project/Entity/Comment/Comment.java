@@ -22,7 +22,7 @@ public class Comment {
     private String image;
     private String video;
    
-    
+    @JsonIgnore
     @ManyToOne 
     @JoinColumn(name = "user_id") User user;
     @JsonIgnore
