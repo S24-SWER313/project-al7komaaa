@@ -13,5 +13,5 @@ public interface CommentRepo extends JpaRepository<Comment, Long> {
 @Query(value = "SELECT * FROM comments WHERE post_id = :postId ORDER BY RAND() LIMIT 5", nativeQuery = true)
 List<Comment> findRandom5CommentsByPostId(@Param("postId") Long postId);
 
-
+Long countCommentsByPostId(Long postId);
 }

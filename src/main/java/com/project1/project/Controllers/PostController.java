@@ -275,6 +275,12 @@ return ResponseEntity.badRequest().body("this post is private");
         }}
   
 
+        @GetMapping("/number/comment/{postId}")
+        public ResponseEntity<?> numberComment(@PathVariable Long postId) {
+          if (commentRepo.countCommentsByPostId(postId)==0||commentRepo.countCommentsByPostId(postId)==null)
+          return ResponseEntity.ok((long) 0);
+            return ResponseEntity.ok(commentRepo.countCommentsByPostId(postId)) ;
+        }
   /////////////////////////////////////////////////////////////////////
   @PostMapping("/comment/{postId}/post")
   public ResponseEntity<?> createComment( @RequestBody Comment comment, @PathVariable Long postId) {
