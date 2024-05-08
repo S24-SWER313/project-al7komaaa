@@ -100,6 +100,51 @@ public class PostController {
   private LikeRepo likeRepo;
 
   List<EntityModel<Post>> l = new ArrayList<>();
+  @GetMapping("/posts/random")
+  public ResponseEntity<CollectionModel<EntityModel<Post>>> getRandomPosts() {
+    User user = userFromToken(request);
+    // if (user==null)
+    // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
+
+List<EntityModel<Post>> users = postRepo.findRandom5Posts().stream().filter(e->e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser()))
+    .map(postmodelAss::toModel)
+    .collect(Collectors.toList());
+
+
+// if (users.isEmpty()) {
+//   MessageResponse errorMessage = new MessageResponse("No posts found.");
+//   return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+
+// }
+
+return ResponseEntity
+.ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).getRandomPosts()).withRel("read more")));
+}
+
+@GetMapping("/{postId}/comments/random")
+public ResponseEntity<?> getRandomComments(@PathVariable Long postId) {
+  User user =userFromToken(request);
+  Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
+if (post.getUser().friends.contains(user)||!post.getUser().getAccountIsPrivate()){
+  //List<Comment> comments = post.postComments;
+List<Comment>comments=commentRepo.findRandom5CommentsByPostId(postId);
+
+if (comments.isEmpty()) {
+return ResponseEntity.ok(new MessageResponse("no comment in this post"));
+}
+  List<EntityModel<Comment>> commentModels = comments.stream()
+      .map(com -> commentmodelAss.commentDelEdit(com))
+      .collect(Collectors.toList());
+
+  if (comments.isEmpty()) {
+    MessageResponse noCommentsMessage = new MessageResponse("There are no comments for this post.");
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(noCommentsMessage);
+  }
+  return ResponseEntity.ok(CollectionModel.of(commentModels,
+      linkTo(methodOn(PostController.class).getRandomComments(postId)).withRel("Read more")));}
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("this user's profile is private add him to see comment of this post ");
+
+}
 
   @PostMapping("/create")
   public ResponseEntity<?> createPost( @RequestBody Post post) {
@@ -154,15 +199,18 @@ if (comments.isEmpty()) {
         .map(postmodelAss::toModel)
         .collect(Collectors.toList());
 
+
     if (users.isEmpty()) {
       MessageResponse errorMessage = new MessageResponse("No posts found.");
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
+
     return ResponseEntity
         .ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
 
 
   }
+  
 
   @PostMapping("/share/{postId}")
   public ResponseEntity<?> sharePost(@PathVariable Long postId,
@@ -352,12 +400,24 @@ String im=   imageUploadController.uploadImage(file);
    
   }
 
+  
+  // @GetMapping("/{postId}/isLike")
+  // public List<Like> hasLiked( Long postId) {
+  //   User user=userFromToken(request);
+    
+  //         List<Like> userLikes = postRepo.findByUser(postId);
+  //         List<Like> c=userLikes.stream().filter((like)->
+  //      like.getUser().equals( user )).collect(Collectors.toList());
+  //         return userLikes ;
+  // }
+
   @GetMapping("/{postId}/likes")
   public ResponseEntity<List<EntityModel<Like>>> getAllPostLikes(@PathVariable Long postId) {
    Post post= postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
 
    
-    List<Like> likes = postRepo.findLikes(postId);
+    // List<Like> likes = postRepo.findLikes(postId);
+    List<Like> likes = likeRepo.findByPost(post);
 
     List<EntityModel<Like>> entityModels = likes.stream()
         .map(us -> postmodelAss.toModelPostLike(us))
@@ -366,6 +426,15 @@ String im=   imageUploadController.uploadImage(file);
     return ResponseEntity.ok(entityModels);
   }
 
+  // @GetMapping("/{postId}/shares")
+  //   public List<Share> getSharesByPost(@PathVariable Long postId) {
+  //       Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("like with ID " + postId + " not found."));
+  //      if (post.shares.isEmpty())
+  //      return Collections.emptyList();
+  //                         else
+  //                  return post.shares;
+      
+  //   }
   @DeleteMapping("/{likeId}/like")
   public ResponseEntity<MessageResponse> UnCreatelikePost(@PathVariable Long likeId) {
     Like like=likeRepo.findById(likeId).orElseThrow(() -> new NFException("like with ID " + likeId + " not found."));
@@ -375,6 +444,7 @@ String im=   imageUploadController.uploadImage(file);
     return ResponseEntity.ok(new MessageResponse("Delete successfully!"));}
     return ResponseEntity.ok(new MessageResponse("you are not the owner of like"));
   }
+  
 
   // @PostMapping("/{commentId}/comment")
   // public Like commentLike(@PathVariable Long commentId,@RequestBody Like
