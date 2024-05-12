@@ -103,19 +103,11 @@ public class PostController {
   @GetMapping("/posts/random")
   public ResponseEntity<CollectionModel<EntityModel<Post>>> getRandomPosts() {
     User user = userFromToken(request);
-    // if (user==null)
-    // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
-
+   
 List<EntityModel<Post>> users = postRepo.findRandom5Posts().stream().filter(e->e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser()))
     .map(postmodelAss::toModel)
     .collect(Collectors.toList());
 
-
-// if (users.isEmpty()) {
-//   MessageResponse errorMessage = new MessageResponse("No posts found.");
-//   return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
-
-// }
 
 return ResponseEntity
 .ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).getRandomPosts()).withRel("read more")));
@@ -431,6 +423,24 @@ String im=   imageUploadController.uploadImage(file);
 
     return ResponseEntity.ok(entityModels);
   }
+  @GetMapping("/{postId}/like/random")
+  public ResponseEntity<CollectionModel<EntityModel<Like>>> getRandomLikes(@PathVariable Long postId) {
+ 
+    List<Like> likes = likeRepo.findRandom5LikesByLikeId(postId);
+    List<EntityModel<Like>> entityModels = likes.stream()
+    .map(us -> postmodelAss.toModelPostLike(us))
+    .collect(Collectors.toList());
+
+return ResponseEntity
+.ok(CollectionModel.of(entityModels, linkTo(methodOn(PostController.class).getRandomLikes(postId)).withRel("read more")));
+
+}
+@GetMapping("/number/like/{postId}")
+public ResponseEntity<?> numberLike(@PathVariable Long postId) {
+  if (likeRepo.countLikesByLikeId(postId)==0||likeRepo.countLikesByLikeId(postId)==null)
+  return ResponseEntity.ok((long) 0);
+    return ResponseEntity.ok(likeRepo.countLikesByLikeId(postId)) ;
+}
 
   // @GetMapping("/{postId}/shares")
   //   public List<Share> getSharesByPost(@PathVariable Long postId) {

@@ -36,13 +36,14 @@ public class PostModelAss implements RepresentationModelAssembler<Post, EntityMo
        
        return EntityModel.of(post,
                 linkTo(methodOn(PostController.class).postUser(post.getPostId())).withRel("the post owner"),
-               linkTo(methodOn(PostController.class).getAllPostLikes(post.getPostId())).withRel("the post's like"),
+              //  linkTo(methodOn(PostController.class).getAllPostLikes(post.getPostId())).withRel("the post's like"),
                 linkTo(methodOn(PostController.class).createComment(null ,post.getPostId())).withRel("createComment"),
               linkTo(methodOn(PostController.class).createLikePost(null ,post.getPostId())).withRel("create like"),
               linkTo(methodOn(PostController.class).findByLikesContainsUser()).withRel("is liked"),
               linkTo(methodOn(PostController.class).numberComment(post.getPostId())).withRel("number of comment"),
-
+              linkTo(methodOn(PostController.class).numberLike(post.getPostId())).withRel("number of like"),
               // linkTo(methodOn(PostController.class).UnCreatelikePost(like.getLikeId())).withRel("delete your like"));
+              linkTo(methodOn(PostController.class).getRandomLikes(post.getPostId())).withRel("the post's likes"),
 
                linkTo(methodOn(PostController.class).getRandomComments(post.getPostId())).withRel("the post's comment"));
 
@@ -77,7 +78,7 @@ public class PostModelAss implements RepresentationModelAssembler<Post, EntityMo
         public EntityModel<Like> toModelPostLike(Like like)  {
          // User user=null;
             String jwt = parseJwt(request);
-              if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+             
                   String username = jwtUtils.getUserNameFromJwtToken(jwt);
               User  user=userRepo.findByUsername(username).get();
              
@@ -94,8 +95,7 @@ public class PostModelAss implements RepresentationModelAssembler<Post, EntityMo
             linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId())).withRel("the post's comment"));   
          }
       
-               } return null;   
-  
+            
           }
 
     
