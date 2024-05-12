@@ -88,10 +88,12 @@ public class PostModelAss implements RepresentationModelAssembler<Post, EntityMo
              return EntityModel.of(like,
              linkTo(methodOn(PostController.class).findById(post.getPostId())).withRel("the post "),
            // linkTo(methodOn(PostController.class).getAllPostLikes(like.getPostId())).withRel("the post's like"),
+           linkTo(methodOn(PostController.class).getRandomLikes(post.getPostId())).withRel("read more"),
             linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId())).withRel("the post's comment"),
             linkTo(methodOn(PostController.class).UnCreatelikePost(like.getLikeId())).withRel("delete your like"));
           }else{    return EntityModel.of(like,
             linkTo(methodOn(PostController.class).findById(post.getPostId())).withRel("the post "),
+            linkTo(methodOn(PostController.class).getRandomLikes(post.getPostId())).withRel("read more"),
             linkTo(methodOn(PostController.class).getAllPostComments(post.getPostId())).withRel("the post's comment"));   
          }
       

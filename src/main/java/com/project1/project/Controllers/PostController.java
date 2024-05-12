@@ -424,16 +424,13 @@ String im=   imageUploadController.uploadImage(file);
     return ResponseEntity.ok(entityModels);
   }
   @GetMapping("/{postId}/like/random")
-  public ResponseEntity<CollectionModel<EntityModel<Like>>> getRandomLikes(@PathVariable Long postId) {
+  public ResponseEntity<List<EntityModel<Like>>> getRandomLikes(@PathVariable Long postId) {
  
     List<Like> likes = likeRepo.findRandom5LikesByLikeId(postId);
     List<EntityModel<Like>> entityModels = likes.stream()
     .map(us -> postmodelAss.toModelPostLike(us))
     .collect(Collectors.toList());
-
-return ResponseEntity
-.ok(CollectionModel.of(entityModels, linkTo(methodOn(PostController.class).getRandomLikes(postId)).withRel("read more")));
-
+    return ResponseEntity.ok(entityModels);
 }
 @GetMapping("/number/like/{postId}")
 public ResponseEntity<?> numberLike(@PathVariable Long postId) {
