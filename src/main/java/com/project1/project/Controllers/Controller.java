@@ -167,6 +167,13 @@ public ResponseEntity<?> getUserName(@PathVariable String name ) {
 
 
 
+@GetMapping("/count/userFriend/{userid}")
+public ResponseEntity<Long> getUserFriendcount(@PathVariable Long userid ){
+
+   
+return ResponseEntity.ok(userRepo.countFriends(userid));
+
+}
 @GetMapping("/userFriend/{userid}")
 public ResponseEntity<CollectionModel<EntityModel<User>>> getUserFriend(@PathVariable Long userid ){
 
@@ -178,12 +185,24 @@ public ResponseEntity<CollectionModel<EntityModel<User>>> getUserFriend(@PathVar
 return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(Controller.class).getUserById(userid)).withRel("Go to all Posts")));
 
 }
-
-@GetMapping("/myUserName")
-public String getmyUserName( ){
+@GetMapping("/friendSuggestion")
+public List<EntityModel<User>> getfriendSuggestion(){
 
     User user = userFromToken(request);
-return user.getUsername();
+    List<EntityModel<User>> users =userRepo.findSuggestedFriends(user.getId()).stream()
+    .map(us -> userModelAss.toModelfriendself(us))
+    .collect(Collectors.toList());
+// return userRepo.getFriends(userid);
+return users;
+
+}
+
+
+@GetMapping("/myUserName")
+public User getmyUserName( ){
+
+    User user = userFromToken(request);
+return user;
 //  ResponseEntity.ok("Fatma");
 
 }
