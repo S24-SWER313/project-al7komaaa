@@ -257,5 +257,12 @@ if(lastName!=null){
         this.accountIsPrivate = accountIsPrivate;
     }
 
+
+
+    
+    public Long getuserid() {
+       return this.id;
+    }
+
    
 }
