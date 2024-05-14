@@ -447,6 +447,14 @@ public ResponseEntity<?> numberLike(@PathVariable Long postId) {
     return ResponseEntity.ok(likeRepo.countLikesByLikeId(postId)) ;
 }
 
+
+@GetMapping("/number/post/{userId}")
+public Long numberpost(@PathVariable Long userId) {
+    return postRepo.countPostsByUserIdNative(userId);
+}
+
+
+
   // @GetMapping("/{postId}/shares")
   //   public List<Share> getSharesByPost(@PathVariable Long postId) {
   //       Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("like with ID " + postId + " not found."));
@@ -562,7 +570,7 @@ public ResponseEntity<?> numberLike(@PathVariable Long postId) {
      
         boolean isFriend = user.friends.contains(friend);
 
-        if (isFriend) {
+        if (isFriend||friendId==user.getId()) {
           List<Post> friendPosts = userRepo.findPostsByUserId(friendId);
           List<EntityModel<Post>> users = postRepo.findAll().stream()
           .map(postmodelAss::toModel)

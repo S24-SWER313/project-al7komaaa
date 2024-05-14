@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.project1.project.Entity.Comment.Comment;
@@ -25,4 +26,10 @@ List<Comment>postComments(Long postId);
 List<Like> findLikes(Long postId);
 @Query(value = "SELECT * FROM posts ORDER BY RAND() LIMIT 10", nativeQuery = true)
 List<Post> findRandom5Posts();
+
+// @Query("SELECT COUNT(p) FROM Post p WHERE p.user.user_id = ?1")
+// Long countPostsByUserId(Long userId);
+@Query(value = "SELECT COUNT(*) FROM posts WHERE user_id = :userId", nativeQuery = true)
+    Long countPostsByUserIdNative(@Param("userId") Long userId);
+
 }
