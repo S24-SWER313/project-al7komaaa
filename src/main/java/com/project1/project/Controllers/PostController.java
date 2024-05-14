@@ -666,6 +666,42 @@ return ResponseEntity
 
 
 
+
+
+
+
+
+
+@GetMapping("/getVideo/{postId}")
+public ResponseEntity<byte[]> getVideo(@PathVariable Long postId) {
+    Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("video not found."));
+   
+    
+    String videoPath = post.getVideo(); // Assuming user has a 'video' field containing the path to the video
+    
+    if (videoPath == null || videoPath.isEmpty()) {
+        return ResponseEntity.notFound().build();
+    }
+    
+    try {
+        Path videoFilePath = Paths.get(videoPath);
+        byte[] videoBytes = Files.readAllBytes(videoFilePath);
+        return ResponseEntity.ok().contentType(MediaType.valueOf("video/mp4")).body(videoBytes);
+    } catch (IOException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
+
+
+
+
+
+
+
+
+
+
 // @GetMapping("/reels/{id}/friend")
 // public ResponseEntity<?> getRealsFriend(Comment comment, HttpServletRequest request) {
 //   return null;
