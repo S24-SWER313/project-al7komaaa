@@ -19,4 +19,7 @@ List<Like> findRandom5LikesByLikeId(@Param("postId") Long postId);
 
 @Query(value = "SELECT COUNT(*) FROM likes WHERE post_id = :postId", nativeQuery = true)
 Long countLikesByLikeId(@Param("postId") Long postId);
+List<Like> findByUserAndPost(User user, Post post);
+
+
 }

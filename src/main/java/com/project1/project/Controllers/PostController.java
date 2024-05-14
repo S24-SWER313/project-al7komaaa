@@ -432,6 +432,14 @@ String im=   imageUploadController.uploadImage(file);
     .collect(Collectors.toList());
     return ResponseEntity.ok(entityModels);
 }
+@GetMapping("/{postId}/isLikes")
+public   ResponseEntity<?> checkIfUserLikedPost( @PathVariable Long postId) {
+  User user=userFromToken(request);
+  Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
+  List<Like> likes = likeRepo.findByUserAndPost(user, post);
+  return  ResponseEntity.ok(likes) ;
+
+}
 @GetMapping("/number/like/{postId}")
 public ResponseEntity<?> numberLike(@PathVariable Long postId) {
   if (likeRepo.countLikesByLikeId(postId)==0||likeRepo.countLikesByLikeId(postId)==null)
