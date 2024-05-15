@@ -32,4 +32,8 @@ List<Post> findRandom5Posts();
 @Query(value = "SELECT COUNT(*) FROM posts WHERE user_id = :userId", nativeQuery = true)
     Long countPostsByUserIdNative(@Param("userId") Long userId);
 
+
+    // @Query("SELECT p FROM posts p WHERE p.user_Id = :userId")
+    // List<Post> findPostsByUserId(@Param("userId") Long userId);
+
 }

@@ -414,7 +414,16 @@ public String getUserImage() {
 public ResponseEntity<byte[]> getImage(@PathVariable Long userId) {
     User user = userRepo.findById(userId).orElse(null);
     if (user == null || user.getImage() == null || user.getImage().isEmpty()) {
-        return ResponseEntity.notFound().build();
+      Path imagePath = Paths.get( "49e40f05-46ad-42b6-a2f3-6270d67cb6df_download.jpeg");
+      byte[] imageBytes;
+      try {
+        imageBytes = Files.readAllBytes(imagePath); 
+         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+      } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    
     }
     try {
         Path imagePath = Paths.get( user.getImage());

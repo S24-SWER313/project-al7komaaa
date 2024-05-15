@@ -595,6 +595,16 @@ public Long numberpost(@PathVariable Long userId) {
   }
   
 
+
+
+
+
+
+
+
+
+  
+
   @GetMapping("/postUser/{postid}")
   public ResponseEntity<EntityModel<User>> postUser(@PathVariable Long postid) {//owner ,user who owner the post
     Post post = postRepo.findById(postid).orElseThrow(() -> new NFException("post with ID " + postid + " not found."));
@@ -626,21 +636,42 @@ return ResponseEntity.ok("you aren't the owner of this comment ");
 public ResponseEntity<?> getUserPost(@PathVariable Long id) {
   User user = userRepo.findById(id).orElseThrow(() -> new NFException("user with ID " + id + " not found."));
   User signInUser = userFromToken(request);
+  if(user.getId()!=id){
  if(user.getAccountIsPrivate() && !user.friends.contains(signInUser)){
   return ResponseEntity.ok("the account is private you cant view");
  }
+}
  else{
   List<Post> userPost =user.posts;
 
   List<EntityModel<Post>> users = userPost.stream()
-  .map(e -> postmodelAss.toModelpostId(e))
+  .map(e -> postmodelAss.toModel(e))
   .collect(Collectors.toList());
  if (users.isEmpty()) {
   return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("there are no posts for this user"));
 }
 return ResponseEntity.ok(CollectionModel.of(users,
   linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Post")));}
+  return null;
 
+
+}
+
+
+@GetMapping("/postImage/{postId}")
+public ResponseEntity<byte[]> getPostImge(@PathVariable Long postId) {
+    Post post = postRepo.findById(postId).orElse(null);
+    if (post == null || post.getImage() == null || post.getImage().isEmpty()) {
+        return ResponseEntity.notFound().build();
+    }
+    try {
+        Path imagePath = Paths.get( post.getImage());
+        byte[] imageBytes = Files.readAllBytes(imagePath);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+    } catch (IOException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
 }
 
 @GetMapping("/reels")
