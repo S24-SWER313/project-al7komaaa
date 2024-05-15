@@ -339,7 +339,7 @@ String im=   imageUploadController.uploadImage(file);
       List<Post> likePost = likeList.stream().map(e -> e.post).filter(e->e!=null).collect(Collectors.toList());
       ///////////////////
       List<EntityModel<Post>> users = likePost.stream()
-          .map(e -> postmodelAss.toModelpostId(e))
+          .map(e -> postmodelAss.toModel(e))
           .collect(Collectors.toList());
 
       if (users.isEmpty()) {
