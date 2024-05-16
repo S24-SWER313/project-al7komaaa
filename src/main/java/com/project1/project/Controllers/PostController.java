@@ -117,24 +117,24 @@ return ResponseEntity
 public ResponseEntity<?> getRandomComments(@PathVariable Long postId) {
   User user =userFromToken(request);
   Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
-// if (post.getUser().friends.contains(user)||!post.getUser().getAccountIsPrivate()){
+if (post.getUser().friends.contains(user)||!post.getUser().getAccountIsPrivate()||post.user.getId()==user.getId()){
   //List<Comment> comments = post.postComments;
 List<Comment>comments=commentRepo.findRandom5CommentsByPostId(postId);
 
-
+if (comments.isEmpty()) {
+return ResponseEntity.ok(new MessageResponse("no comment in this post"));
+}
   List<EntityModel<Comment>> commentModels = comments.stream()
       .map(com -> commentmodelAss.commentDelEdit(com))
       .collect(Collectors.toList());
 
   if (comments.isEmpty()) {
     MessageResponse noCommentsMessage = new MessageResponse("There are no comments for this post.");
-   List<Comment> f= new ArrayList<Comment>();
-    return ResponseEntity.ok(CollectionModel.of(f,
-    linkTo(methodOn(PostController.class).getRandomComments(postId)).withRel("Read more")));
-
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(noCommentsMessage);
   }
   return ResponseEntity.ok(CollectionModel.of(commentModels,
-      linkTo(methodOn(PostController.class).getRandomComments(postId)).withRel("Read more")));
+      linkTo(methodOn(PostController.class).getRandomComments(postId)).withRel("Read more")));}
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("this user's profile is private add him to see comment of this post ");
 
 }
 
