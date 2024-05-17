@@ -459,20 +459,28 @@ userRepo.save(user);
 
 @GetMapping("/backgroundImage/{userId}")
 public ResponseEntity<byte[]> getBackgroundImage(@PathVariable Long userId) {
-    User user = userRepo.findById(userId).orElse(null);
-    if (user == null || user.getImage() == null || user.getImage().isEmpty()) {
-        return ResponseEntity.notFound().build();
-    }
+  User user = userRepo.findById(userId).orElse(null);
+  if (user == null || user.getBackgroudimage() == null || user.getBackgroudimage().isEmpty()) {
+    Path imagePath = Paths.get( "7ba92ff8-08bf-4836-ad5c-074835f8288f_download.jpg");
+    byte[] imageBytes;
     try {
-        Path imagePath = Paths.get( user.getBackgroudimage());
-        byte[] imageBytes = Files.readAllBytes(imagePath);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+      imageBytes = Files.readAllBytes(imagePath); 
+       return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     } catch (IOException e) {
-        e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
+  
+  }
+  try {
+      Path imagePath = Paths.get( user.getBackgroudimage());
+      byte[] imageBytes = Files.readAllBytes(imagePath);
+      return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+  } catch (IOException e) {
+      e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+  }
 }
-
 
 
 
