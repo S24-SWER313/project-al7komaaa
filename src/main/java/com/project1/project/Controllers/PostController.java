@@ -146,7 +146,7 @@ return ResponseEntity.ok(new MessageResponse("no comment in this post"));
 
       post.setUser(user);
       postRepo.save(post);
-      return ResponseEntity.ok(new MessageResponse("Post Created successfully!"));
+      return ResponseEntity.ok(post.getId());
   }
   @PostMapping("{id}/create/image")
   public ResponseEntity<?> addImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
