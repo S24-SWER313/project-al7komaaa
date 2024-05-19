@@ -673,6 +673,23 @@ public ResponseEntity<byte[]> getPostImge(@PathVariable Long postId) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }
+@DeleteMapping("/deleteImage/{postId}")
+public ResponseEntity<?> DeletePostImge(@PathVariable Long postId) {
+    Post post = postRepo.findById(postId).orElse(null);
+    User user=userFromToken(request);
+    if (post.getUser().getId()==user.getId()){
+     post.setImage(null);
+     postRepo.save(post);
+     MessageResponse Message = new MessageResponse("image delete secc");
+     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Message +post.getImage());
+    }
+    else{
+      MessageResponse errMessage = new MessageResponse("image delete feild");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errMessage);
+    }
+
+   
+}
 
 @GetMapping("/reels")
 public ResponseEntity<?> getReals() {
