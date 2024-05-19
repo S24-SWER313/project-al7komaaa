@@ -881,7 +881,17 @@ return ResponseEntity.ok("you aren't the owner of this real ");
 
 }
 
+//////////////////
 
+
+
+@GetMapping("/users/{userId}/shares")
+public List<Share> getSharesByUserId(@PathVariable Long userId) {
+    return shareRepo.findByUserId(userId);
+}
+
+
+//////////////////
 
 
 
