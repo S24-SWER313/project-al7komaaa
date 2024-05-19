@@ -215,7 +215,9 @@ if (comments.isEmpty()) {
           if (post == null) {
               return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
           }
-          if(!post.getUser().getAccountIsPrivate()||post.getUser().equals(user)){
+          if(!post.getUser().getAccountIsPrivate()||post.getUser().equals(user)||user.friends.contains(post.getUser())){
+        
+
           Share share = new Share(content.trim(), user, post);
           shareRepo.save(share);
          // EntityModel<Share> entityModel = EntityModel.of();
