@@ -249,7 +249,7 @@ Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post wi
         if (user==null)
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
 if(!post.getUser().getAccountIsPrivate()||user.friends.contains(post.getUser())||post.getUser().equals(user))
-return ResponseEntity.ok(postmodelAss.toModelpostId(post)); 
+return ResponseEntity.ok(postmodelAss.toModel(post)); 
 return ResponseEntity.badRequest().body("this post is private");
   }
 
