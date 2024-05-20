@@ -104,4 +104,8 @@ public class Comment {
         return user.getImage();
     }
 
+    public Long getUserId() {
+        return user.getId();
+    }
+
 }

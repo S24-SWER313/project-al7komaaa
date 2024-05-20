@@ -21,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.server.SecurityWebFilterChain;
@@ -187,6 +188,37 @@ public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwor
     } 
 }
 
+
+// public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwords, HttpServletRequest request) {
+//     String oldPassword = passwords.get("oldPassword");
+//     String newPassword = passwords.get("newPassword");
+    
+//     String jwt = parseJwt(request);
+//     if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+//         String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        
+//         User user = userRepo.findByUsername(username)
+//                             .orElseThrow(() -> new RuntimeException("User not found"));
+        
+//         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        
+//         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+//             return ResponseEntity
+//                     .badRequest()
+//                     .body(new MessageResponse("Error: Incorrect old password"));
+//         }
+        
+//         // استخدم الكود الخاص بك لتحديث كلمة المرور وحفظها في قاعدة البيانات
+//     } else {
+//         return ResponseEntity
+//                 .badRequest()
+//                 .body(new MessageResponse("Error: User not found with username "));
+//     } 
+//     return null;
+// }
+
+
+
     private String parseJwt(HttpServletRequest request) {
       String headerAuth = request.getHeader("Authorization");
   
@@ -196,9 +228,6 @@ public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwor
   
       return null;
     }
-
-
-
 
 
 @PostMapping("/logout")
