@@ -458,13 +458,14 @@ userRepo.save(user);
 }
 
 @GetMapping("/backgroundImage/{userId}")
-public ResponseEntity<byte[]> getBackgroundImage(@PathVariable Long userId) {
-  User user = userRepo.findById(userId).orElse(null);
+public ResponseEntity<?> getBackgroundImage(@PathVariable Long userId) {
+  User user = userRepo.findById(userId) .orElseThrow(() -> new NFException("user with ID " + userId + " not found."));
+
   if (user == null || user.getBackgroudimage() == null || user.getBackgroudimage().isEmpty()) {
     Path imagePath = Paths.get( "7ba92ff8-08bf-4836-ad5c-074835f8288f_download.jpg");
-    byte[] imageBytes;
+    
     try {
-      imageBytes = Files.readAllBytes(imagePath); 
+     byte[]  imageBytes = Files.readAllBytes(imagePath); 
        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     } catch (IOException e) {
       // TODO Auto-generated catch block
