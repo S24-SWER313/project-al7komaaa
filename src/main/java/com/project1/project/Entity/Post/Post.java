@@ -117,4 +117,9 @@ private String content;
     //         return null; 
     //     }
     // }
+
+       
+    public Long getuserid() {
+        return this.user.getId();
+     }
     }
