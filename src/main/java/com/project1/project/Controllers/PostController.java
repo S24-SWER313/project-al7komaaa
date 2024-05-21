@@ -283,7 +283,7 @@ return ResponseEntity.badRequest().body("this post is private");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
 
       Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
-      if (post.getUser().friends.contains(user)||!post.getUser().getAccountIsPrivate()){
+      if (post.getUser().friends.contains(user)||!post.getUser().getAccountIsPrivate()||post.getUser().getId()==user.getId()){
       post.postComments.add(comment);
       comment.setUser(user);
       comment.setPost(post);
@@ -298,12 +298,30 @@ return ResponseEntity.badRequest().body("this post is private");
 }
 @PostMapping("comment/{id}/image")
 public ResponseEntity<?> addImageComment(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
-  Comment comment = commentRepo.findById(id).orElseThrow(() -> new NFException("comment with ID " + id + " not found."));
+  User user =userFromToken(request);
+  if (user ==null )
+  return ResponseEntity.ok(new MessageResponse("user nulll"));
+   Comment comment = commentRepo.findById(id).orElseThrow(() -> new NFException("comment with ID " + id + " not found."));
 String im=   imageUploadController.uploadImage(file);
   comment.setImage(im);
   commentRepo.save(comment);
-    return ResponseEntity.ok(new MessageResponse("added image successfully"));
+    return ResponseEntity.ok(comment);
+    // return "sss";
 }
+
+
+
+
+@DeleteMapping("comment/{id}/image")
+public ResponseEntity<?> deleteImageComment(@PathVariable Long id) {
+  Comment comment = commentRepo.findById(id).orElseThrow(() -> new NFException("comment with ID " + id + " not found."));
+  comment.setImage(null);
+  commentRepo.save(comment);
+    return ResponseEntity.ok(new MessageResponse("delete image successfully"));
+}
+
+
+
 
   @DeleteMapping("/comment/{commentId}")
   public ResponseEntity deleteComment(@PathVariable Long commentId) {
