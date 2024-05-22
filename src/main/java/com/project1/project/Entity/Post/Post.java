@@ -122,4 +122,10 @@ private String content;
     public Long getuserid() {
         return this.user.getId();
      }
+     public String getuserimage() {
+        return this.user.getImage();
+     }
+     public String getusername() {
+        return this.user.getUsername();
+     }
     }
