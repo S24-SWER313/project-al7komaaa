@@ -100,6 +100,15 @@ public class PostController {
   private LikeRepo likeRepo;
 
   List<EntityModel<Post>> l = new ArrayList<>();
+
+
+
+
+
+
+
+
+
   @GetMapping("/posts/random")
   public ResponseEntity<CollectionModel<EntityModel<Post>>> getRandomPosts() {
     User user = userFromToken(request);

@@ -308,6 +308,27 @@ userRepo.save(user);
 }
 
 
+
+
+@GetMapping("/search/{username}")
+public ResponseEntity<List<User>> getUsersByUsername(@PathVariable String username) {
+    List<User> users = userRepo.searchUsers(username);
+    return ResponseEntity.ok(users);
+}
+
+
+
+@GetMapping("/accountIsPrivate/{userId}")
+public boolean getaccountIsPrivate(@PathVariable Long userId) {
+User user=userRepo.findById(userId).get();
+  User me=userFromToken(request);
+  if (me.friends.contains(user)||!user.getAccountIsPrivate()||me==user)
+return false;
+else
+   return true;
+}
+
+
   
 @PutMapping("/editFirstName")
 public ResponseEntity<?> editFirstName(@RequestBody String newfirstName) {
