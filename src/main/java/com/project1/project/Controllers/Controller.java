@@ -42,6 +42,8 @@ import com.project1.project.Entity.User.Gender;
 import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserModelAss;
 import com.project1.project.Entity.User.UserRepo;
+import com.project1.project.Entity.User.Friend.FriendRequest;
+import com.project1.project.Entity.User.Friend.FriendRequestRepo;
 import com.project1.project.Payload.Response.MessageResponse;
 import com.project1.project.Security.Jwt.JwtUtils;
 
@@ -56,6 +58,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+
 @RestController
 public class Controller {
     private final CommentRepo commentRepo;
@@ -63,6 +66,9 @@ public class Controller {
     private final PostRepo postRepo;
     private final ShareRepo shareRepo;
     private final UserRepo userRepo;
+
+@Autowired
+private FriendRequestRepo friendRequestRepo;
       @Autowired
   private JwtUtils jwtUtils;
     @Autowired
@@ -84,6 +90,77 @@ ImageUploadController imageUploadController=new ImageUploadController();
         this.userRepo = userRepo;
        
     }
+
+
+
+
+
+
+ // إرسال طلب صداقة
+  @PostMapping("/sendFriendRequest/{receiverId}")
+    public ResponseEntity<String> sendFriendRequest(HttpServletRequest request, @PathVariable Long receiverId) {
+        User sender = userFromToken(request);
+        User receiver = userRepo.findById(receiverId)
+                .orElseThrow(() -> new NFException("User not found."));
+
+        // تحقق من وجود طلب صداقة معلق
+        if (friendRequestRepo.findBySenderIdAndReceiverId(sender.getId(), receiverId).isPresent()) {
+            return ResponseEntity.badRequest().body("Friend request already sent.");
+        }
+
+        FriendRequest friendRequest = new FriendRequest();
+        friendRequest.setSender(sender);
+        friendRequest.setReceiver(receiver);
+
+        friendRequestRepo.save(friendRequest);
+        return ResponseEntity.ok("Friend request sent successfully.");
+    }
+
+    // عرض طلبات الصداقة المعلقة
+    @GetMapping("/friendRequests")
+    public ResponseEntity<List<FriendRequest>> getFriendRequests(HttpServletRequest request) {
+        User receiver = userFromToken(request);
+        List<FriendRequest> friendRequests = friendRequestRepo.findByReceiverId(receiver.getId());
+        return ResponseEntity.ok(friendRequests);
+    }
+
+    // قبول طلب صداقة
+    @PostMapping("/acceptFriendRequest/{senderId}")
+    public ResponseEntity<String> acceptFriendRequest(HttpServletRequest request, @PathVariable Long senderId) {
+        User receiver = userFromToken(request);
+        User sender = userRepo.findById(senderId)
+                .orElseThrow(() -> new NFException("User not found."));
+
+        FriendRequest friendRequest = friendRequestRepo.findBySenderIdAndReceiverId(senderId, receiver.getId())
+                .orElseThrow(() -> new NFException("Friend request not found."));
+
+        // أضف الصداقة في كلا الحسابين
+        receiver.friends.add(sender);
+        sender.friends.add(receiver);
+
+        userRepo.save(receiver);
+        userRepo.save(sender);
+
+        // احذف طلب الصداقة بعد قبوله
+        friendRequestRepo.delete(friendRequest);
+
+        return ResponseEntity.ok("Friend request accepted.");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Transactional
     @GetMapping("/users")
     public ResponseEntity<CollectionModel<EntityModel<User>>> getAllUsers(HttpServletRequest request) {
