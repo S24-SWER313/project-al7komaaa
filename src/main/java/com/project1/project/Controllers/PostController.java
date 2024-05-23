@@ -676,9 +676,9 @@ public ResponseEntity<?> getUserPost(@PathVariable Long id) {
   List<EntityModel<Post>> users = userPost.stream()
   .map(e -> postmodelAss.toModel(e))
   .collect(Collectors.toList());
- if (users.isEmpty()) {
-  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("there are no posts for this user"));
-}
+//  if (users.isEmpty()) {
+//   return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("there are no posts for this user"));
+// }
 return ResponseEntity.ok(CollectionModel.of(users,
   linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Post")));}
   return null;

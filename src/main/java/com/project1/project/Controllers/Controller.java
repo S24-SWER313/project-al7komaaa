@@ -105,7 +105,7 @@ ImageUploadController imageUploadController=new ImageUploadController();
 
         // تحقق من وجود طلب صداقة معلق
         if (friendRequestRepo.findBySenderIdAndReceiverId(sender.getId(), receiverId).isPresent()) {
-            return ResponseEntity.badRequest().body("Friend request already sent.");
+            return ResponseEntity.ok("Friend request already sent.");
         }
 
         FriendRequest friendRequest = new FriendRequest();
@@ -284,7 +284,44 @@ return user;
 
 }
 
+@GetMapping("/hasSentFriendRequest/{userId}")
+    public boolean hasSentFriendRequest( @PathVariable Long userId) {
+        User currentUser = userFromToken(request);
+        User otherUser = userRepo.findById(userId)
+                .orElseThrow(() -> new NFException("User not found."));
 
+        boolean hasSentRequest = friendRequestRepo.findBySenderAndReceiver(currentUser, otherUser).isPresent();
+
+        return hasSentRequest;
+}
+
+@GetMapping("/isFriend/{userId}")
+    public ResponseEntity<Boolean> isFriend(@PathVariable Long userId) {
+        User currentUser = userFromToken(request);
+        User otherUser = userRepo.findById(userId)
+                .orElseThrow(() -> new NFException("User not found."));
+
+        boolean isFriend = currentUser.friends.contains(otherUser);
+
+        return ResponseEntity.ok(isFriend);
+      
+}
+@DeleteMapping("/cancelFriendRequest/{userId}")
+public ResponseEntity<String> cancelFriendRequest( @PathVariable Long userId) {
+  User currentUser = userFromToken(request);
+  User otherUser = userRepo.findById(userId)
+          .orElseThrow(() -> new NFException("User not found."));
+
+  Optional<FriendRequest> friendRequestOpt = friendRequestRepo.findBySenderAndReceiver(currentUser, otherUser);
+
+  if (friendRequestOpt.isPresent()) {
+      FriendRequest friendRequest = friendRequestOpt.get();
+      friendRequestRepo.deleteById(friendRequest.getId());
+      return ResponseEntity.ok("Friend request cancelled successfully.");
+  } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Friend request not found.");
+}
+}
 
 @PostMapping("/addUserFriend/{userfriendid}")
 public ResponseEntity<String> addFriend(HttpServletRequest request, @PathVariable Long userfriendid) {

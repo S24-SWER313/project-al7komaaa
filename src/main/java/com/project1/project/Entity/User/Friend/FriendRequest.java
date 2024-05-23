@@ -41,4 +41,17 @@ public class FriendRequest {
     public void setReceiver(User receiver) {
         this.receiver = receiver;
     }
+
+    
+    private boolean isAccepted =false;
+
+    public boolean isAccepted() {
+        return isAccepted;
+    }
+
+    public void setAccepted(boolean isAccepted) {
+        this.isAccepted = isAccepted;
+    }
+
+    
 }
