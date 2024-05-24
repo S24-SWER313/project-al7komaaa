@@ -1,5 +1,6 @@
 package com.project1.project.Entity.User.Friend;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project1.project.Entity.User.User;
 import jakarta.persistence.*;
 
@@ -15,6 +16,7 @@ public class FriendRequest {
     private User sender;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
 
@@ -41,4 +43,17 @@ public class FriendRequest {
     public void setReceiver(User receiver) {
         this.receiver = receiver;
     }
+
+    
+    private boolean isAccepted =false;
+
+    public boolean isAccepted() {
+        return isAccepted;
+    }
+
+    public void setAccepted(boolean isAccepted) {
+        this.isAccepted = isAccepted;
+    }
+
+    
 }
