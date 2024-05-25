@@ -324,14 +324,15 @@ return user;
 }
 
 @GetMapping("/hasSentFriendRequest/{userId}")
-    public boolean hasSentFriendRequest( @PathVariable Long userId) {
+    public ResponseEntity<Boolean> hasSentFriendRequest( @PathVariable Long userId) {
         User currentUser = userFromToken(request);
         User otherUser = userRepo.findById(userId)
                 .orElseThrow(() -> new NFException("User not found."));
 
         boolean hasSentRequest = friendRequestRepo.findBySenderAndReceiver(currentUser, otherUser).isPresent();
 
-        return hasSentRequest;
+        return ResponseEntity.ok(hasSentRequest);
+        
 }
 
 @GetMapping("/isFriend/{userId}")

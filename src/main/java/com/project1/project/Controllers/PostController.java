@@ -702,6 +702,23 @@ public ResponseEntity<byte[]> getPostImge(@PathVariable Long postId) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }
+
+
+@GetMapping("/commentImage/{commentId}")
+public ResponseEntity<byte[]> getCommentImge(@PathVariable Long commentId) {
+    Comment  comment = commentRepo.findById(commentId).orElse(null);
+    if (comment == null || comment.getImage() == null || comment.getImage().isEmpty()) {
+        return ResponseEntity.notFound().build();
+    }
+    try {
+        Path imagePath = Paths.get( comment.getImage());
+        byte[] imageBytes = Files.readAllBytes(imagePath);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+    } catch (IOException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
 @DeleteMapping("/deleteImage/{postId}")
 public ResponseEntity<?> DeletePostImge(@PathVariable Long postId) {
     Post post = postRepo.findById(postId).orElse(null);
