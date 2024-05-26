@@ -64,7 +64,8 @@ public class User {
     private String password;
     public ArrayList<Role> role;
     // role=new ArrayList<>;
-    
+    private boolean dark=false; 
+
 @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<Post> posts;
@@ -262,6 +263,16 @@ if(lastName!=null){
     
     public Long getuserid() {
        return this.id;
+    }
+
+
+    public boolean isDark() {
+        return dark;
+    }
+
+
+    public void setDark(boolean dark) {
+        this.dark = dark;
     }
 
    
