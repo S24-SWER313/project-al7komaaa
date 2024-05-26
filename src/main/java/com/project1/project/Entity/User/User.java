@@ -275,5 +275,17 @@ if(lastName!=null){
         this.dark = dark;
     }
 
+
+    public User( String firstname, String lastname , String email,String location,String bio,String mobile, Gender gender,LocalDate dateofbirth) {
+        this.mobile = mobile;
+        this.email = email;
+        this.gender = gender;
+        this.bio = bio;
+        this.location = location;
+        this.dateofbirth = dateofbirth;
+        this.firstname= firstname;
+        this.lastname= lastname;
+    }
+
    
 }
