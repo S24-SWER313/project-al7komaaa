@@ -118,32 +118,29 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     } */
   @Bean
 public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf(csrf -> csrf.disable()) .cors(Customizer.withDefaults())
-    // .exceptionHandling(customizer -> customizer.authenticationEntryPoint(new
-    // HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-       .csrf(AbstractHttpConfigurer::disable)
-       .cors(cors -> cors.configurationSource(request -> {
-               var corsConfiguration = new CorsConfiguration();
-               corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
-               corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-               corsConfiguration.setAllowedHeaders(List.of("*"));
-               corsConfiguration.setAllowCredentials(true);
-               return corsConfiguration;
-}))
-        .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth -> 
-          auth.requestMatchers("/api/auth/**").permitAll() 
-              .requestMatchers("/api/test/**").permitAll()
+  http.csrf(AbstractHttpConfigurer::disable)
+  .cors(cors -> cors.configurationSource(request -> {
+      CorsConfiguration corsConfiguration = new CorsConfiguration();
+      corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
+      corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+      corsConfiguration.setAllowedHeaders(List.of("*"));
+      corsConfiguration.setAllowCredentials(true);
+      return corsConfiguration;
+  }))
+  .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+  .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+  .authorizeHttpRequests(auth -> 
+      auth.requestMatchers("/", "/error", "/webjars/**").permitAll()
+          .requestMatchers("/api/auth/**").permitAll()
+          .requestMatchers("/api/test/**").permitAll()
+          .anyRequest().authenticated()
+  )
+  .oauth2Login(Customizer.withDefaults());
 
-              // .anyRequest().permitAll()); 
-             .anyRequest().authenticated()  );      
-    
-    http.authenticationProvider(authenticationProvider());
+http.authenticationProvider(authenticationProvider());
+http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
-    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    
-    return http.build();
+return http.build();
 }
 
 }
