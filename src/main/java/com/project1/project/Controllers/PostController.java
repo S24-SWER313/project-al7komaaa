@@ -743,7 +743,7 @@ public ResponseEntity<?> getReals() {
   User user = userFromToken(request);
   if (user==null)
   return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
-  List <Post> posts = postRepo.findAll().stream().filter(e->(e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser())||e.getUser()==user))
+  List <Post> posts = postRepo.findRandom5Posts().stream().filter(e->(e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser())||e.getUser()==user||user==e.getUser()))
   // .map(postmodelAss::toModel)
   .collect(Collectors.toList());
   List<EntityModel<Post>> reels = posts.stream().filter(e->e.getVideo() != null).map(postmodelAss::toModel).collect(Collectors.toList());
