@@ -687,6 +687,38 @@ return ResponseEntity.ok(CollectionModel.of(users,
 }
 
 
+
+// @GetMapping("/{id}/user")
+// public ResponseEntity<?> getUserPost(@PathVariable Long id, @RequestParam(defaultValue = "0") int offset) {
+//     User user = userRepo.findById(id).orElseThrow(() -> new NFException("User with ID " + id + " not found."));
+//     User signInUser = userFromToken(request);
+
+//     if (user.getId() != id) {
+//         if (user.getAccountIsPrivate() && !user.getFriends().contains(signInUser)) {
+//             return ResponseEntity.ok("The account is private, you can't view.");
+//         }
+//     } else {
+//         List<Post> userPosts = userRepo.findPostsByUserId(id);
+        
+//         // الحصول على 5 منشورات فقط بدءًا من الموضع المحدد
+//         List<Post> limitedPosts = userPosts.stream()
+//             .skip(offset)
+//             .limit(5)
+//             .collect(Collectors.toList());
+
+//         List<EntityModel<Post>> posts = limitedPosts.stream()
+//             .map(postmodelAss::toModel)
+//             .collect(Collectors.toList());
+
+//         return ResponseEntity.ok(CollectionModel.of(posts,
+//             linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Post")));
+//     }
+
+//     return null;
+// }
+// }
+
+
 @GetMapping("/postImage/{postId}")
 public ResponseEntity<byte[]> getPostImge(@PathVariable Long postId) {
     Post post = postRepo.findById(postId).orElse(null);
@@ -752,8 +784,9 @@ if (reels.isEmpty()) {
 MessageResponse errorMessage = new MessageResponse("No reels found.");
 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
 }
+// 
 return ResponseEntity
-  .ok(CollectionModel.of(reels, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
+.ok(CollectionModel.of(reels, linkTo(methodOn(PostController.class).getReals()).withRel("read more")));
 
  
 }
