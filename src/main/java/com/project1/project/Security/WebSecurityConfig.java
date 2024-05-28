@@ -127,13 +127,14 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
       corsConfiguration.setAllowCredentials(true);
       return corsConfiguration;
   }))
-  .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+  //.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
   .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
   .authorizeHttpRequests(auth -> 
       auth.requestMatchers("/", "/error", "/webjars/**").permitAll()
           .requestMatchers("/api/auth/**").permitAll()
           .requestMatchers("/api/test/**").permitAll()
-          .anyRequest().authenticated()
+        //  .anyRequest().authenticated()
+        .anyRequest().permitAll()
   )
   .oauth2Login(Customizer.withDefaults());
 
