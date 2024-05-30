@@ -497,30 +497,7 @@ User user=userRepo.findById(userId).get();
 return false;
 else
    return true;
-}  @PutMapping("/editProfile")
-public ResponseEntity<String> editProfile(@RequestBody User user) {
-    User myuser = userFromToken(request);
-    if (myuser == null) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-    
-    myuser.setEmail(user.getEmail());
-    myuser.setBio(user.getBio());
-    myuser.setDateofbirth(user.getDateofbirth());
-    myuser.setGender(user.getGender());
-    myuser.setMobile(user.getMobile());
-    myuser.setLocation(user.getLocation());
-    myuser.setFirstname(user.getFirstname());
-    myuser.setLastname(user.getLastname());
-    
-    userRepo.save(myuser);
-
-    return ResponseEntity.ok("User Details have been changed!!");
-}
-
-
-
-
+} 
 
   
 @PutMapping("/editFirstName")

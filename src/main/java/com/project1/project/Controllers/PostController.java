@@ -743,7 +743,7 @@ public ResponseEntity<?> getReals() {
   User user = userFromToken(request);
   if (user==null)
   return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
-  List <Post> posts = postRepo.findRandom5Posts().stream().filter(e->(e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser())||e.getUser()==user||user==e.getUser()))
+  List <Post> posts = postRepo.findRandom5Posts().stream().filter(e->(e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser())||e.getUser()==user))
   // .map(postmodelAss::toModel)
   .collect(Collectors.toList());
   List<EntityModel<Post>> reels = posts.stream().filter(e->e.getVideo() != null).map(postmodelAss::toModel).collect(Collectors.toList());
@@ -753,7 +753,7 @@ MessageResponse errorMessage = new MessageResponse("No reels found.");
 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
 }
 return ResponseEntity
-  .ok(CollectionModel.of(reels, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
+  .ok(CollectionModel.of(reels, linkTo(methodOn(PostController.class).getReals()).withRel("read more")));
 
  
 }
@@ -907,7 +907,7 @@ public ResponseEntity<?> createReal( @RequestParam("file") MultipartFile video) 
 if(post.getVideo()!= null){
 post.setUser(user);
 postRepo.save(post);
-return ResponseEntity.ok(new MessageResponse("Reel Created successfully!"));
+return ResponseEntity.ok(post.getId());
 }
 return ResponseEntity.ok(new MessageResponse("must be video and content"));
 }
