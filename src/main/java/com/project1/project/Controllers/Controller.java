@@ -455,6 +455,14 @@ userRepo.save(user);
   return ResponseEntity.ok("the privacy of account is "+ isprivate);
 }
 
+@GetMapping("/IsPrivacy")
+public ResponseEntity<?> getPrivacy() {
+    User user = userFromToken(request);
+        if (user==null)
+return ResponseEntity.ok("make sure you signed up");
+  return ResponseEntity.ok(user.getAccountIsPrivate());
+}
+
 
 
 
