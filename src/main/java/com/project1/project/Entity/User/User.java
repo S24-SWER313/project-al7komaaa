@@ -64,7 +64,8 @@ public class User {
     private String password;
     public ArrayList<Role> role;
     // role=new ArrayList<>;
-    
+    private boolean dark=false; 
+
 @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<Post> posts;
@@ -255,6 +256,35 @@ if(lastName!=null){
 
     public void setAccountIsPrivate(boolean accountIsPrivate) {
         this.accountIsPrivate = accountIsPrivate;
+    }
+
+
+
+    
+    public Long getuserid() {
+       return this.id;
+    }
+
+
+    public boolean isDark() {
+        return dark;
+    }
+
+
+    public void setDark(boolean dark) {
+        this.dark = dark;
+    }
+
+
+    public User( String firstname, String lastname , String email,String location,String bio,String mobile, Gender gender,LocalDate dateofbirth) {
+        this.mobile = mobile;
+        this.email = email;
+        this.gender = gender;
+        this.bio = bio;
+        this.location = location;
+        this.dateofbirth = dateofbirth;
+        this.firstname= firstname;
+        this.lastname= lastname;
     }
 
    

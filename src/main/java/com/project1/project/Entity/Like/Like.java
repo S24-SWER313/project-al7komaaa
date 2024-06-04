@@ -14,7 +14,7 @@ public class Like {
     private Long likeId;
 
     private likeType type ;
-    
+    @JsonIgnore
      @ManyToOne 
     @JoinColumn(name = "post_id")
     public Post post;
@@ -68,8 +68,8 @@ public class Like {
     public void setType(likeType type) {
       this.type = type;
     }
-    public String getPost() {
-      return post.getContent();
+    public Long getPostId() {
+      return post.getId();
     }
     public void setPost(Post post) {
       this.post = post;

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +43,8 @@ import com.project1.project.Entity.User.Gender;
 import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserModelAss;
 import com.project1.project.Entity.User.UserRepo;
+import com.project1.project.Entity.User.Friend.FriendRequest;
+import com.project1.project.Entity.User.Friend.FriendRequestRepo;
 import com.project1.project.Payload.Response.MessageResponse;
 import com.project1.project.Security.Jwt.JwtUtils;
 
@@ -56,6 +59,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+
 @RestController
 public class Controller {
     private final CommentRepo commentRepo;
@@ -63,6 +67,9 @@ public class Controller {
     private final PostRepo postRepo;
     private final ShareRepo shareRepo;
     private final UserRepo userRepo;
+
+@Autowired
+private FriendRequestRepo friendRequestRepo;
       @Autowired
   private JwtUtils jwtUtils;
     @Autowired
@@ -84,6 +91,116 @@ ImageUploadController imageUploadController=new ImageUploadController();
         this.userRepo = userRepo;
        
     }
+
+
+
+
+
+
+ // إرسال طلب صداقة
+ @PostMapping("/sendFriendRequest/{receiverId}")
+ public ResponseEntity<String> sendFriendRequest(HttpServletRequest request, @PathVariable Long receiverId) {
+     User sender = userFromToken(request);
+     User receiver = userRepo.findById(receiverId)
+             .orElseThrow(() -> new NFException("User not found."));
+ 
+     // تحقق من وجود طلب صداقة معلق من المرسل إلى المستقبل
+     if (friendRequestRepo.findBySenderIdAndReceiverId(sender.getId(), receiverId).isPresent()) {
+         return ResponseEntity.ok("Friend request already sent.");
+     }
+ 
+     // تحقق من وجود طلب صداقة معلق من المستقبل إلى المرسل
+     Optional<FriendRequest> friendRequestFromReceiver = friendRequestRepo.findBySenderIdAndReceiverId(receiverId, sender.getId());
+     if (friendRequestFromReceiver.isPresent()) {
+         return ResponseEntity.ok("This friend has already sent you a friend request.");
+     }
+ 
+     FriendRequest friendRequest = new FriendRequest();
+     friendRequest.setSender(sender);
+     friendRequest.setReceiver(receiver);
+ 
+     friendRequestRepo.save(friendRequest);
+ 
+     return ResponseEntity.ok("Friend request sent successfully.");
+ }
+ 
+
+
+    // عرض طلبات الصداقة المعلقة
+    @GetMapping("/friendRequests")
+    public ResponseEntity<List<FriendRequest>> getFriendRequests(HttpServletRequest request) {
+        User receiver = userFromToken(request);
+        List<FriendRequest> friendRequests = friendRequestRepo.findByReceiverId(receiver.getId());
+        return ResponseEntity.ok(friendRequests);
+    }
+
+    // قبول طلب صداقة
+    @PostMapping("/acceptFriendRequest/{senderId}")
+    public ResponseEntity<String> acceptFriendRequest(HttpServletRequest request, @PathVariable Long senderId) {
+        User receiver = userFromToken(request);
+        User sender = userRepo.findById(senderId)
+                .orElseThrow(() -> new NFException("User not found."));
+
+        FriendRequest friendRequest = friendRequestRepo.findBySenderIdAndReceiverId(senderId, receiver.getId())
+                .orElseThrow(() -> new NFException("Friend request not found."));
+
+        // أضف الصداقة في كلا الحسابين
+        receiver.friends.add(sender);
+        sender.friends.add(receiver);
+
+        userRepo.save(receiver);
+        userRepo.save(sender);
+
+        // احذف طلب الصداقة بعد قبوله
+        friendRequestRepo.delete(friendRequest);
+
+        return ResponseEntity.ok("Friend request accepted.");
+    }
+
+
+
+    // @DeleteMapping("/cancelFriendRequest/{userId}")
+    // public ResponseEntity<String> cancelFriendRequest( @PathVariable Long userId) {
+    //     User currentUser = userFromToken(request);
+    //     User otherUser = userRepo.findById(userId)
+    //             .orElseThrow(() -> new NFException("User not found."));
+
+    //     Optional<FriendRequest> friendRequestOpt = friendRequestRepo.findBySenderAndReceiver(otherUser, currentUser);
+
+    //     if (friendRequestOpt.isPresent()) {
+    //         FriendRequest friendRequest = friendRequestOpt.get();
+    //         friendRequestRepo.deleteById(friendRequest.getId());
+    //         return ResponseEntity.ok("Friend request cancelled successfully.");
+    //     } else {
+    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Friend request not found.");
+    //     }
+    // }
+
+  
+
+    // @DeleteMapping("/cancelFriendRequest2/{userId}")
+    // public ResponseEntity<String> cancelFriendRequest2(HttpServletRequest request, @PathVariable Long userId) {
+    //     User currentUser = userFromToken(request);
+    //     User otherUser = userRepo.findById(userId)
+    //             .orElseThrow(() -> new NFException("User not found."));
+    //             FriendRequest friendRequest = friendRequestRepo.findBySenderIdAndReceiverId(otherUser.getId(), currentUser.getId())
+    //             .orElseThrow(() -> new NFException("Friend request not found."));
+    //             FriendRequest friendRequest2 = friendRequestRepo.findBySenderIdAndReceiverId( currentUser.getId(),otherUser.getId())
+    //             .orElseThrow(() -> new NFException("Friend request not found."));
+
+    //             friendRequestRepo.delete(friendRequest);
+    //             friendRequestRepo.delete(friendRequest2);
+
+    //     return ResponseEntity.ok("All friend requests between the users have been cancelled successfully.");
+    // }
+
+
+
+
+
+
+
+
     @Transactional
     @GetMapping("/users")
     public ResponseEntity<CollectionModel<EntityModel<User>>> getAllUsers(HttpServletRequest request) {
@@ -167,6 +284,13 @@ public ResponseEntity<?> getUserName(@PathVariable String name ) {
 
 
 
+@GetMapping("/count/userFriend/{userid}")
+public ResponseEntity<Long> getUserFriendcount(@PathVariable Long userid ){
+
+   
+return ResponseEntity.ok(userRepo.countFriends(userid));
+
+}
 @GetMapping("/userFriend/{userid}")
 public ResponseEntity<CollectionModel<EntityModel<User>>> getUserFriend(@PathVariable Long userid ){
 
@@ -178,10 +302,84 @@ public ResponseEntity<CollectionModel<EntityModel<User>>> getUserFriend(@PathVar
 return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(Controller.class).getUserById(userid)).withRel("Go to all Posts")));
 
 }
+@GetMapping("/friendSuggestion")
+public List<EntityModel<User>> getfriendSuggestion(){
+
+    User user = userFromToken(request);
+    List<EntityModel<User>> users =userRepo.findSuggestedFriends(user.getId()).stream()
+    .map(us -> userModelAss.toModelfriendself(us))
+    .collect(Collectors.toList());
+// return userRepo.getFriends(userid);
+return users;
+
+}
 
 
+@GetMapping("/myUserName")
+public User getmyUserName( ){
 
+    User user = userFromToken(request);
+return user;
+//  ResponseEntity.ok("Fatma");
 
+}
+
+@GetMapping("/hasSentFriendRequest/{userId}")
+    public ResponseEntity<Boolean> hasSentFriendRequest( @PathVariable Long userId) {
+        User currentUser = userFromToken(request);
+        User otherUser = userRepo.findById(userId)
+                .orElseThrow(() -> new NFException("User not found."));
+
+        boolean hasSentRequest = friendRequestRepo.findBySenderAndReceiver(currentUser, otherUser).isPresent();
+
+        return ResponseEntity.ok(hasSentRequest);
+        
+}
+
+@GetMapping("/isFriend/{userId}")
+    public ResponseEntity<Boolean> isFriend(@PathVariable Long userId) {
+        User currentUser = userFromToken(request);
+        User otherUser = userRepo.findById(userId)
+                .orElseThrow(() -> new NFException("User not found."));
+
+        boolean isFriend = currentUser.friends.contains(otherUser);
+
+        return ResponseEntity.ok(isFriend);
+      
+}
+@DeleteMapping("/cancelFriendRequest/{userId}")
+public ResponseEntity<String> cancelFriendRequest( @PathVariable Long userId) {
+  User currentUser = userFromToken(request);
+  User otherUser = userRepo.findById(userId)
+          .orElseThrow(() -> new NFException("User not found."));
+
+  Optional<FriendRequest> friendRequestOpt = friendRequestRepo.findBySenderAndReceiver(currentUser, otherUser);
+
+  if (friendRequestOpt.isPresent()) {
+      FriendRequest friendRequest = friendRequestOpt.get();
+      friendRequestRepo.deleteById(friendRequest.getId());
+      return ResponseEntity.ok("Friend request cancelled successfully.");
+  } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Friend request not found.");
+}
+}
+
+@DeleteMapping("/cancelFriendRequest/res/{userId}")
+public ResponseEntity<String> cancelFriendRequestres( @PathVariable Long userId) {
+  User currentUser = userFromToken(request);
+  User otherUser = userRepo.findById(userId)
+          .orElseThrow(() -> new NFException("User not found."));
+
+  Optional<FriendRequest> friendRequestOpt = friendRequestRepo.findBySenderAndReceiver( otherUser,currentUser);
+
+  if (friendRequestOpt.isPresent()) {
+      FriendRequest friendRequest = friendRequestOpt.get();
+      friendRequestRepo.deleteById(friendRequest.getId());
+      return ResponseEntity.ok("Friend request cancelled successfully.");
+  } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Friend request not found.");
+}
+}
 @PostMapping("/addUserFriend/{userfriendid}")
 public ResponseEntity<String> addFriend(HttpServletRequest request, @PathVariable Long userfriendid) {
 
@@ -257,6 +455,14 @@ userRepo.save(user);
   return ResponseEntity.ok("the privacy of account is "+ isprivate);
 }
 
+@GetMapping("/IsPrivacy")
+public ResponseEntity<?> getPrivacy() {
+    User user = userFromToken(request);
+        if (user==null)
+return ResponseEntity.ok("make sure you signed up");
+  return ResponseEntity.ok(user.getAccountIsPrivate());
+}
+
 
 
 
@@ -280,6 +486,26 @@ userRepo.save(user);
     return null;
 }
 
+
+
+
+@GetMapping("/search/{username}")
+public ResponseEntity<List<User>> getUsersByUsername(@PathVariable String username) {
+    List<User> users = userRepo.searchUsers(username);
+    return ResponseEntity.ok(users);
+}
+
+
+
+@GetMapping("/accountIsPrivate/{userId}")
+public boolean getaccountIsPrivate(@PathVariable Long userId) {
+User user=userRepo.findById(userId).get();
+  User me=userFromToken(request);
+  if (me.friends.contains(user)||!user.getAccountIsPrivate()||me==user)
+return false;
+else
+   return true;
+} 
 
   
 @PutMapping("/editFirstName")
@@ -377,11 +603,26 @@ user.setImage(res);
 userRepo.save(user);
   return ResponseEntity.ok(user.getImage());
 }
+@GetMapping("/getImage")
+public String getUserImage() {
+  User user = userFromToken(request);
+  return user.getImage();
+
+}
 @GetMapping("/getImage/{userId}")
 public ResponseEntity<byte[]> getImage(@PathVariable Long userId) {
     User user = userRepo.findById(userId).orElse(null);
     if (user == null || user.getImage() == null || user.getImage().isEmpty()) {
-        return ResponseEntity.notFound().build();
+      Path imagePath = Paths.get( "49e40f05-46ad-42b6-a2f3-6270d67cb6df_download.jpeg");
+      byte[] imageBytes;
+      try {
+        imageBytes = Files.readAllBytes(imagePath); 
+         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+      } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    
     }
     try {
         Path imagePath = Paths.get( user.getImage());
@@ -416,25 +657,42 @@ userRepo.save(user);
 }
 
 @GetMapping("/backgroundImage/{userId}")
-public ResponseEntity<byte[]> getBackgroundImage(@PathVariable Long userId) {
-    User user = userRepo.findById(userId).orElse(null);
-    if (user == null || user.getImage() == null || user.getImage().isEmpty()) {
-        return ResponseEntity.notFound().build();
-    }
+public ResponseEntity<?> getBackgroundImage(@PathVariable Long userId) {
+  User user = userRepo.findById(userId) .orElseThrow(() -> new NFException("user with ID " + userId + " not found."));
+
+  if (user == null || user.getBackgroudimage() == null || user.getBackgroudimage().isEmpty()) {
+    Path imagePath = Paths.get( "7ba92ff8-08bf-4836-ad5c-074835f8288f_download.jpg");
+    
     try {
-        Path imagePath = Paths.get( user.getBackgroudimage());
-        byte[] imageBytes = Files.readAllBytes(imagePath);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+     byte[]  imageBytes = Files.readAllBytes(imagePath); 
+       return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     } catch (IOException e) {
-        e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
+  
+  }
+  try {
+      Path imagePath = Paths.get( user.getBackgroudimage());
+      byte[] imageBytes = Files.readAllBytes(imagePath);
+      return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+  } catch (IOException e) {
+      e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+  }
 }
 
 
-
-
-
+ @PutMapping("/editMode")
+    public ResponseEntity<Boolean> editMode() {
+        User user = userFromToken(request);
+        if (user == null) {
+            return ResponseEntity.ok(false);
+        }
+        user.setDark(!user.isDark());
+        userRepo.save(user);
+        return ResponseEntity.ok(user.isDark());
+    }
 
 
 

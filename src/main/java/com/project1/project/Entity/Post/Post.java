@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 @Entity
 @Table(name = "posts")
 public class Post {
@@ -41,8 +42,11 @@ private String content;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL) //t8ayarat
     public List<Like> like;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Share> shares;
+    public List<Share> shares;
+    private LocalDateTime timestamp;
+
     public Post() {
+        this.timestamp=LocalDateTime.now();
     }
 
 
@@ -50,7 +54,7 @@ private String content;
     public Post( String content) {
       
         this.content = content;
-     
+       this.timestamp=LocalDateTime.now();
 
     }
   
@@ -89,8 +93,20 @@ private String content;
     public void setContent(String content) {
         this.content = content;
     }
-    
+    public String getUserName() {
+        return user.getUsername();
+    }
 
+    public Long getId() {
+        return postId;
+    }
+       public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
     // public byte[] getVideoReel() {
     //     try {
     //         Path videoFile = Paths.get(getVideo());
@@ -101,4 +117,15 @@ private String content;
     //         return null; 
     //     }
     // }
+
+       
+    public Long getuserid() {
+        return this.user.getId();
+     }
+     public String getuserimage() {
+        return this.user.getImage();
+     }
+     public String getusername() {
+        return this.user.getUsername();
+     }
     }

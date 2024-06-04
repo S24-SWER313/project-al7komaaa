@@ -40,9 +40,9 @@ public EntityModel<User> toModelfriendself(User user) {
     Link addFriendLink = linkTo(methodOn(Controller.class).addFriend(request, user.getId())).withRel("Add Friend");
     Link deleteFriendLink = linkTo(methodOn(Controller.class).deleteUserFriend( user.getId(), request)).withRel("Remove friend");
 
-    if(userFromToken(request).friends.contains(user))
-    return EntityModel.of(user, selfLink, deleteFriendLink);
-    return EntityModel.of(user, selfLink, addFriendLink);
+    // if(userFromToken(request).friends.contains(user))
+    return EntityModel.of(user, selfLink, deleteFriendLink,addFriendLink);
+    // return EntityModel.of(user, selfLink, );
   
     
 }

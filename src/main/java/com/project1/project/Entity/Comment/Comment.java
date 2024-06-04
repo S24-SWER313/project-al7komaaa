@@ -53,6 +53,9 @@ public class Comment {
     public Long getCommentId() {
         return commentId;
     }
+    public Long getId() {
+        return commentId;
+    }
     public void setCommentId(Long commentId) {
         this.commentId = commentId;
     }
@@ -94,4 +97,15 @@ public class Comment {
     public void setShare(Share share) {
         this.share = share;
     }
+    public String getUserName() {
+        return user.getUsername();
+    }
+    public String getUserImage() {
+        return user.getImage();
+    }
+
+    public Long getUserId() {
+        return user.getId();
+    }
+
 }

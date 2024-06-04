@@ -70,6 +70,8 @@ public class Share {
         this.post = post;
     }
     
-    
-    
+    public Long getPostId() {
+        return post.getId();
+    }
+
 }

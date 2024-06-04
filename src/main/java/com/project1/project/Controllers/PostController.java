@@ -101,6 +101,52 @@ public class PostController {
 
   List<EntityModel<Post>> l = new ArrayList<>();
 
+
+
+
+
+
+
+
+
+  @GetMapping("/posts/random")
+  public ResponseEntity<CollectionModel<EntityModel<Post>>> getRandomPosts() {
+    User user = userFromToken(request);
+   
+List<EntityModel<Post>> users = postRepo.findRandom5Posts().stream().filter(e->e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser()))
+    .map(postmodelAss::toModel)
+    .collect(Collectors.toList());
+
+
+return ResponseEntity
+.ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).getRandomPosts()).withRel("read more")));
+}
+
+@GetMapping("/{postId}/comments/random")
+public ResponseEntity<?> getRandomComments(@PathVariable Long postId) {
+  User user =userFromToken(request);
+  Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
+if (post.getUser().friends.contains(user)||!post.getUser().getAccountIsPrivate()||post.user.getId()==user.getId()){
+  //List<Comment> comments = post.postComments;
+List<Comment>comments=commentRepo.findRandom5CommentsByPostId(postId);
+
+if (comments.isEmpty()) {
+return ResponseEntity.ok(new MessageResponse("no comment in this post"));
+}
+  List<EntityModel<Comment>> commentModels = comments.stream()
+      .map(com -> commentmodelAss.commentDelEdit(com))
+      .collect(Collectors.toList());
+
+  if (comments.isEmpty()) {
+    MessageResponse noCommentsMessage = new MessageResponse("There are no comments for this post.");
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(noCommentsMessage);
+  }
+  return ResponseEntity.ok(CollectionModel.of(commentModels,
+      linkTo(methodOn(PostController.class).getRandomComments(postId)).withRel("Read more")));}
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("this user's profile is private add him to see comment of this post ");
+
+}
+
   @PostMapping("/create")
   public ResponseEntity<?> createPost( @RequestBody Post post) {
      User user = userFromToken(request);
@@ -109,7 +155,7 @@ public class PostController {
 
       post.setUser(user);
       postRepo.save(post);
-      return ResponseEntity.ok(new MessageResponse("Post Created successfully!"));
+      return ResponseEntity.ok(post.getId());
   }
   @PostMapping("{id}/create/image")
   public ResponseEntity<?> addImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
@@ -154,15 +200,18 @@ if (comments.isEmpty()) {
         .map(postmodelAss::toModel)
         .collect(Collectors.toList());
 
+
     if (users.isEmpty()) {
       MessageResponse errorMessage = new MessageResponse("No posts found.");
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
+
     return ResponseEntity
         .ok(CollectionModel.of(users, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
 
 
   }
+  
 
   @PostMapping("/share/{postId}")
   public ResponseEntity<?> sharePost(@PathVariable Long postId,
@@ -175,7 +224,9 @@ if (comments.isEmpty()) {
           if (post == null) {
               return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
           }
-          if(!post.getUser().getAccountIsPrivate()||post.getUser().equals(user)){
+          if(!post.getUser().getAccountIsPrivate()||post.getUser().equals(user)||user.friends.contains(post.getUser())){
+        
+
           Share share = new Share(content.trim(), user, post);
           shareRepo.save(share);
          // EntityModel<Share> entityModel = EntityModel.of();
@@ -207,7 +258,7 @@ Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post wi
         if (user==null)
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
 if(!post.getUser().getAccountIsPrivate()||user.friends.contains(post.getUser())||post.getUser().equals(user))
-return ResponseEntity.ok(postmodelAss.toModelpostId(post)); 
+return ResponseEntity.ok(postmodelAss.toModel(post)); 
 return ResponseEntity.badRequest().body("this post is private");
   }
 
@@ -227,6 +278,12 @@ return ResponseEntity.badRequest().body("this post is private");
         }}
   
 
+        @GetMapping("/number/comment/{postId}")
+        public ResponseEntity<?> numberComment(@PathVariable Long postId) {
+          if (commentRepo.countCommentsByPostId(postId)==0||commentRepo.countCommentsByPostId(postId)==null)
+          return ResponseEntity.ok((long) 0);
+            return ResponseEntity.ok(commentRepo.countCommentsByPostId(postId)) ;
+        }
   /////////////////////////////////////////////////////////////////////
   @PostMapping("/comment/{postId}/post")
   public ResponseEntity<?> createComment( @RequestBody Comment comment, @PathVariable Long postId) {
@@ -235,7 +292,7 @@ return ResponseEntity.badRequest().body("this post is private");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
 
       Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
-      if (post.getUser().friends.contains(user)||!post.getUser().getAccountIsPrivate()){
+      if (post.getUser().friends.contains(user)||!post.getUser().getAccountIsPrivate()||post.getUser().getId()==user.getId()){
       post.postComments.add(comment);
       comment.setUser(user);
       comment.setPost(post);
@@ -250,12 +307,30 @@ return ResponseEntity.badRequest().body("this post is private");
 }
 @PostMapping("comment/{id}/image")
 public ResponseEntity<?> addImageComment(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
-  Comment comment = commentRepo.findById(id).orElseThrow(() -> new NFException("comment with ID " + id + " not found."));
+  User user =userFromToken(request);
+  if (user ==null )
+  return ResponseEntity.ok(new MessageResponse("user nulll"));
+   Comment comment = commentRepo.findById(id).orElseThrow(() -> new NFException("comment with ID " + id + " not found."));
 String im=   imageUploadController.uploadImage(file);
   comment.setImage(im);
   commentRepo.save(comment);
-    return ResponseEntity.ok(new MessageResponse("added image successfully"));
+    return ResponseEntity.ok(comment);
+    // return "sss";
 }
+
+
+
+
+@DeleteMapping("comment/{id}/image")
+public ResponseEntity<?> deleteImageComment(@PathVariable Long id) {
+  Comment comment = commentRepo.findById(id).orElseThrow(() -> new NFException("comment with ID " + id + " not found."));
+  comment.setImage(null);
+  commentRepo.save(comment);
+    return ResponseEntity.ok(new MessageResponse("delete image successfully"));
+}
+
+
+
 
   @DeleteMapping("/comment/{commentId}")
   public ResponseEntity deleteComment(@PathVariable Long commentId) {
@@ -293,7 +368,7 @@ String im=   imageUploadController.uploadImage(file);
       List<Post> likePost = likeList.stream().map(e -> e.post).filter(e->e!=null).collect(Collectors.toList());
       ///////////////////
       List<EntityModel<Post>> users = likePost.stream()
-          .map(e -> postmodelAss.toModelpostId(e))
+          .map(e -> postmodelAss.toModel(e))
           .collect(Collectors.toList());
 
       if (users.isEmpty()) {
@@ -352,12 +427,24 @@ String im=   imageUploadController.uploadImage(file);
    
   }
 
+  
+  // @GetMapping("/{postId}/isLike")
+  // public List<Like> hasLiked( Long postId) {
+  //   User user=userFromToken(request);
+    
+  //         List<Like> userLikes = postRepo.findByUser(postId);
+  //         List<Like> c=userLikes.stream().filter((like)->
+  //      like.getUser().equals( user )).collect(Collectors.toList());
+  //         return userLikes ;
+  // }
+
   @GetMapping("/{postId}/likes")
   public ResponseEntity<List<EntityModel<Like>>> getAllPostLikes(@PathVariable Long postId) {
    Post post= postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
 
    
-    List<Like> likes = postRepo.findLikes(postId);
+    // List<Like> likes = postRepo.findLikes(postId);
+    List<Like> likes = likeRepo.findByPost(post);
 
     List<EntityModel<Like>> entityModels = likes.stream()
         .map(us -> postmodelAss.toModelPostLike(us))
@@ -365,7 +452,47 @@ String im=   imageUploadController.uploadImage(file);
 
     return ResponseEntity.ok(entityModels);
   }
+  @GetMapping("/{postId}/like/random")
+  public ResponseEntity<List<EntityModel<Like>>> getRandomLikes(@PathVariable Long postId) {
+ 
+    List<Like> likes = likeRepo.findRandom5LikesByLikeId(postId);
+    List<EntityModel<Like>> entityModels = likes.stream()
+    .map(us -> postmodelAss.toModelPostLike(us))
+    .collect(Collectors.toList());
+    return ResponseEntity.ok(entityModels);
+}
+@GetMapping("/{postId}/isLikes")
+public   ResponseEntity<?> checkIfUserLikedPost( @PathVariable Long postId) {
+  User user=userFromToken(request);
+  Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("post with ID " + postId + " not found."));
+  List<Like> likes = likeRepo.findByUserAndPost(user, post);
+  return  ResponseEntity.ok(likes) ;
 
+}
+@GetMapping("/number/like/{postId}")
+public ResponseEntity<?> numberLike(@PathVariable Long postId) {
+  if (likeRepo.countLikesByLikeId(postId)==0||likeRepo.countLikesByLikeId(postId)==null)
+  return ResponseEntity.ok((long) 0);
+    return ResponseEntity.ok(likeRepo.countLikesByLikeId(postId)) ;
+}
+
+
+@GetMapping("/number/post/{userId}")
+public Long numberpost(@PathVariable Long userId) {
+    return postRepo.countPostsByUserIdNative(userId);
+}
+
+
+
+  // @GetMapping("/{postId}/shares")
+  //   public List<Share> getSharesByPost(@PathVariable Long postId) {
+  //       Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("like with ID " + postId + " not found."));
+  //      if (post.shares.isEmpty())
+  //      return Collections.emptyList();
+  //                         else
+  //                  return post.shares;
+      
+  //   }
   @DeleteMapping("/{likeId}/like")
   public ResponseEntity<MessageResponse> UnCreatelikePost(@PathVariable Long likeId) {
     Like like=likeRepo.findById(likeId).orElseThrow(() -> new NFException("like with ID " + likeId + " not found."));
@@ -375,6 +502,7 @@ String im=   imageUploadController.uploadImage(file);
     return ResponseEntity.ok(new MessageResponse("Delete successfully!"));}
     return ResponseEntity.ok(new MessageResponse("you are not the owner of like"));
   }
+  
 
   // @PostMapping("/{commentId}/comment")
   // public Like commentLike(@PathVariable Long commentId,@RequestBody Like
@@ -471,7 +599,7 @@ String im=   imageUploadController.uploadImage(file);
      
         boolean isFriend = user.friends.contains(friend);
 
-        if (isFriend) {
+        if (isFriend||friendId==user.getId()) {
           List<Post> friendPosts = userRepo.findPostsByUserId(friendId);
           List<EntityModel<Post>> users = postRepo.findAll().stream()
           .map(postmodelAss::toModel)
@@ -494,6 +622,16 @@ String im=   imageUploadController.uploadImage(file);
     //   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access. sign in");
     // }
   }
+  
+
+
+
+
+
+
+
+
+
   
 
   @GetMapping("/postUser/{postid}")
@@ -527,21 +665,108 @@ return ResponseEntity.ok("you aren't the owner of this comment ");
 public ResponseEntity<?> getUserPost(@PathVariable Long id) {
   User user = userRepo.findById(id).orElseThrow(() -> new NFException("user with ID " + id + " not found."));
   User signInUser = userFromToken(request);
+  if(user.getId()!=id){
  if(user.getAccountIsPrivate() && !user.friends.contains(signInUser)){
   return ResponseEntity.ok("the account is private you cant view");
  }
+}
  else{
   List<Post> userPost =user.posts;
 
   List<EntityModel<Post>> users = userPost.stream()
-  .map(e -> postmodelAss.toModelpostId(e))
+  .map(e -> postmodelAss.toModel(e))
   .collect(Collectors.toList());
- if (users.isEmpty()) {
-  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("there are no posts for this user"));
-}
+//  if (users.isEmpty()) {
+//   return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("there are no posts for this user"));
+// }
 return ResponseEntity.ok(CollectionModel.of(users,
   linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Post")));}
+  return null;
 
+
+}
+
+
+
+// @GetMapping("/{id}/user")
+// public ResponseEntity<?> getUserPost(@PathVariable Long id, @RequestParam(defaultValue = "0") int offset) {
+//     User user = userRepo.findById(id).orElseThrow(() -> new NFException("User with ID " + id + " not found."));
+//     User signInUser = userFromToken(request);
+
+//     if (user.getId() != id) {
+//         if (user.getAccountIsPrivate() && !user.getFriends().contains(signInUser)) {
+//             return ResponseEntity.ok("The account is private, you can't view.");
+//         }
+//     } else {
+//         List<Post> userPosts = userRepo.findPostsByUserId(id);
+        
+//         // الحصول على 5 منشورات فقط بدءًا من الموضع المحدد
+//         List<Post> limitedPosts = userPosts.stream()
+//             .skip(offset)
+//             .limit(5)
+//             .collect(Collectors.toList());
+
+//         List<EntityModel<Post>> posts = limitedPosts.stream()
+//             .map(postmodelAss::toModel)
+//             .collect(Collectors.toList());
+
+//         return ResponseEntity.ok(CollectionModel.of(posts,
+//             linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Post")));
+//     }
+
+//     return null;
+// }
+// }
+
+
+@GetMapping("/postImage/{postId}")
+public ResponseEntity<byte[]> getPostImge(@PathVariable Long postId) {
+    Post post = postRepo.findById(postId).orElse(null);
+    if (post == null || post.getImage() == null || post.getImage().isEmpty()) {
+        return ResponseEntity.notFound().build();
+    }
+    try {
+        Path imagePath = Paths.get( post.getImage());
+        byte[] imageBytes = Files.readAllBytes(imagePath);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+    } catch (IOException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
+
+
+@GetMapping("/commentImage/{commentId}")
+public ResponseEntity<byte[]> getCommentImge(@PathVariable Long commentId) {
+    Comment  comment = commentRepo.findById(commentId).orElse(null);
+    if (comment == null || comment.getImage() == null || comment.getImage().isEmpty()) {
+        return ResponseEntity.notFound().build();
+    }
+    try {
+        Path imagePath = Paths.get( comment.getImage());
+        byte[] imageBytes = Files.readAllBytes(imagePath);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+    } catch (IOException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
+@DeleteMapping("/deleteImage/{postId}")
+public ResponseEntity<?> DeletePostImge(@PathVariable Long postId) {
+    Post post = postRepo.findById(postId).orElse(null);
+    User user=userFromToken(request);
+    if (post.getUser().getId()==user.getId()){
+     post.setImage(null);
+     postRepo.save(post);
+     MessageResponse Message = new MessageResponse("image delete secc");
+     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Message +post.getImage());
+    }
+    else{
+      MessageResponse errMessage = new MessageResponse("image delete feild");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errMessage);
+    }
+
+   
 }
 
 @GetMapping("/reels")
@@ -550,7 +775,7 @@ public ResponseEntity<?> getReals() {
   User user = userFromToken(request);
   if (user==null)
   return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("user not found"));
-  List <Post> posts = postRepo.findAll().stream().filter(e->(e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser())||e.getUser()==user))
+  List <Post> posts = postRepo.findRandom5Posts().stream().filter(e->(e.getUser().getAccountIsPrivate()==false||user.friends.contains(e.getUser())||e.getUser()==user))
   // .map(postmodelAss::toModel)
   .collect(Collectors.toList());
   List<EntityModel<Post>> reels = posts.stream().filter(e->e.getVideo() != null).map(postmodelAss::toModel).collect(Collectors.toList());
@@ -559,11 +784,48 @@ if (reels.isEmpty()) {
 MessageResponse errorMessage = new MessageResponse("No reels found.");
 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
 }
+// 
 return ResponseEntity
-  .ok(CollectionModel.of(reels, linkTo(methodOn(PostController.class).findAllPost()).withRel("Go to all Posts")));
+  .ok(CollectionModel.of(reels, linkTo(methodOn(PostController.class).getReals()).withRel("read more")));
 
  
 }
+
+
+
+
+
+
+
+
+
+@GetMapping("/getVideo/{postId}")
+public ResponseEntity<byte[]> getVideo(@PathVariable Long postId) {
+    Post post = postRepo.findById(postId).orElseThrow(() -> new NFException("video not found."));
+   
+    
+    String videoPath = post.getVideo(); // Assuming user has a 'video' field containing the path to the video
+    
+    if (videoPath == null || videoPath.isEmpty()) {
+        return ResponseEntity.notFound().build();
+    }
+    
+    try {
+        Path videoFilePath = Paths.get(videoPath);
+        byte[] videoBytes = Files.readAllBytes(videoFilePath);
+        return ResponseEntity.ok().contentType(MediaType.valueOf("video/mp4")).body(videoBytes);
+    } catch (IOException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
+
+
+
+
+
+
+
 
 
 
@@ -678,7 +940,7 @@ public ResponseEntity<?> createReal( @RequestParam("file") MultipartFile video) 
 if(post.getVideo()!= null){
 post.setUser(user);
 postRepo.save(post);
-return ResponseEntity.ok(new MessageResponse("Reel Created successfully!"));
+return ResponseEntity.ok(post.getId());
 }
 return ResponseEntity.ok(new MessageResponse("must be video and content"));
 }
@@ -696,7 +958,17 @@ return ResponseEntity.ok("you aren't the owner of this real ");
 
 }
 
+//////////////////
 
+
+
+@GetMapping("/users/{userId}/shares")
+public List<Share> getSharesByUserId(@PathVariable Long userId) {
+    return shareRepo.findByUserId(userId);
+}
+
+
+//////////////////
 
 
 

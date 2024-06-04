@@ -1,5 +1,6 @@
 package com.project1.project.Controllers;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +19,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.server.SecurityWebFilterChain;
@@ -28,13 +31,18 @@ import org.springframework.security.web.server.authentication.logout.DelegatingS
 import org.springframework.security.web.server.authentication.logout.SecurityContextServerLogoutHandler;
 import org.springframework.security.web.server.authentication.logout.WebSessionServerLogoutHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 
+import com.project1.project.NFException;
 import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserRepo;
 import com.project1.project.Payload.Request.LoginRequest;
@@ -43,6 +51,14 @@ import com.project1.project.Payload.Response.JwtResponse;
 import com.project1.project.Payload.Response.MessageResponse;
 import com.project1.project.Security.Jwt.JwtUtils;
 import com.project1.project.Security.Services.UserDetailsImpl;
+
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -74,6 +90,49 @@ public class AuthController {
   // @Autowired
   // private JwtTokenProvider jwtTokenProvider;
 
+@GetMapping("/user")
+	@ResponseBody
+	public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
+		return Collections.singletonMap("name", principal.getAttribute("name"));
+	}
+
+  // @CrossOrigin(origins = "http://localhost:3000")
+  // @PostMapping("/token")
+  // public ResponseEntity<String> token(OAuth2AuthenticationToken token) {
+  //   if (token == null) {
+  //     // return ResponseEntity.badRequest().body("OAuth2AuthenticationToken is null");
+  //   }
+  //   System.out.println("Token: " + token.toString());
+  //   return ResponseEntity.ok(token.toString());
+  // }
+    
+
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/token")
+    public ResponseEntity<?> token(OAuth2AuthenticationToken token, WebRequest request) {
+        if (token == null) {
+            return ResponseEntity.badRequest().body("OAuth2AuthenticationToken is null");
+        }
+        // Store token in session
+        request.setAttribute("oauth2AuthenticationToken", token, WebRequest.SCOPE_SESSION);
+        return ResponseEntity.ok(token);
+    }
+    
+    @ModelAttribute("oauth2AuthenticationToken")
+    public OAuth2AuthenticationToken getToken(WebRequest request) {
+        return (OAuth2AuthenticationToken) request.getAttribute("oauth2AuthenticationToken", WebRequest.SCOPE_SESSION);
+    }
+
+    public User userFromToken(HttpServletRequest request, @ModelAttribute("oauth2AuthenticationToken") OAuth2AuthenticationToken token) {
+    String jwt = parseJwt(request);
+    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        User user = userRepo.findByUsername(username).orElseThrow(() -> new NFException("User not found."));
+        return user;
+    }
+    return null;
+}
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -187,6 +246,37 @@ public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwor
     } 
 }
 
+
+// public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwords, HttpServletRequest request) {
+//     String oldPassword = passwords.get("oldPassword");
+//     String newPassword = passwords.get("newPassword");
+    
+//     String jwt = parseJwt(request);
+//     if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+//         String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        
+//         User user = userRepo.findByUsername(username)
+//                             .orElseThrow(() -> new RuntimeException("User not found"));
+        
+//         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        
+//         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+//             return ResponseEntity
+//                     .badRequest()
+//                     .body(new MessageResponse("Error: Incorrect old password"));
+//         }
+        
+//         // استخدم الكود الخاص بك لتحديث كلمة المرور وحفظها في قاعدة البيانات
+//     } else {
+//         return ResponseEntity
+//                 .badRequest()
+//                 .body(new MessageResponse("Error: User not found with username "));
+//     } 
+//     return null;
+// }
+
+
+
     private String parseJwt(HttpServletRequest request) {
       String headerAuth = request.getHeader("Authorization");
   
@@ -196,9 +286,6 @@ public ResponseEntity<?> changePassword(@RequestBody Map<String, String> passwor
   
       return null;
     }
-
-
-
 
 
 @PostMapping("/logout")
