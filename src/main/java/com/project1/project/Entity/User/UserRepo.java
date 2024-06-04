@@ -34,8 +34,12 @@ List<Post> findPostsByUserId(Long userId);
     Set<User> getFriends(Long id);
     @Query("SELECT COUNT(f) FROM User u JOIN u.friends f WHERE u.id = :userId")
     Long countFriends(Long userId);
-    @Query("SELECT u FROM User u WHERE u.id NOT IN (SELECT f.id FROM User user JOIN user.friends f WHERE user.id = :userId) AND u.id != :userId")
-    List<User> findSuggestedFriends(@Param("userId") Long userId);
+    // @Query("SELECT u FROM User u WHERE u.id NOT IN (SELECT f.id FROM User user JOIN user.friends f WHERE user.id = :userId) AND u.id != :userId")
+    // List<User> findSuggestedFriends(@Param("userId") Long userId);
+
+    @Query("SELECT u FROM User u WHERE u.id NOT IN (SELECT f.id FROM User user JOIN user.friends f WHERE user.id = :userId) AND u.id != :userId AND u.id NOT IN (SELECT fr.sender.id FROM FriendRequest fr WHERE fr.receiver.id = :userId) AND u.id NOT IN (SELECT fr.receiver.id FROM FriendRequest fr WHERE fr.sender.id = :userId)")
+List<User> findSuggestedFriends(@Param("userId") Long userId);
+
 
     // @Query("SELECT u FROM User u WHERE LOWER(u.username) LIKE LOWER(concat('%', :searchTerm, '%')) OR LOWER(u.firstname) LIKE LOWER(concat('%', :searchTerm, '%')) OR LOWER(u.lastname) LIKE LOWER(concat('%', :searchTerm, '%'))")
     // List<User> searchUsers(@Param("searchTerm") String searchTerm);
