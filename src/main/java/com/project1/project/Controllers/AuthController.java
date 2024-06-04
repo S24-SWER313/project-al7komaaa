@@ -93,11 +93,15 @@ public class AuthController {
 		return Collections.singletonMap("name", principal.getAttribute("name"));
 	}
 
-    @GetMapping("/token")
-    public Map<String, Object> token(OAuth2AuthenticationToken token) {
-        System.out.println(token.toString());
-        return Collections.singletonMap("name", token.getPrincipal().getAttribute("name"));
-	}
+  @CrossOrigin(origins = "http://localhost:3000")
+  @PostMapping("/token")
+  public ResponseEntity<String> token(OAuth2AuthenticationToken token) {
+    if (token == null) {
+      // return ResponseEntity.badRequest().body("OAuth2AuthenticationToken is null");
+    }
+    System.out.println("Token: " + token.toString());
+    return ResponseEntity.ok(token.toString());
+  }
     
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
