@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserRepo;
@@ -87,7 +89,7 @@ public class AuthController {
   // @Autowired
   // private JwtTokenProvider jwtTokenProvider;
 
-@GetMapping("/user")
+@GetMapping("/user")  
 	@ResponseBody
 	public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
 		return Collections.singletonMap("name", principal.getAttribute("name"));
@@ -95,12 +97,14 @@ public class AuthController {
 
   @CrossOrigin(origins = "http://localhost:3000")
   @PostMapping("/token")
-  public ResponseEntity<String> token(OAuth2AuthenticationToken token) {
-    if (token == null) {
-      // return ResponseEntity.badRequest().body("OAuth2AuthenticationToken is null");
+  public String token(@RequestBody String email) {
+    Optional<User> user = userRepo.findByEmail(email);
+    if (user.isPresent()) {
+      String jwt = jwtUtils.generateJwtTokenFromUsername(user.get().getUsername());
+      System.out.println(jwt);
+      return jwt;
     }
-    System.out.println("Token: " + token.toString());
-    return ResponseEntity.ok(token.toString());
+    return "NO Such Email";
   }
     
   @PostMapping("/signin")
