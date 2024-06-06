@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.project1.project.NFException;
 import com.project1.project.Entity.User.User;
@@ -90,7 +91,7 @@ public class AuthController {
   // @Autowired
   // private JwtTokenProvider jwtTokenProvider;
 
-@GetMapping("/user")
+@GetMapping("/user")  
 	@ResponseBody
 	public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
 		return Collections.singletonMap("name", principal.getAttribute("name"));
@@ -108,32 +109,18 @@ public class AuthController {
     
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping("/token")
-    public ResponseEntity<?> token(OAuth2AuthenticationToken token, WebRequest request) {
-        if (token == null) {
-            return ResponseEntity.badRequest().body("OAuth2AuthenticationToken is null");
-        }
-        // Store token in session
-        request.setAttribute("oauth2AuthenticationToken", token, WebRequest.SCOPE_SESSION);
-        return ResponseEntity.ok(token);
+  @CrossOrigin(origins = "http://localhost:3000")
+  @PostMapping("/token")
+  public ResponseEntity<?> token(@RequestBody String email) {
+    Optional<User> user = userRepo.findByEmail(email);
+    if (user.isPresent()) {
+      String jwt = jwtUtils.generateJwtTokenFromUsername(user.get().getUsername());
+      System.out.println(jwt);
+      return ResponseEntity.ok(jwt);
     }
+    return ResponseEntity.badRequest().body("NO Such Email");
+  }
     
-    @ModelAttribute("oauth2AuthenticationToken")
-    public OAuth2AuthenticationToken getToken(WebRequest request) {
-        return (OAuth2AuthenticationToken) request.getAttribute("oauth2AuthenticationToken", WebRequest.SCOPE_SESSION);
-    }
-
-    public User userFromToken(HttpServletRequest request, @ModelAttribute("oauth2AuthenticationToken") OAuth2AuthenticationToken token) {
-    String jwt = parseJwt(request);
-    if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-        String username = jwtUtils.getUserNameFromJwtToken(jwt);
-        User user = userRepo.findByUsername(username).orElseThrow(() -> new NFException("User not found."));
-        return user;
-    }
-    return null;
-}
-
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
