@@ -29,6 +29,14 @@ public class JwtUtils {
   @Value("${bezkoder.app.jwtExpirationMs}")
   private int jwtExpirationMs;
   
+  public String generateJwtTokenFromUsername(String username) {
+    return Jwts.builder()
+    .setSubject(username)
+    .setIssuedAt(new Date())
+    .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
+    .signWith(key(), SignatureAlgorithm.HS256)
+    .compact();
+  }
 
   public String generateJwtToken(Authentication authentication) {
 
