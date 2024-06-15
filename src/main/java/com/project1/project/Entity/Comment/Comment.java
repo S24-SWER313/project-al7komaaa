@@ -22,16 +22,10 @@ public class Comment {
     private String image;
     private String video;
    
-    @JsonIgnore
-    @ManyToOne 
-    @JoinColumn(name = "user_id") User user;
-    @JsonIgnore
-    @ManyToOne 
-    @JoinColumn(name = "post_id")
-    private Post post;
-    @JsonIgnore
-    @ManyToOne 
-    @JoinColumn(name = "share_id") Share share;
+ User user;
+
+    Post post;
+Share share;
     
     public Comment() {
         
@@ -89,12 +83,10 @@ public class Comment {
     public void setVideo(String video) {
         this.video = video;
     }
-
-    public Share getShare() {
+ public Share getShare() {
         return share;
     }
-
-    public void setShare(Share share) {
+ public void setShare(Share share) {
         this.share = share;
     }
     public String getUserName() {
