@@ -10,6 +10,7 @@ import com.project1.project.Entity.Post.Post;
 import com.project1.project.Entity.User.User;
 
 
+
 public interface LikeRepo extends JpaRepository<Like, Long> { 
     // @Query("SELECT l FROM Like l WHERE l.user = ?1")
 List<Like> findByUser(User user);
