@@ -33,6 +33,7 @@ import org.springframework.security.web.server.authentication.logout.SecurityCon
 import org.springframework.security.web.server.authentication.logout.WebSessionServerLogoutHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -42,6 +43,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.project1.project.NFException;
 import com.project1.project.Entity.User.User;
 import com.project1.project.Entity.User.UserRepo;
 import com.project1.project.Payload.Request.LoginRequest;
@@ -95,16 +97,28 @@ public class AuthController {
 		return Collections.singletonMap("name", principal.getAttribute("name"));
 	}
 
+  // @CrossOrigin(origins = "http://localhost:3000")
+  // @PostMapping("/token")
+  // public ResponseEntity<String> token(OAuth2AuthenticationToken token) {
+  //   if (token == null) {
+  //     // return ResponseEntity.badRequest().body("OAuth2AuthenticationToken is null");
+  //   }
+  //   System.out.println("Token: " + token.toString());
+  //   return ResponseEntity.ok(token.toString());
+  // }
+    
+
+
   @CrossOrigin(origins = "http://localhost:3000")
   @PostMapping("/token")
-  public String token(@RequestBody String email) {
+  public ResponseEntity<?> token(@RequestBody String email) {
     Optional<User> user = userRepo.findByEmail(email);
     if (user.isPresent()) {
       String jwt = jwtUtils.generateJwtTokenFromUsername(user.get().getUsername());
       System.out.println(jwt);
-      return jwt;
+      return ResponseEntity.ok(jwt);
     }
-    return "NO Such Email";
+    return ResponseEntity.badRequest().body("NO Such Email");
   }
     
   @PostMapping("/signin")
