@@ -20,9 +20,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.stereotype.Component;
 
-import com.fatima.userservice.Security.Services.UserDetailsServiceImpl;
-
-@Component
+import com.project1.project.Security.Services.UserDetailsServiceImpl;
+ 
+ 
 public class AuthTokenFilter extends OncePerRequestFilter {
   @Autowired
     private JwtUtils jwtUtils;
