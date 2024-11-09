@@ -23,12 +23,13 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
-// private Type type;
+
 private String image;
 private String video;
 @Size(max = 1000000, message = "Content is too long")
 private String content;
-// private Long count =(long) 1;
+
+
 
 
   @JsonIgnore
